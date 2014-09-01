@@ -31,6 +31,7 @@
 		"Vintage",
 		"SublimeAStyleFormatter",
 		"HTML",
+		"Emmet",
 	],
 	"folders":
 	[
@@ -49,5 +50,6 @@
 		"pep257": true,
 		"anaconda_linter_delay": 1,
 		"complete_parameters": true,
+		"display_signatures": true,
 	}
 }
