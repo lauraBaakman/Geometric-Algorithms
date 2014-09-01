@@ -23,6 +23,9 @@ print "numbers", numbers
 
 for i in range(len(numbers)):
     numbers[i] = numbers[i] + 1
+# Equivalent to:
+#   numbers = [x + 1 for x in numbers]
+
 print "numbers", numbers
 
 print "maximum", max(numbers)
@@ -32,3 +35,5 @@ i = 0
 while numbers[i] > 1.5:
     print numbers[i]
     i = i + 1
+# Equivalent to:
+#   print([x for x in numbers if x > 1.5])
