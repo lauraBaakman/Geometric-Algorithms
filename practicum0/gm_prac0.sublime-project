@@ -22,6 +22,16 @@
 			"shell_cmd": "python -u \"$file\""
 		}
 	],
+	"ignored_packages": [
+		"Javascript Beautify",
+		"HTML/CSS/JS Prettify",
+		"Bootstrap 3 Snippets",
+		"CodeFormatter",
+		"YAMLE",
+		"Vintage",
+		"SublimeAStyleFormatter",
+		"HTML",
+	],
 	"folders":
 	[
 		{
