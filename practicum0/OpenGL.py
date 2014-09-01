@@ -1,11 +1,10 @@
-#!/usr/bin/env python
-print "		======================================================"
-print "				example 1"
-print "		======================================================\n"
-# H.Bekker@rug.nl
-# This example is given to get started with python and opengl in python
-# Some random points are generated, sorted, connected by line segments and visualized
+"""
+Example of OpenGL with python.
 
+This example is given to get started with python and opengl in python.
+Some random points are generated, sorted, connected by line segments and visualized.
+H.Bekker@rug.nl
+"""
 
 
 from sys import *
@@ -21,11 +20,11 @@ try:
 except:
   print '''ERROR: PyOpenGL not installed properly.'''
   print '''Go get it: http://atrpms.net/'''
-  exit ( 2 ) 
+  exit ( 2 )
 
 # globals
 points=[]  # points
-spoints=[] # x_sorted points 
+spoints=[] # x_sorted points
 width  = 800  # screen x_size
 height = 800  # screen y_size
 seed(5)  # seed value of random
@@ -39,7 +38,7 @@ def generate_points():
       if r>0.5 and r<1.0 :
          points.append([500*x+100, 500*y+100])
 
-      
+
 
 
 def display():
@@ -59,7 +58,7 @@ def display():
        glVertex2f (spoints[i+1][0], spoints[i+1][1])
     glEnd()
     glutSwapBuffers ()  # display
-    
+
 def reshape (wid, hgt):
     global width, height
     width = wid
