@@ -8,7 +8,9 @@ This example is given to get started with python and opengl in python.
 
 from sys import *
 from random import *
+from math import sqrt
 import operator
+from pdb import *
 # from CGAL.Kernel import *
 
 try:
@@ -66,6 +68,14 @@ def reshape(wid, hgt):
     gluOrtho2D(0, width, height, 0)  # reshape
 
 
+def euclideanDistance2D(a, b):
+    """Compute the euclidean distance between the points a and b."""
+    sum = 0
+    for i in range(len(a)):
+        sum += (a[i] - b[i])**2
+    return (sqrt(sum))
+
+
 def main(argv=None):
     if argv is None:
         argv = sys.argv
@@ -85,4 +95,5 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    # sys.exit(main())
+    print(euclideanDistance2D([2, -1], [-2, 2]))
