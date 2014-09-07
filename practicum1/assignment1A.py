@@ -70,10 +70,13 @@ def reshape(wid, hgt):
 
 def euclideanDistance2D(a, b):
     """Compute the euclidean distance between the points a and b."""
-    sum = 0
-    for i in range(len(a)):
-        sum += (a[i] - b[i])**2
-    return (sqrt(sum))
+    return(
+        sqrt(
+            sum(
+                [(a_i - b_i)**2 for a_i, b_i in zip(a, b)]
+                )
+        )
+    )
 
 
 def main(argv=None):
