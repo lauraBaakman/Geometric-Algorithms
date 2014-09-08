@@ -1,0 +1,61 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+
+%Code
+\usepackage{listings}
+\usepackage{color}
+
+%Accenten
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+
+%Math
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+%Plaatjes
+\usepackage{graphicx}
+\usepackage[small,bf]{caption}
+\usepackage{subcaption}
+
+\usepackage{todonotes}
+
+% Code lay-out
+\definecolor{light-gray}{gray}{0.95}
+\usepackage{courier}
+\lstset{language=Python, 
+	tabsize = 4, 
+	columns=flexible, 
+	breaklines = true, 
+	backgroundcolor=\color{light-gray},
+	keepspaces=true,
+	showspaces=false,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily
+}
+
+\renewcommand{\t}[1]{\texttt{#1}}
+
+% General lay-out
+\renewcommand{\thesection}{\Alph{section}}
+
+%Math
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+
+\title{Geometric Algorithms\\Assignment 1}
+\author{Laura Baakman (s1869140)}
+
+\begin{document}
+
+\maketitle
+
+\section{~}
+\input{a.tex}
+
+\section{~}
+\input{b.tex}
+
+\end{document}
