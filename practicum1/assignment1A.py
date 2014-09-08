@@ -68,13 +68,23 @@ def reshape(wid, hgt):
     gluOrtho2D(0, width, height, 0)  # reshape
 
 
-def euclideanDistance2D(a, b):
-    """Compute the euclidean distance between the points a and b."""
+def euclidean_distance(a, b):
+    """Compute the euclidean distance between the n-dimensional points a and b."""
     return(
         sqrt(
             sum(
                 [(a_i - b_i)**2 for a_i, b_i in zip(a, b)]
-                )
+            )
+        )
+    )
+
+
+def length_of_connecting_path(points):
+    """Compute the length of the polygonal line that connects consecutive points."""
+    pairs = zip(points, points[1:])
+    return(
+        sum(
+            [euclidean_distance(a, b) for (a, b) in pairs]
         )
     )
 
@@ -85,6 +95,11 @@ def main(argv=None):
     generate_points()
     global spoints
     spoints = sorted(points, key=operator.itemgetter(0))  # sort points in x direction
+
+    print "Length of the path between consecutive points: {}".format(
+        length_of_connecting_path(spoints)
+    )
+
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
@@ -98,5 +113,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    # sys.exit(main())
-    print(euclideanDistance2D([2, -1], [-2, 2]))
+    sys.exit(main())
