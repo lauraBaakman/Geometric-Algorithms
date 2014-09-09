@@ -1,27 +1,27 @@
 %!TEX root = practicum1.tex
-A general sketch of the situation is provided in \autoref{fig:b:leftRightTurn}. To determine whether $L$ makes a turn and in what direction we can use the angle $\theta$.
+A general sketch of the situation is provided in \autoref{fig:b:leftRightTurn}. To determine whether $L$ makes a turn and in what direction we can use the angle $\theta$. Since we are not interested in the exact angle, we only need to know whether $\theta$ is zero and if not, what its sign is. 
 
 \begin{figure}
 	\centering
 	\includegraphics[scale=1]{./img/b_leftRightTurn}
-	\caption{The three points $\vec{P_1}$, $\vec{P_2}$ and $\vec{P_3}$. The dashed line represents the path $L$ from points $\vec{P_1}$, through $\vec{P_2}$ to $\vec{P_3}$.}
+	\caption{The three points $\vec{P_1}$, $\vec{P_2}$ and $\vec{P_3}$. The dashed line represents the path $L$ from point $\vec{P_1}$, through $\vec{P_2}$ to $\vec{P_3}$. $\theta$ is the angle between the vectors $\vec{v_1} = \vec{P_3} - \vec{P_1}$ and $\vec{v_2} = \vec{P_2} - \vec{P_1}$}.
 	\label{fig:b:leftRightTurn}
 \end{figure}
 
-Since we are not interested in the exact angle, we only need to know whether $\theta$ is zero and if not what its sign is. To do this we can take the cross-product of the vectors $\vec{v_1}$ and $\vec{v_2}$. The crossproduct of two identical vectors is, no turn, is zero. If the crossproduct is smaller than zero we made a right turn, if it is larger than zero we made a right turn.  
+Adding a $z$-coordinate of zero to the points $\vec{P_r}$ gives us the points $\vec{P_r}'$ with $r \in \{1, 2, 3\}$. The cross product of the vectors $\vec{v_1}$ and $\vec{v_2}$ is defined as:
 
-The formal expression, see \autoref{lst:b:formalExpression} for the derivation, is then:
-\begin{equation}
-	-x_2 y_1 + x_3 y_1 + x_1 y_2 - x_3 y_2 - x_1 y_3 + x_2 y_3.
-\end{equation}
-Where $x_2$ is the first element of the vector that represents the point $\vec{P_2}$.
+	\begin{equation}
+		\vec{v_1} \times \vec{v_2} = \begin{pmatrix}0\\0\\q\end{pmatrix},
+	\end{equation}
+with $q = p1y p2x - p1x p2y - p1y p3x + p2y p3x + p1x p3y - p2x p3y$, where $p1y$ represents the second element of the point $\vec{p_1}$, the code used to derive this expression is presented in \autoref{lst:b:formalExpression}. The sign of the variable $q$ indicates what turn if any we made. If $q$ is zero there was no turn, if $q$ smaller than zero we made a right turn, if it is larger than zero a left turn.
+
 
 \begin{lstlisting}[float, caption={Generation of the formal expression.}, label={lst:b:formalExpression}, language=Mathematica]
 p1 = {p1x, p1y, 0};
 p2 = {p2x, p2y, 0};
 p3 = {p3x, p3y, 0};
-v1 = b - a;
-v2 = c - a;
+v1 = p3 - p1;
+v2 = p2 - p1;
 Cross[v1, v2]
 \end{lstlisting}
 
