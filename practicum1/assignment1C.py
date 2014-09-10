@@ -3,7 +3,6 @@ Assignment C
 
 TODO:
 - Herhaalde stukje in convex_hull naar een functie trekken.
-- Oppervlakte berekenen
 """
 
 from random import *
@@ -24,8 +23,9 @@ convex_hull_points = []
 width = 800  # screen x_size
 height = 800  # screen y_size
 seed(5)  # random generator initialization
-N = 1000  # Number of points, initially set to 1000
+N = 100  # Number of points, initially set to 1000
 
+debug = False
 
 def area_irregular_polygon(points):
     """
@@ -71,15 +71,6 @@ def convex_hull(cv_points):
 
 
 def generate_points(debug=False):
-    if(debug):
-        points.extend([
-            [-3, -2],
-            [-1, 4],
-            [6, 1],
-            [3, 10],
-            [-4, 9]
-        ])
-    else:
         while True:
             x = random()
             y = random()
@@ -95,25 +86,35 @@ def display():
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(1.0, 0.0, 1.0)
 
-    # Draw lines
-    # Set the colours of the lines to red
+    # Draw lines between the points in green
+    if(debug):
+        glColor3f(0.0, 1.0, 0.0)
+
+        glBegin(GL_LINES)
+        for p in points:
+            for q in points:
+                glVertex2f(p[0], p[1])
+                glVertex2f(q[0], q[1])
+        glEnd()
+
+    # Draw lines the convex hull in red
     glColor3f(1.0, 0.0, 0.0)
 
     glBegin(GL_LINES)
     for i in range(len(convex_hull_points) - 1):
         glVertex2f(convex_hull_points[i][0], convex_hull_points[i][1])
         glVertex2f(convex_hull_points[i + 1][0], convex_hull_points[i + 1][1])
-    # glVertex2f(convex_hull_points[i + 1][0], convex_hull_points[i + 1][1])
-    # glVertex2f(convex_hull_points[0][0], convex_hull_points[0][1])
     glEnd()
 
-    # Draw points
+    # Draw the points
     glColor3f(1.0, 1.0, 1.0)
     glPointSize(3)
     glBegin(GL_POINTS)
     for p in points:
         glVertex2f(p[0], p[1])
     glEnd()
+
+
     glutSwapBuffers()  # display
 
 
@@ -130,7 +131,7 @@ def reshape(wid, hgt):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     global convex_hull_points
     convex_hull_points = convex_hull(points)
 
