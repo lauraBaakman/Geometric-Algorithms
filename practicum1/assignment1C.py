@@ -1,5 +1,9 @@
 """
 Assignment C
+
+TODO:
+- Herhaalde stukje in convex_hull naar een functie trekken.
+- Oppervlakte berekenen
 """
 
 from random import *
@@ -23,13 +27,26 @@ seed(5)  # random generator initialization
 N = 1000  # Number of points, initially set to 1000
 
 
+def area_irregular_polygon(points):
+    """
+    Compute the area  of an irregular polygon.
+
+    The polygon is defined by the passed points, which are the polygons vertices.
+    """
+    points.append(points[0])
+    first_sum = sum([x * y for ([x, _], [_, y]) in zip(points, points[1:])])
+    second_sum = sum([x * y for ([x, _], [_, y]) in zip(points[1:], points)])
+    return ((first_sum - second_sum)/2)
+    # second_sum = sum
+
+
 def make_right_turn(o, a, b):
     """Return true if the line drawn through p1, p2 and p3 makes a right turn."""
     q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
     return (q > 0)
 
 
-def compute_convex_hull(cv_points):
+def convex_hull(cv_points):
     """Compute the convex hull of the passed points using the passed points."""
     cv_points.sort()
 
@@ -43,7 +60,7 @@ def compute_convex_hull(cv_points):
             L_upper.pop(-2)
 
     L_lower = cv_points[-2:]
-    for i in reversed(range(0, len(cv_points)-2)):
+    for i in reversed(range(0, len(cv_points) - 2)):
         L_lower.append(cv_points[i])
         while (
             len(L_lower) > 2 and
@@ -54,7 +71,16 @@ def compute_convex_hull(cv_points):
     return(L_upper + L_lower[1:len(cv_points) - 1])
 
 
-def generate_points():
+def generate_points(debug=False):
+    if(debug):
+        points.extend([
+            [-3, -2],
+            [-1, 4],
+            [6, 1],
+            [3, 10],
+            [-4, 9]
+        ])
+    else:
         while True:
             x = random()
             y = random()
@@ -105,20 +131,21 @@ def reshape(wid, hgt):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    generate_points()
-    global convex_hull_points
-    convex_hull_points = compute_convex_hull(points)
+    generate_points(True)
+    # global convex_hull_points
+    # convex_hull_points = convex_hull(points)
+    print(area_irregular_polygon(points))
 
-    glutInit(argv)
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-    glutInitWindowSize(width, height)
-    glutInitWindowPosition(100, 100)
-    glutCreateWindow("Polygon, no CGAL")
-    glutDisplayFunc(display)
-    glutIdleFunc(display)
-    glutReshapeFunc(reshape)
-    display()
-    glutMainLoop()
+    # glutInit(argv)
+    # glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+    # glutInitWindowSize(width, height)
+    # glutInitWindowPosition(100, 100)
+    # glutCreateWindow("Polygon, no CGAL")
+    # glutDisplayFunc(display)
+    # glutIdleFunc(display)
+    # glutReshapeFunc(reshape)
+    # display()
+    # glutMainLoop()
     return
 
 
