@@ -23,6 +23,18 @@ seed(5)  # random generator initialization
 N = 1000  # Number of points, initially set to 1000
 
 
+def area_irregular_polygon(points):
+    """
+    Compute the area  of an irregular polygon.
+
+    The polygon is defined by the passed points, which are the polygons vertices.
+    """
+    points.append(points[0])
+    first_sum = sum([x * y for ([x, _], [_, y]) in zip(points, points[1:])])
+    second_sum = sum([x * y for ([x, _], [_, y]) in zip(points[1:], points)])
+    return ((first_sum - second_sum) / 2)
+
+
 def make_right_turn(o, a, b):
     """Return true if the line drawn through p1, p2 and p3 makes a right turn."""
     q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
@@ -43,7 +55,7 @@ def compute_convex_hull(cv_points):
             L_upper.pop(-2)
 
     L_lower = cv_points[-2:]
-    for i in reversed(range(0, len(cv_points)-2)):
+    for i in reversed(range(0, len(cv_points) - 2)):
         L_lower.append(cv_points[i])
         while (
             len(L_lower) > 2 and
@@ -108,6 +120,10 @@ def main(argv=None):
     generate_points()
     global convex_hull_points
     convex_hull_points = compute_convex_hull(points)
+
+    print ("The area of the convex hull is: {}".format(
+        area_irregular_polygon(convex_hull_points))
+    )
 
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
