@@ -36,8 +36,7 @@ def area_irregular_polygon(points):
     points.append(points[0])
     first_sum = sum([x * y for ([x, _], [_, y]) in zip(points, points[1:])])
     second_sum = sum([x * y for ([x, _], [_, y]) in zip(points[1:], points)])
-    return ((first_sum - second_sum)/2)
-    # second_sum = sum
+    return ((first_sum - second_sum) / 2)
 
 
 def make_right_turn(o, a, b):
@@ -131,21 +130,24 @@ def reshape(wid, hgt):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    generate_points(True)
-    # global convex_hull_points
-    # convex_hull_points = convex_hull(points)
-    print(area_irregular_polygon(points))
+    generate_points()
+    global convex_hull_points
+    convex_hull_points = convex_hull(points)
 
-    # glutInit(argv)
-    # glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-    # glutInitWindowSize(width, height)
-    # glutInitWindowPosition(100, 100)
-    # glutCreateWindow("Polygon, no CGAL")
-    # glutDisplayFunc(display)
-    # glutIdleFunc(display)
-    # glutReshapeFunc(reshape)
-    # display()
-    # glutMainLoop()
+    print ("The area of the convex hull is: {}".format(
+        area_irregular_polygon(convex_hull_points))
+    )
+
+    glutInit(argv)
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+    glutInitWindowSize(width, height)
+    glutInitWindowPosition(100, 100)
+    glutCreateWindow("Polygon, no CGAL")
+    glutDisplayFunc(display)
+    glutIdleFunc(display)
+    glutReshapeFunc(reshape)
+    display()
+    glutMainLoop()
     return
 
 
