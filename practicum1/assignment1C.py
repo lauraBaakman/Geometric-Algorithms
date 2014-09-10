@@ -44,28 +44,39 @@ def make_right_turn(o, a, b):
     q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
     return (q > 0)
 
+def half_convex_hull(L, for_range, points_sorted):
+    for i in for_range:
+        L.append(points_sorted[i])
+        while (
+            len(L) > 2 and
+            not make_right_turn(L[-3], L[-2], L[-1])
+        ):
+            L.pop(-2)
+    return L
 
 def convex_hull(cv_points):
     """Compute the convex hull of the passed points using the passed points."""
     cv_points.sort()
 
-    L_upper = cv_points[0:2]
-    for i in range(2, len(cv_points)):
-        L_upper.append(cv_points[i])
-        while (
-            len(L_upper) > 2 and
-            not make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
-        ):
-            L_upper.pop(-2)
+    # L_upper = cv_points[0:2]
+    # for i in range(2, len(cv_points)):
+    #     L_upper.append(cv_points[i])
+    #     while (
+    #         len(L_upper) > 2 and
+    #         not make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
+    #     ):
+    #         L_upper.pop(-2)
+    L_upper = half_convex_hull(cv_points[0:2], range(2, len(cv_points)), cv_points)
+    L_lower = half_convex_hull(cv_points[-2:], reversed(range(0, len(cv_points) - 2)), cv_points)
 
-    L_lower = cv_points[-2:]
-    for i in reversed(range(0, len(cv_points) - 2)):
-        L_lower.append(cv_points[i])
-        while (
-            len(L_lower) > 2 and
-            not make_right_turn(L_lower[-3], L_lower[-2], L_lower[-1])
-        ):
-            L_lower.pop(-2)
+    # L_lower = cv_points[-2:]
+    # for i in reversed(range(0, len(cv_points) - 2)):
+    #     L_lower.append(cv_points[i])
+    #     while (
+    #         len(L_lower) > 2 and
+    #         not make_right_turn(L_lower[-3], L_lower[-2], L_lower[-1])
+    #     ):
+    #         L_lower.pop(-2)
 
     return(L_upper + L_lower[1:len(cv_points) - 1])
 
