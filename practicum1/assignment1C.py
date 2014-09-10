@@ -71,36 +71,37 @@ def convex_hull(points):
 def make_right_turn(o, a, b):
     """Return true if the line drawn through p1, p2 and p3 makes a right turn."""
     q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-    # print "Computed {} from: {} {} {}".format(q, o, a, b)
     return (q <= 0)
+
+
+def compute_convex_hull_part(result_set, for_range, point_set):
+    for i in for_range:
+        result_set.append(point_set[i])
+        while (
+            len(result_set) > 2 and
+            make_right_turn(result_set[-3], result_set[-2], result_set[-1])
+        ):
+            q = result_set.pop(-2)
+            # print "{} (removed the point {})".format(result_set, q)
+    return result_set
 
 
 def compute_convex_hull(cv_points):
     """Compute the convex hull of the passed points using the passed points."""
     cv_points.sort()
 
-    L_upper = cv_points[0:2]
-    for i in range(2, len(cv_points)):
-        L_upper.append(cv_points[i])
-        while (
-            len(L_upper) > 2 and
-            make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
-        ):
-                q = L_upper.pop(-2)
-                print "{} (removed the point {})".format(L_upper, q)
-        print L_upper
+    L_upper = compute_convex_hull_part(cv_points[0:2], range(2, len(cv_points)), cv_points)
+    print L_upper
 
-    print "UPPER HULL"
+    # L_lower = cv_points[-2:]
+    # for i in reversed(range(2, len(cv_points))):
+    #     L_lower.append(cv_points[i])
+    #     if (len(L_lower) > 2):
+    #         [p1, p2, p3] = L_lower[-3:]
+    #         if (not make_right_turn(p1, p2, p3)):
+    #             L_lower.remove(p2)
 
-    L_lower = cv_points[-2:]
-    for i in reversed(range(2, len(cv_points))):
-        L_lower.append(cv_points[i])
-        if (len(L_lower) > 2):
-            [p1, p2, p3] = L_lower[-3:]
-            if (not make_right_turn(p1, p2, p3)):
-                L_lower.remove(p2)
-
-    return(L_upper + L_lower[1:len(L) - 1])
+    # return(L_upper + L_lower[1:len(L) - 1])
     # TODO van het for stuk functie maken!
 
 
