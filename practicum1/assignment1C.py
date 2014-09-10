@@ -114,7 +114,6 @@ def display():
         glVertex2f(p[0], p[1])
     glEnd()
 
-
     glutSwapBuffers()  # display
 
 
