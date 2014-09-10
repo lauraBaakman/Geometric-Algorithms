@@ -1,4 +1,10 @@
-"""Assignment C."""
+"""
+Assignment C.
+
+TODO:
+- Laatste kant mist nog
+- Aan de rechterkant is het spul niet convex.
+"""
 
 from random import *
 import pdb
@@ -18,7 +24,7 @@ convex_hull_points = []
 width = 800  # screen x_size
 height = 800  # screen y_size
 seed(5)  # random generator initialization
-N = 20  # Number of points, initially set to 1000
+N = 1000  # Number of points, initially set to 1000
 
 
 def make_right_turn(o, a, b):
@@ -41,7 +47,7 @@ def compute_convex_hull(cv_points):
             L_upper.pop(-2)
 
     L_lower = cv_points[-2:]
-    for i in reversed(range(2, len(cv_points))):
+    for i in reversed(range(0, len(cv_points)-2)):
         L_lower.append(cv_points[i])
         while (
             len(L_lower) > 2 and
