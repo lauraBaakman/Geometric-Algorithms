@@ -14,58 +14,11 @@ except:
 
 # globals
 points = []  # points
-width = 1000  # screen x_size
-height = 1000  # screen y_size
+convex_hull_points = []
+width = 800  # screen x_size
+height = 800  # screen y_size
 seed(5)  # random generator initialization
-N = 10  # Number of points, initially set to 1000
-
-
-def convex_hull(points):
-    """Computes the convex hull of a set of 2D points.
-
-    Input: an iterable sequence of (x, y) pairs representing the points.
-    Output: a list of vertices of the convex hull in counter-clockwise order,
-      starting from the vertex with the lexicographically smallest coordinates.
-    Implements Andrew's monotone chain algorithm. O(n log n) complexity.
-    """
-
-    # Sort the points lexicographically (tuples are compared lexicographically).
-    # Remove duplicates to detect the case we have just one unique point.
-    points = sorted(points)
-
-    # Boring case: no points or a single point, possibly repeated multiple times.
-    if len(points) <= 1:
-        return points
-
-    # 2D cross product of OA and OB vectors, i.e. z-component of their 3D cross product.
-    # Returns a positive value, if OAB makes a counter-clockwise turn,
-    # negative for clockwise turn, and zero if the points are collinear.
-    def cross(o, a, b):
-        q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-        # print "Computed {} from: {} {} {}".format(q, o, a, b)
-        return q <= 0
-
-    # Build lower hull
-    lower = []
-    for p in points:
-        while len(lower) >= 2 and cross(lower[-2], lower[-1], p):
-            q = lower.pop()
-            print "{} (removed the point {})".format(lower, q)
-        lower.append(p)
-        print lower
-
-    print "UPPER HULL"
-
-    # Build upper hull
-    upper = []
-    for p in reversed(points):
-        while len(upper) >= 2 and cross(upper[-2], upper[-1], p) <= 0:
-            upper.pop()
-        upper.append(p)
-
-    # Concatenation of the lower and upper hulls gives the convex hull.
-    # Last point of each list is omitted because it is repeated at the beginning of the other list.
-    return lower[:-1] + upper[:-1]
+N = 20  # Number of points, initially set to 1000
 
 
 def make_right_turn(o, a, b):
@@ -74,42 +27,36 @@ def make_right_turn(o, a, b):
     return (q <= 0)
 
 
-def compute_convex_hull_part(result_set, for_range, point_set):
-    for i in for_range:
-        result_set.append(point_set[i])
-        while (
-            len(result_set) > 2 and
-            make_right_turn(result_set[-3], result_set[-2], result_set[-1])
-        ):
-            q = result_set.pop(-2)
-            # print "{} (removed the point {})".format(result_set, q)
-    return result_set
-
-
 def compute_convex_hull(cv_points):
     """Compute the convex hull of the passed points using the passed points."""
     cv_points.sort()
 
-    L_upper = compute_convex_hull_part(cv_points[0:2], range(2, len(cv_points)), cv_points)
-    print L_upper
+    L_upper = cv_points[0:2]
+    for i in range(2, len(cv_points)):
+        L_upper.append(cv_points[i])
+        while (
+            len(L_upper) > 2 and
+            make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
+        ):
+            L_upper.pop(-2)
 
-    # L_lower = cv_points[-2:]
-    # for i in reversed(range(2, len(cv_points))):
-    #     L_lower.append(cv_points[i])
-    #     if (len(L_lower) > 2):
-    #         [p1, p2, p3] = L_lower[-3:]
-    #         if (not make_right_turn(p1, p2, p3)):
-    #             L_lower.remove(p2)
+    L_lower = cv_points[-2:]
+    for i in reversed(range(2, len(cv_points))):
+        L_lower.append(cv_points[i])
+        while (
+            len(L_lower) > 2 and
+            make_right_turn(L_lower[-3], L_lower[-2], L_lower[-1])
+        ):
+            L_lower.pop(-2)
 
-    # return(L_upper + L_lower[1:len(L) - 1])
-    # TODO van het for stuk functie maken!
+    return(L_upper + L_lower[1:len(cv_points) - 1])
 
 
 def generate_points(debug=False):
     if(debug):
         points.extend([
             [050, 700], [200, 600], [100, 400],
-            [300, 200], [400, 100], [500, 100],
+            [320, 200], [400, 100], [500, 100],
             [600, 300], [700, 050], [800, 100],
             [900, 500],
         ])
@@ -128,9 +75,22 @@ def generate_points(debug=False):
 def display():
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(1.0, 0.0, 1.0)
+
+    # Draw lines
+    # Set the colours of the lines to red
+    glColor3f(1.0, 0.0, 0.0)
+
+    glBegin(GL_LINES)
+    for i in range(len(convex_hull_points) - 1):
+        glVertex2f(convex_hull_points[i][0], convex_hull_points[i][1])
+        glVertex2f(convex_hull_points[i + 1][0], convex_hull_points[i + 1][1])
+    # glVertex2f(convex_hull_points[i + 1][0], convex_hull_points[i + 1][1])
+    # glVertex2f(convex_hull_points[0][0], convex_hull_points[0][1])
+    glEnd()
+
     # Draw points
     glColor3f(1.0, 1.0, 1.0)
-    glPointSize(10)
+    glPointSize(3)
     glBegin(GL_POINTS)
     for p in points:
         glVertex2f(p[0], p[1])
@@ -151,21 +111,20 @@ def reshape(wid, hgt):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    generate_points(True)
-    print(convex_hull(points))
-    print '---'
-    print(compute_convex_hull(points))
+    generate_points()
+    global convex_hull_points
+    convex_hull_points = compute_convex_hull(points)
 
-    # glutInit(argv)
-    # glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-    # glutInitWindowSize(width, height)
-    # glutInitWindowPosition(100, 100)
-    # glutCreateWindow("Polygon, no CGAL")
-    # glutDisplayFunc(display)
-    # glutIdleFunc(display)
-    # glutReshapeFunc(reshape)
-    # display()
-    # glutMainLoop()
+    glutInit(argv)
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+    glutInitWindowSize(width, height)
+    glutInitWindowPosition(100, 100)
+    glutCreateWindow("Polygon, no CGAL")
+    glutDisplayFunc(display)
+    glutIdleFunc(display)
+    glutReshapeFunc(reshape)
+    display()
+    glutMainLoop()
     return
 
 
