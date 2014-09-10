@@ -1,9 +1,5 @@
 """
-Assignment C.
-
-TODO:
-- Laatste kant mist nog
-- Aan de rechterkant is het spul niet convex.
+Assignment C
 """
 
 from random import *
@@ -30,7 +26,7 @@ N = 1000  # Number of points, initially set to 1000
 def make_right_turn(o, a, b):
     """Return true if the line drawn through p1, p2 and p3 makes a right turn."""
     q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
-    return (q <= 0)
+    return (q > 0)
 
 
 def compute_convex_hull(cv_points):
@@ -42,7 +38,7 @@ def compute_convex_hull(cv_points):
         L_upper.append(cv_points[i])
         while (
             len(L_upper) > 2 and
-            make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
+            not make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
         ):
             L_upper.pop(-2)
 
@@ -51,22 +47,14 @@ def compute_convex_hull(cv_points):
         L_lower.append(cv_points[i])
         while (
             len(L_lower) > 2 and
-            make_right_turn(L_lower[-3], L_lower[-2], L_lower[-1])
+            not make_right_turn(L_lower[-3], L_lower[-2], L_lower[-1])
         ):
             L_lower.pop(-2)
 
     return(L_upper + L_lower[1:len(cv_points) - 1])
 
 
-def generate_points(debug=False):
-    if(debug):
-        points.extend([
-            [050, 700], [200, 600], [100, 400],
-            [320, 200], [400, 100], [500, 100],
-            [600, 300], [700, 050], [800, 100],
-            [900, 500],
-        ])
-    else:
+def generate_points():
         while True:
             x = random()
             y = random()
