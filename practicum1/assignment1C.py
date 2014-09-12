@@ -23,9 +23,9 @@ convex_hull_points = []
 width = 800  # screen x_size
 height = 800  # screen y_size
 seed(5)  # random generator initialization
-N = 100  # Number of points, initially set to 1000
+N = 1000  # Number of points, initially set to 1000
 
-debug = False
+debug = True
 
 def area_irregular_polygon(points):
     """
@@ -39,12 +39,21 @@ def area_irregular_polygon(points):
     return ((first_sum - second_sum) / 2)
 
 
-def make_right_turn(o, a, b):
+def make_right_turn(p1, p2, p3):
     """Return true if the line drawn through p1, p2 and p3 makes a right turn."""
-    q = (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    q = -(p1[1]*p2[0]) + p1[0]*p2[1] + p1[1]*p3[0] - p2[1]*p3[0] - p1[0]*p3[1] + p2[0]*p3[1]
     return (q > 0)
 
+
 def half_convex_hull(L, for_range, points_sorted):
+    """
+    Compute the upper or lower part of the convex hull.
+
+    Args:
+        L: The initial set to be used for the this half of the convex hull.
+        for_range: The range of points_sorted to be considered.
+        points_sorted: The sorted list of points of which the half convex hull is computed.
+    """
     for i in for_range:
         L.append(points_sorted[i])
         while (
@@ -58,25 +67,8 @@ def convex_hull(cv_points):
     """Compute the convex hull of the passed points using the passed points."""
     cv_points.sort()
 
-    # L_upper = cv_points[0:2]
-    # for i in range(2, len(cv_points)):
-    #     L_upper.append(cv_points[i])
-    #     while (
-    #         len(L_upper) > 2 and
-    #         not make_right_turn(L_upper[-3], L_upper[-2], L_upper[-1])
-    #     ):
-    #         L_upper.pop(-2)
     L_upper = half_convex_hull(cv_points[0:2], range(2, len(cv_points)), cv_points)
     L_lower = half_convex_hull(cv_points[-2:], reversed(range(0, len(cv_points) - 2)), cv_points)
-
-    # L_lower = cv_points[-2:]
-    # for i in reversed(range(0, len(cv_points) - 2)):
-    #     L_lower.append(cv_points[i])
-    #     while (
-    #         len(L_lower) > 2 and
-    #         not make_right_turn(L_lower[-3], L_lower[-2], L_lower[-1])
-    #     ):
-    #         L_lower.pop(-2)
 
     return(L_upper + L_lower[1:len(cv_points) - 1])
 

@@ -43,7 +43,13 @@
 \renewcommand{\thesection}{\Alph{section}}
 
 %Math
-\renewcommand{\vec}[1]{\boldsymbol{#1}}
+\renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+
+%Short cuts
+\newcommand{\p}[1]{\ensuremath{\vec{P_#1}}}
+\renewcommand{\v}[1]{\ensuremath{\vec{v_#1}}}
 
 \title{Geometric Algorithms\\Assignment 1}
 \author{Laura Baakman (s1869140)}
@@ -55,10 +61,10 @@
 % \section{~}
 % \input{a.tex}
 
-% \section{~}
-% \input{b.tex}
+\section{~}
+\input{b.tex}
 
-\section(~)
-\input{c.tex}
+% \section{~}
+% \input{c.tex}
 
 \end{document}

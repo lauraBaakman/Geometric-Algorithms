@@ -4,11 +4,11 @@ The Euclidean distance between the $n$-dimensional points $\vec{a}$ and $\vec{b}
 		d(\vec{a},\vec{b}) = \sqrt{\sum_{i = 1}^{n} (a_i - b_i)^2}.
 	\end{equation}
 My implementation of this formula is provided in \autoref{lst:a:euclideanDistance}.
-\lstinputlisting[float, firstline=71, lastline=79, label={lst:a:euclideanDistance}, caption={An implementation of the Euclidean distance.}]{../assignment1A.py}
+\lstinputlisting[float, firstline=71, lastline=79, label={lst:a:euclideanDistance}, caption={Function that computes the Euclidean distance between two points.}]{../assignment1A.py}
 ~\\
 The length of the polygonal line created by drawing line segments between consecutive points from the list $[\vec{p_0}, \ldots, \vec{p_n}]$ is:
 	\begin{equation}
 		\sum_{i=0}^{n} d(\vec{p_i}, \vec{p_{i+1}}).
 	\end{equation}
 The first step of my implementation computes the list \t{pairs}, which contains all pairs of points between which the distance should be computed. Actually computing this distance, using the function \t{euclidean\_distance} and summing the results gives the length of the requested line, see \autoref{lst:a:pathLength}.
-\lstinputlisting[float, firstline=82, lastline=89, label={lst:a:pathLength}, caption={Compute the length of the polygonal path between consecutive points.}]{../assignment1A.py}
+\lstinputlisting[float, firstline=82, lastline=89, label={lst:a:pathLength}, caption={Function that computes the length of the polygonal path between consecutive points.}]{../assignment1A.py}
