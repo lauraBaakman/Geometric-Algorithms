@@ -17,6 +17,7 @@ from fractions import *
 from random import *
 from math import *
 from assignment1A import euclidean_distance
+from assignment1C import convex_hull
 
 try:
     from OpenGL.GLUT import *
@@ -36,7 +37,7 @@ ch = []             # complete convex hull
 width = 700         # screen x_size
 height = 700        # screen y_size
 seed(5)             # random generator initialization
-epsilon = 0.005     # very small number
+epsilon = 0.05     # very small number
 
 
 def generatePointsA():
@@ -98,23 +99,46 @@ def generatePointsD():
         points.append(p)
 
 
-def vectorNorm(vector):
-    """Compute the norm of a n-dimensonal vector."""
-    return sqrt(sum(
-        [x**2 for x in vector]
-    ))
+def isSmall(number):
+    """Function to check if a number is very small."""
+    return abs(number) < epsilon
 
-def vectorMin(vectorA, vectorB):
-    """Substract two n-dimensonal vectors."""
-    return [a - b for (a, b) in zip(vectorA, vectorB)]
 
-def rightTurnFiltered(a, b, c):
+def make_right_turn(a, b, c):
     """Return true if if the line drawn through a, b, and c makes a right turn."""
+    print "rightTurn in E"
 
-    # write here your code to determine whether a,b,c make a right turn
-    # let v1 and v2 be the distance between a,b and b,c respectively
-    # if v1 or v2 are very small, or when the turn angle is very small use fractions
+    def floatVectortoFractionVector(vector):
+        return [Fraction.from_float(x) for x in vector]
 
+    def crossProduct(p1, p2, p3):
+        """Compute the crossProduct of the vectors p2 - p1 and p3 - p1."""
+        print "in crossProduct"
+        return (
+            -(p1[1]*p2[0]) + p1[0]*p2[1] + p1[1]*p3[0] - p2[1]*p3[0] - p1[0]*p3[1] + p2[0]*p3[1]
+        )
+
+    v1Norm = euclidean_distance(a, b)
+    print v1Norm
+    v2Norm = euclidean_distance(a, c)
+    print v2Norm
+    q = crossProduct(a, b, c)
+    print q
+    angle = q / (v1Norm * v2Norm)
+
+    if (
+        isSmall(v1Norm) or
+        isSmall(v2Norm) or
+        isSmall(angle)
+    ):
+        print "Recomputing q"
+        # Recompute q
+        af = floatVectortoFractionVector(a)
+        bf = floatVectortoFractionVector(b)
+        cf = floatVectortoFractionVector(c)
+        q = crossProduct(af, bf, cf)
+        print "Recomputed q: {}".format(q)
+    return (q > 0)
 
 
 def det(a, b, c):
@@ -130,9 +154,9 @@ def det(a, b, c):
 
 
 def ConvexHull():
-    a = 0
-    # dummy statement, delete
-    # write here you CH code
+    res = convex_hull(points)
+    print(res)
+    return res
 
 
 def ChArea(ch):
@@ -207,5 +231,4 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    # sys.exit(main())
-    print(asA.euclidean_distance(p1, p2))
+    sys.exit(main())
