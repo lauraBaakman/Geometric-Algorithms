@@ -25,7 +25,7 @@ height = 800  # screen y_size
 seed(5)  # random generator initialization
 N = 1000  # Number of points, initially set to 1000
 
-debug = True
+debug = False
 
 def area_irregular_polygon(points):
     """
@@ -102,6 +102,7 @@ def display():
 
     # Draw lines the convex hull in red
     glColor3f(1.0, 0.0, 0.0)
+    glLineWidth(2)
 
     glBegin(GL_LINES)
     for i in range(len(convex_hull_points) - 1):
