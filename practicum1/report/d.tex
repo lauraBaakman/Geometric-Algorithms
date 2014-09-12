@@ -1,22 +1,37 @@
 %!TEX root = practicum1.tex
-For the purpose of this exercise I have defined a class \t{Line} that contains all methods pertaining to the lines. \autoref{lst:d:classDefinition} presents the class definition and its constructors and factory methods. The factory method \t{randomWithFloat} generates a random line, with the coefficients \t{a} and \t{b} as floats, \t{randomWithFraction} does the same but uses \t{Fraction} objects.
+For the purpose of this exercise I have defined a class \t{Line} that contains all methods pertaining to lines. \autoref{lst:d:classDefinition} presents the class definition and its constructors and factory methods. The factory method \t{randomWithFloat()} generates a random line, with the coefficients \t{a} and \t{b} as floats, \t{randomWithFraction()} does the same but uses \t{Fraction} objects.
 
-\lstinputlisting[float, firstline=7, lastline=43, label={lst:d:classDefinition}, caption={The definition of the line class and its constructors.}]{../assignment1D.py}
+\lstinputlisting[float, firstline=8, lastline=44, label={lst:d:classDefinition}, caption={Constructors and factory methods of the class Line.}]{../assignment1D.py}
 
 \subsection*{Intersection}
-The x-coordinate intersection of two lines $f(x) = a_1 \cdot x + b_1$ and $g(x) = a_2 \cdot x + b_2$ can be found by solving $f(x) = g(x)$. Using Mathematica, see \autoref{eq:d:matIntersection}, we get the solution of this equation:
-\begin{equation}
-	x = \frac{-b_1 + b_2}{a_1 - a_2}.
-\end{equation}
-Paying attention to the case where the lines are parallel, i.e $a_1 - a_2 == 0$, we use this equation to implement the intersect method of the class \t{Line}, see \autoref{lst:d:intersect}.
+	The x-coordinate intersection of two lines $f(x) = a_1 \cdot x + b_1$ and $g(x) = a_2 \cdot x + b_2$ can be found by solving $f(x) = g(x)$. Using Mathematica, see \autoref{eq:d:matIntersection}, we get the solution of this equation:
+	\begin{equation}
+		x = \frac{-b_1 + b_2}{a_1 - a_2}.
+	\end{equation}
+	Paying attention to the case where the lines are parallel, i.e $a_1 - a_2 = 0$, we use this equation to implement a method in the class \t{Line}, see \autoref{lst:d:intersect}.
 
-\lstinputlisting[float, firstline=7, lastline=43, label={lst:d:intersect}, caption={The method \t{intersect} of the class \t{Line}.}]{../assignment1D.py}
+	\begin{lstlisting}[language=Mathematica, float, caption={Mathematica code used to derive an expression for the $x$-coordinate of two lines.}, label={eq:d:matIntersection}]
+	Solve[a1 * x + b1 == a2 * x + b2, x]\end{lstlisting}
 
-
-\begin{lstlisting}[language=Mathematica, float, caption={Mathematica code used to derive an expression for the $x$-coordinate of two lines.}, label={eq:d:matIntersection}]
-Solve[a1 * x + b1 == a2 * x + b2, x]
-\end{lstlisting}
+	\lstinputlisting[float, firstline=55, lastline=62, label={lst:d:intersect}, caption={The method \t{intersectionPoint()} of the class \t{Line}.}]{../assignment1D.py}
 
 \subsection*{Point on Line}
+	A point $\vec{P} = (q,z)$ lies on a line $y = ax +b$ if plugging \vec{P} into the equation of the line returns a true statement, i.e. if the following holds:
+	\begin{equation}
+		a \cdot q + b - z = 0.
+	\end{equation}
+
+	To test if a point is on a line I have implemented the method \t{pointOnLine()}, which returns \t{True} if the passed point is on the line, see \autoref{lst:d:pointOnLine}. 
+
+	\lstinputlisting[float, firstline=50, lastline=53, label={lst:d:pointOnLine}, caption={The method \t{pointOnLine()} of the class \t{Line}.}]{../assignment1D.py}
 
 \subsection*{Test}
+	Testing is done using the methods \t{testLinePair()} and \t{test()}. The first finds the intersection of a pair of lines. If the lines intersection, i.e. are not parallel, it is tested if the intersection point coincides with both of the lines, see \autoref{lst:d:testLinePair}.
+
+	\lstinputlisting[float, firstline=83, lastline=97, label={lst:d:testLinePair}, caption={The method \t{testLinePair()}.}]{../assignment1D.py}
+
+	The  method \t{test()} generates \t{N} lines and calls \t{testLinePair} for all unique line pairs with distinct lines. The code of this method is provided in \autoref{lst:d:test}. The \t{Counter} object stores the values of \t{results} as keys and their counts as values in a dictionary. 
+
+	\lstinputlisting[float, firstline=100, lastline=114, label={lst:d:testLinePair}, caption={The method \t{test()}.}]{../assignment1D.py}
+
+	The test is executed for both fractions and floats. The results show that when fractions are used all intersection points lie on both of the lines, whereas with floats the 1980 of the 2970 did not coincide with their lines. No parallel were generated in either case.
