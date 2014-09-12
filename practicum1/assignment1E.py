@@ -16,6 +16,7 @@ same calculation is performed using rational numbers.
 from fractions import *
 from random import *
 from math import *
+from assignment1A import euclidean_distance
 
 try:
     from OpenGL.GLUT import *
@@ -207,8 +208,4 @@ def main(argv=None):
 
 if __name__ == '__main__':
     # sys.exit(main())
-    p1 = (7, 3)
-    p2 = (8, 9)
-    res = vectorMin(p1, p2)
-    print res
-    print(vectorNorm(res))
+    print(asA.euclidean_distance(p1, p2))
