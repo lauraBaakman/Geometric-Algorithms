@@ -1,14 +1,16 @@
 %!TEX root = practicum1.tex
 \subsection*{Convex Hull}
-	To find the convex hull of the generated set we use the ConvexHull algorithm given in the exercise. Since the code necessary to compute \t{L\_upper} and \t{L\_lower} is comparative it has been extracted to a method called \t{half\_convex\_hull} provided in \autoref{lst:c:halfConvexHull}. The function \t{half\_convex\_hull} uses the method \t{make_right)turn} that determines if the path defined by the last three points in the set \t{L} makes a right turn. This method, uses the value of $q$ defined in \eqref{eq:b:q}, see \autoref{lst:c:makeRightTurn}. 
+	To find the convex hull of the generated set we use the ConvexHull algorithm given in the exercise. Since the code necessary to compute \t{L\_upper} and \t{L\_lower} is comparative it has been extracted to a method called \t{half\_convex\_hull} provided in \autoref{lst:c:halfConvexHull}. The function \t{half\_convex\_hull} uses the method \t{make_right)turn} that determines if the path defined by the last three points in the set \t{L} makes a right turn. This method, uses the value of $q$ defined in \eqref{eq:b:q}, see \autoref{lst:c:makeRightTurn}. Both 
 
 	This method is called twice to compute the convex hull, see \autoref{lst:c:convexHull}.
 
-	\lstinputlisting[float, firstline=48, lastline=64, label={lst:c:halfConvexHull}, caption={Method that computes the upper (or lower) half of the convex hull.}]{../assignment1C.py}
+	\lstinputlisting[float, firstline=48, lastline=65, label={lst:c:halfConvexHull}, caption={Method that computes the upper (or lower) half of the convex hull.}]{../assignment1C.py}
 
 	\lstinputlisting[float, firstline=42, lastline=45, label={lst:c:makeRightTurn}, caption={Method that computes the type of a path defined by \t{p1}, \t{p2} and \t{p3}.}]{../assignment1C.py}
 
-	\lstinputlisting[float, firstline=66, lastline=73, label={lst:c:convexHull}, caption={Method that computes the convex hull of the inputted set of points.}]{../assignment1C.py}
+	\lstinputlisting[float, firstline=68, lastline=85, label={lst:c:convexHull}, caption={Method that computes the convex hull of the inputted set of points.}]{../assignment1C.py}
+
+	Both the method \t{half_convex_hull} and \t{convex_hull} accept an argument called \t{make_right_turn}, this is done so that these methods can be used with a different method to determine the turn of a path.\\
 
 	See \autoref{subfig:c:convexHull} for a visualization of a convex hull of 1000 points, generated with the provided \t{generate\_points()} method. \autoref{subfig:c:convexHullTest} shows the convex hull of 100 points and all possible straight lines between points in the set in green, showing that the convex hull is indeed convex.
 

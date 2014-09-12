@@ -23,9 +23,9 @@ convex_hull_points = []
 width = 800  # screen x_size
 height = 800  # screen y_size
 seed(5)  # random generator initialization
-N = 1000  # Number of points, initially set to 1000
+N = 100  # Number of points, initially set to 1000
 
-debug = False
+debug = True
 
 def area_irregular_polygon(points):
     """
@@ -45,7 +45,7 @@ def make_right_turn(p1, p2, p3):
     return (q > 0)
 
 
-def half_convex_hull(L, for_range, points_sorted):
+def half_convex_hull(L, for_range, points_sorted, make_right_turn):
     """
     Compute the upper or lower part of the convex hull.
 
@@ -53,6 +53,7 @@ def half_convex_hull(L, for_range, points_sorted):
         L: The initial set to be used for the this half of the convex hull.
         for_range: The range of points_sorted to be considered.
         points_sorted: The sorted list of points of which the half convex hull is computed.
+        make_right_turn: The function that defines whether a path makes a right turn.
     """
     for i in for_range:
         L.append(points_sorted[i])
@@ -63,12 +64,23 @@ def half_convex_hull(L, for_range, points_sorted):
             L.pop(-2)
     return L
 
-def convex_hull(cv_points):
+
+def convex_hull(cv_points, make_right_turn=make_right_turn):
     """Compute the convex hull of the passed points using the passed points."""
     cv_points.sort()
 
-    L_upper = half_convex_hull(cv_points[0:2], range(2, len(cv_points)), cv_points)
-    L_lower = half_convex_hull(cv_points[-2:], reversed(range(0, len(cv_points) - 2)), cv_points)
+    L_upper = half_convex_hull(
+        cv_points[0:2],
+        range(2, len(cv_points)),
+        cv_points,
+        make_right_turn
+    )
+    L_lower = half_convex_hull(
+        cv_points[-2:],
+        reversed(range(0, len(cv_points) - 2)),
+        cv_points,
+        make_right_turn
+    )
 
     return(L_upper + L_lower[1:len(cv_points) - 1])
 

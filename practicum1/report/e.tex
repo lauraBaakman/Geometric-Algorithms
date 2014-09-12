@@ -1,0 +1,23 @@
+%!TEX root = practicum1.tex
+\autoref{lst:e:rightTurnFiltered} presents the implementation of the method \t{rightTurnFiltered} which determines what, if any, type of turn a path makes. In principle this method is the same as the \t{make_right_turn()} method used in assignment \ref{s:c}. 
+
+However when the vector \v{1}, \v{2} or \t{angle} is very small, $q$ is recomputed with \t{Fraction}s. A value is considered very small when it is smaller than some epsilon that is defined globally. \\
+
+To compute the convex hull we have reused the method \t{convex_hull()} that was defined for assignment \ref{s:c}, see \autoref{lst:e:convexHull}.\\
+
+The results of using the improved turn method are shown in \autoref{tab:e:results}.
+
+\begin{table}
+	\centering
+	\begin{tabular}{l|cccc}
+	Set & A		&	B	&	C	&	D\\
+	\hline
+	$N$	& 25	&	17	&	11	&	5\\
+	\end{tabular}
+	\caption{The results of assignment C with $\varepsilon = 0.05$, and $N$ is the number of points on the convex hull.}
+	\label{tab:e:results}
+\end{table}
+
+\lstinputlisting[float, firstline=149, lastline=151, label={lst:e:convexHull}, caption={Method that computes the convex hull of a globally defined set points, using the \t{convex_hull} method from assignment \ref{s:c}. See \autoref{lst:c:convexHull} for the implementation of that method.}]{../assignment1E.py}
+
+\lstinputlisting[float, firstline=102, lastline=134, label={lst:e:rightTurnFiltered}, caption={Method that computes the type of a path defined by \t{p1}, \t{p2} and \t{p3}.}]{../assignment1E.py}

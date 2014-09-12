@@ -34,8 +34,8 @@ spoints = []        # x_sorted points
 uch = []            # upper convex hull
 lch = []            # lower convex hull
 ch = []             # complete convex hull
-width = 700         # screen x_size
-height = 700        # screen y_size
+width = 800         # screen x_size
+height = 800        # screen y_size
 seed(5)             # random generator initialization
 epsilon = 0.05     # very small number
 
@@ -99,31 +99,26 @@ def generatePointsD():
         points.append(p)
 
 
-def isSmall(number):
-    """Function to check if a number is very small."""
-    return abs(number) < epsilon
-
-
-def make_right_turn(a, b, c):
+def rightTurnFiltered(a, b, c):
     """Return true if if the line drawn through a, b, and c makes a right turn."""
-    print "rightTurn in E"
+    def isSmall(number):
+        """Function to check if a number is very small."""
+        return abs(number) < epsilon
 
     def floatVectortoFractionVector(vector):
         return [Fraction.from_float(x) for x in vector]
 
     def crossProduct(p1, p2, p3):
         """Compute the crossProduct of the vectors p2 - p1 and p3 - p1."""
-        print "in crossProduct"
         return (
-            -(p1[1]*p2[0]) + p1[0]*p2[1] + p1[1]*p3[0] - p2[1]*p3[0] - p1[0]*p3[1] + p2[0]*p3[1]
+            -(p1[1]*p2[0]) + p1[0]*p2[1] +
+            p1[1]*p3[0] - p2[1]*p3[0] -
+            p1[0]*p3[1] + p2[0]*p3[1]
         )
 
     v1Norm = euclidean_distance(a, b)
-    print v1Norm
     v2Norm = euclidean_distance(a, c)
-    print v2Norm
     q = crossProduct(a, b, c)
-    print q
     angle = q / (v1Norm * v2Norm)
 
     if (
@@ -131,13 +126,11 @@ def make_right_turn(a, b, c):
         isSmall(v2Norm) or
         isSmall(angle)
     ):
-        print "Recomputing q"
-        # Recompute q
-        af = floatVectortoFractionVector(a)
-        bf = floatVectortoFractionVector(b)
-        cf = floatVectortoFractionVector(c)
-        q = crossProduct(af, bf, cf)
-        print "Recomputed q: {}".format(q)
+        q = crossProduct(
+            floatVectortoFractionVector(a),
+            floatVectortoFractionVector(b),
+            floatVectortoFractionVector(c)
+        )
     return (q > 0)
 
 
@@ -154,9 +147,8 @@ def det(a, b, c):
 
 
 def ConvexHull():
-    res = convex_hull(points)
-    print(res)
-    return res
+    global ch
+    ch = convex_hull(points, rightTurnFiltered)
 
 
 def ChArea(ch):
@@ -168,9 +160,10 @@ def ChArea(ch):
 
 
 def display():
+
+    # Draw points
     glClear(GL_COLOR_BUFFER_BIT)
     glColor3f(1.0, 0.0, 1.0)
-    # Draw points
     glColor3f(1.0, 1.0, 1.0)
     glPointSize(3)
     glBegin(GL_POINTS)
@@ -179,7 +172,7 @@ def display():
     glEnd()
 
     # draw points defining CH
-    glColor3f(0.0, 1.0, 1.0)
+    glColor3f(0.0, 1.0, 0.0)
     glPointSize(5)
     glBegin(GL_POINTS)
     for p in ch:
@@ -210,10 +203,11 @@ def reshape(wid, hgt):
     gluOrtho2D(0, width, height, 0)  # reshape
 
 
-def main(argv=None):
+def main(argv=None, generator=generatePointsA):
     if argv is None:
         argv = sys.argv
-    generatePointsA()
+    print "Using the function {} to generate points.".format(generator.__name__)
+    generator()
     ConvexHull()
     print "len(ch): ", len(ch)
     print "ChArea: ", ChArea(ch)
