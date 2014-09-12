@@ -27,14 +27,15 @@ except:
     exit(2)
 
 # globals
-points = []     # points
-spoints = []    # x_sorted points
-uch = []        # upper convex hull
-lch = []        # lower convex hull
-ch = []         # complete convex hull
-width = 700     # screen x_size
-height = 700    # screen y_size
-seed(5)         # random generator initialization
+points = []         # points
+spoints = []        # x_sorted points
+uch = []            # upper convex hull
+lch = []            # lower convex hull
+ch = []             # complete convex hull
+width = 700         # screen x_size
+height = 700        # screen y_size
+seed(5)             # random generator initialization
+epsilon = 0.005     # very small number
 
 
 def generatePointsA():
@@ -102,11 +103,16 @@ def vectorNorm(vector):
         [x**2 for x in vector]
     ))
 
+def vectorMin(vectorA, vectorB):
+    """Substract two n-dimensonal vectors."""
+    return [a - b for (a, b) in zip(vectorA, vectorB)]
+
 def rightTurnFiltered(a, b, c):
-    a = 1
+    """Return true if if the line drawn through a, b, and c makes a right turn."""
+
     # write here your code to determine whether a,b,c make a right turn
-    # let l1 and l2 be the distance between a,b and b,c respectively
-    # if l1 or l2 are very small, or when the turn angle is very small use fractions
+    # let v1 and v2 be the distance between a,b and b,c respectively
+    # if v1 or v2 are very small, or when the turn angle is very small use fractions
 
 
 
@@ -201,6 +207,8 @@ def main(argv=None):
 
 if __name__ == '__main__':
     # sys.exit(main())
-    vector = [random() for x in range(2)]
-    print vector
-    print vectorNorm(vector)
+    p1 = (7, 3)
+    p2 = (8, 9)
+    res = vectorMin(p1, p2)
+    print res
+    print(vectorNorm(res))
