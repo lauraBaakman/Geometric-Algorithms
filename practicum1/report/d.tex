@@ -1,0 +1,22 @@
+%!TEX root = practicum1.tex
+For the purpose of this exercise I have defined a class \t{Line} that contains all methods pertaining to the lines. \autoref{lst:d:classDefinition} presents the class definition and its constructors and factory methods. The factory method \t{randomWithFloat} generates a random line, with the coefficients \t{a} and \t{b} as floats, \t{randomWithFraction} does the same but uses \t{Fraction} objects.
+
+\lstinputlisting[float, firstline=7, lastline=43, label={lst:d:classDefinition}, caption={The definition of the line class and its constructors.}]{../assignment1D.py}
+
+\subsection*{Intersection}
+The x-coordinate intersection of two lines $f(x) = a_1 \cdot x + b_1$ and $g(x) = a_2 \cdot x + b_2$ can be found by solving $f(x) = g(x)$. Using Mathematica, see \autoref{eq:d:matIntersection}, we get the solution of this equation:
+\begin{equation}
+	x = \frac{-b_1 + b_2}{a_1 - a_2}.
+\end{equation}
+Paying attention to the case where the lines are parallel, i.e $a_1 - a_2 == 0$, we use this equation to implement the intersect method of the class \t{Line}, see \autoref{lst:d:intersect}.
+
+\lstinputlisting[float, firstline=7, lastline=43, label={lst:d:intersect}, caption={The method \t{intersect} of the class \t{Line}.}]{../assignment1D.py}
+
+
+\begin{lstlisting}[language=Mathematica, float, caption={Mathematica code used to derive an expression for the $x$-coordinate of two lines.}, label={eq:d:matIntersection}]
+Solve[a1 * x + b1 == a2 * x + b2, x]
+\end{lstlisting}
+
+\subsection*{Point on Line}
+
+\subsection*{Test}
