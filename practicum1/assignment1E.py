@@ -16,7 +16,6 @@ same calculation is performed using rational numbers.
 from fractions import *
 from random import *
 from math import *
-import operator
 
 try:
     from OpenGL.GLUT import *
@@ -97,12 +96,18 @@ def generatePointsD():
         points.append(p)
 
 
+def vectorNorm(vector):
+    """Compute the norm of a n-dimensonal vector."""
+    return sqrt(sum(
+        [x**2 for x in vector]
+    ))
+
 def rightTurnFiltered(a, b, c):
     a = 1
-    # dummy tatement, delete
     # write here your code to determine whether a,b,c make a right turn
     # let l1 and l2 be the distance between a,b and b,c respectively
     # if l1 or l2 are very small, or when the turn angle is very small use fractions
+
 
 
 def det(a, b, c):
@@ -177,7 +182,7 @@ def reshape(wid, hgt):
 def main(argv=None):
     if argv is None:
         argv = sys.argv
-    generatePointsC()
+    generatePointsA()
     ConvexHull()
     print "len(ch): ", len(ch)
     print "ChArea: ", ChArea(ch)
@@ -195,4 +200,7 @@ def main(argv=None):
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+    # sys.exit(main())
+    vector = [random() for x in range(2)]
+    print vector
+    print vectorNorm(vector)
