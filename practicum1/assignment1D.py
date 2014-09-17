@@ -16,7 +16,11 @@ class Line(object):
         self.b = b
 
     @classmethod
-    def randomWithFloat(cls, bounds=(-100, 100)):
+    def random(cls, gen_type, bounds=(-100, 100)):
+        """."""
+        return cls.types[gen_type](bounds)
+
+    def randomWithFloat(bounds):
         """
         Return a Line object, that is initialized with randomly chosen floats.
 
@@ -24,13 +28,12 @@ class Line(object):
         tuple (min, max) as the bounds parameter changes these values.
         """
         (minimum, maximum) = bounds
-        return cls(
+        return Line(
             uniform(minimum, maximum),
             uniform(minimum, maximum)
         )
 
-    @classmethod
-    def randomWithFraction(cls, bounds=(-100, 100)):
+    def randomWithFraction(bounds):
         """
         Return a Line object, that is initialized with randomly chosen fractions.
 
@@ -38,10 +41,15 @@ class Line(object):
         a tuple (min, max)as the bounds parameter changes these values.
         """
         (minimum, maximum) = bounds
-        return cls(
+        return Line(
             Fraction.from_float(uniform(minimum, maximum)),
             Fraction.from_float(uniform(minimum, maximum))
         )
+
+    types = {
+        'float': randomWithFloat,
+        'fraction': randomWithFraction,
+    }
 
     def computeYCoordinate(self, x):
         """Compute the y-coordinate of a point on the line, given an x-coordinate."""
@@ -136,4 +144,6 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    l = Line.random('float')
+    print(l)
