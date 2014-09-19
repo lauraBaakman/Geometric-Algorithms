@@ -75,6 +75,7 @@ degP = [
 
 # p and q are the active vertices of P and Q, p_minus, q_minus, p_Dot, q_Dot
 p, q, p_min, q_min, p_dot, q_dot = 0, 0, 0,  0, 0, 0
+pg = None
 
 width = 700  # screen x_size
 height = 700  # screen y_size
@@ -103,21 +104,24 @@ class PolygonIntersection(object):
 
     """
 
-    def __init__(self, p, q):
+    def __init__(self, P, Q):
         """Construct a PolygonIntersection object."""
         super(PolygonIntersection, self).__init__()
-        self.p = p
-        self.q = q
+        self.P = P
+        self.Q = Q
         self.current_step = 1
-        self.max_steps = 2 * (len(self.p) + len(self.q))
+        self.max_steps = 2 * (len(self.P) + len(self.Q))
         self._algorithm_init()
 
     def _algorithm_init(self):
         """Initialize the algorithm by selecting a random p and q."""
         print "Initializing :-)"
-        global p, q
-        p = self.p[random.randint(0, len(self.p) - 1)]
-        q = self.q[random.randint(0, len(self.q) - 1)]
+        global p, q, p_min, q_min, p_dot, q_dot
+        p_min, q_min = len(P) - 1, len(Q) - 1
+        p_dot = [P[p_min], P[p]]
+        q_dot = [Q[q_min], Q[q]]
+
+        # self.p_dot_ls = LineSegment()
 
     def __iter__(self):
         """Make this class iterable."""
@@ -129,7 +133,7 @@ class PolygonIntersection(object):
         if self.current_step < self.max_steps:
             self.current_step = self.current_step + 1
             self._algorithm_step()
-            # execute algorithm
+
             pass
         else:
             self._algorithm_finalize()
@@ -200,11 +204,17 @@ def keyboard(key, x, y):
     if q_min < 0:
         q_min = len(Q) - 1
     # p_dot means "p dot" see article
-    p_dot = [[P[p_min][0], P[p_min][1]], [P[p][0], P[p][1]]]
+    p_dot = [
+        [P[p_min][0], P[p_min][1]],
+        [P[p][0], P[p][1]]
+    ]
     # q_dot means "q dot" see article
     q_dot = [[Q[q_min][0], Q[q_min][1]], [Q[q][0], Q[q][1]]]
     if key == 'n':  # do one step of the actual algorithm from the paper
         print "one step"
+        pg.next()
+    if key == 'q':
+        raise SystemExit
 
 
 def reshape(wid, hgt):
@@ -220,14 +230,10 @@ def reshape(wid, hgt):
 
 def main(argv=None):
     """."""
-    global P, Q, p_min, q_min, p_dot, q_dot
+    global P, Q, p_min, q_min, p_dot, q_dot, pg
     if argv is None:
         argv = sys.argv
-    p_min, q_min = len(P) - 1, len(Q) - 1
-    # p_dot means "p dot" see article
-    p_dot = [[P[p_min][0], P[p_min][1]], [P[p][0], P[p][1]]]
-    # q_dot means "q dot" see article
-    q_dot = [[Q[q_min][0], Q[q_min][1]], [Q[q][0], Q[q][1]]]
+    pg = PolygonIntersection(P, Q)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
@@ -250,5 +256,6 @@ def main_without_visualization():
 
 
 if __name__ == '__main__':
+    print "Init in polygonIntersection afmaken!!!!!"
     sys.exit(main())
     # main_without_visualization()
