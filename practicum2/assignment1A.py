@@ -121,7 +121,8 @@ class PolygonIntersection(object):
         p_dot = [P[p_min], P[p]]
         q_dot = [Q[q_min], Q[q]]
 
-        # self.p_dot_ls = LineSegment()
+        self.p_dot_ls = LineSegment.from_point_list(p_dot)
+        self.q_dot_ls = LineSegment.from_point_list(q_dot)
 
     def __iter__(self):
         """Make this class iterable."""
@@ -256,6 +257,8 @@ def main_without_visualization():
 
 
 if __name__ == '__main__':
-    print "Init in polygonIntersection afmaken!!!!!"
+    print "REKENING HOUDEN MET DELINGEN DIE NIET LEKKER UITKOMEN BIJ"
+    "DE INTERSECTIE VAN LINE SEGMENTS?!?!"
+
     sys.exit(main())
     # main_without_visualization()
