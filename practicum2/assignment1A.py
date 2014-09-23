@@ -107,11 +107,38 @@ class PolygonIntersection(object):
     def __init__(self, P, Q):
         """Construct a PolygonIntersection object."""
         super(PolygonIntersection, self).__init__()
-        self.P = P
-        self.Q = Q
-        self.current_step = 1
-        self.max_steps = 2 * (len(self.P) + len(self.Q))
+        self._P = P
+        self._Q = Q
+        self._current_step = 1
+        self._max_steps = 2 * (len(self._P) + len(self._Q))
+        self._first_intersection = None
+
         self._algorithm_init()
+
+    def __iter__(self):
+        """Make this class iterable."""
+        return self
+
+    def next(self):
+        """Take the next step."""
+        print "Step {}".format(self._current_step)
+        if self._current_step < self._max_steps:
+            self._current_step = self._current_step + 1
+            self._algorithm_step()
+        else:
+            self._algorithm_finalize()
+            raise StopIteration("Finished finding the intersection of the sets.")
+
+    def _algorithm_finalize(self):
+        """Finalize the algorithm."""
+        print "Finalizing :-)"
+
+    def _algorithm_step(self):
+        """Execute one iteration of the do-while of the algorithm."""
+        intersection = self.p_dot_ls.intersection(self.q_dot_ls)
+        if(intersection):
+            pass
+        pass
 
     def _algorithm_init(self):
         """Initialize the algorithm by selecting a random p and q."""
@@ -123,29 +150,6 @@ class PolygonIntersection(object):
 
         self.p_dot_ls = LineSegment.from_point_list(p_dot)
         self.q_dot_ls = LineSegment.from_point_list(q_dot)
-
-    def __iter__(self):
-        """Make this class iterable."""
-        return self
-
-    def next(self):
-        """Take the next step."""
-        print "Step {}".format(self.current_step)
-        if self.current_step < self.max_steps:
-            self.current_step = self.current_step + 1
-            self._algorithm_step()
-
-            pass
-        else:
-            self._algorithm_finalize()
-            raise StopIteration("Finished finding the intersection of the sets.")
-
-    def _algorithm_finalize(self):
-        """Finalize the algorithm."""
-        print "Finalizing :-)"
-
-    def _algorithm_step(self):
-        """Execute one iteration of the do-while of the algorithm."""
 
 
 def display():
