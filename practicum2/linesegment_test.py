@@ -14,49 +14,50 @@ class TestLinesegmentIntersection(unittest.TestCase):
 
     def test_intersecting_linesegments(self):
         """The line segments intersect."""
-        l1 = LineSegment.from_point_list([[0, 0], [4, 0]])
-        l2 = LineSegment.from_point_list([[0, -1], [4, 3]])
-        self.assertTrue(l1.intersect(l2))
-        self.assertTrue(l2.intersect(l1))
+        l1 = LineSegment.from_point_list([[-24.0, 6.0], [4.0, 1.0]])
+        l2 = LineSegment.from_point_list([[-10.0, -6.0], [4.0, 3.0]])
+        intersectionPoint = [-5, -1]
+        self.assertEqual(l1.intersect(l2), intersectionPoint)
+        self.assertEqual(l2.intersect(l1), intersectionPoint)
 
     def test_non_intersecting_non_parallel_linesegments(self):
         """The line segments aren't parallel but do not intersect."""
-        l1 = LineSegment.from_point_list([[0, 0], [0, 4]])
-        l2 = LineSegment.from_point_list([[1, 1], [5, 5]])
+        l1 = LineSegment.from_point_list([[0.0, 0.0], [0.0, 4.0]])
+        l2 = LineSegment.from_point_list([[1.0, 1.0], [5.0, 5.0]])
         self.assertFalse(l1.intersect(l2))
         self.assertFalse(l2.intersect(l1))
 
     def test_parallel_non_colinear_line_segments(self):
         """The line segements are parallel, but not colinear."""
-        l1 = LineSegment.from_point_list([[0, 0], [0, 5]])
-        l2 = LineSegment.from_point_list([[3, 2], [3, 7]])
+        l1 = LineSegment.from_point_list([[0.0, 0.0], [0.0, 5.0]])
+        l2 = LineSegment.from_point_list([[3.0, 2.0], [3.0, 7.0]])
         self.assertFalse(l1.intersect(l2))
         self.assertFalse(l2.intersect(l1))
 
     def test_colinear_non_overlapping(self):
         """The line segements are colinear but do not overlap."""
-        l1 = LineSegment.from_point_list([[1, 2], [1, 7]])
-        l2 = LineSegment.from_point_list([[1, 9], [1, 10]])
+        l1 = LineSegment.from_point_list([[1.0, 2.0], [1.0, 7.0]])
+        l2 = LineSegment.from_point_list([[1.0, 9.0], [1.0, 10.0]])
         self.assertFalse(l1.intersect(l2))
         self.assertFalse(l2.intersect(l1))
 
     def test_colinear_contained(self):
         """One of the line segments is contained in the other."""
-        l1 = LineSegment.from_point_list([[1, 1], [5, 1]])
-        l2 = LineSegment.from_point_list([[2, 1], [4, 1]])
+        l1 = LineSegment.from_point_list([[1.0, 1.0], [5.0, 1.0]])
+        l2 = LineSegment.from_point_list([[2.0, 1.0], [4.0, 1.0]])
         self.assertFalse(l1.intersect(l2))
         self.assertFalse(l2.intersect(l1))
 
     def test_colinear_overlapping(self):
         """One of the line segments partially overlaps the other."""
-        l1 = LineSegment.from_point_list([[1, 1], [5, 1]])
-        l2 = LineSegment.from_point_list([[0, 1], [3, 1]])
+        l1 = LineSegment.from_point_list([[1.0, 1.0], [5.0, 1.0]])
+        l2 = LineSegment.from_point_list([[0.0, 1.0], [3.0, 1.0]])
         self.assertFalse(l1.intersect(l2))
         self.assertFalse(l2.intersect(l1))
 
     def test_colinear_equal(self):
         """A line segment does not intersect with itself."""
-        l1 = LineSegment.from_point_list([[1, 1], [5, 1]])
+        l1 = LineSegment.from_point_list([[1.0, 1.0], [5.0, 1,0]])
         self.assertFalse(l1.intersect(l1))
 
 
