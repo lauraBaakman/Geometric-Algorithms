@@ -1,15 +1,24 @@
 """ This class stores a line as a vector and a point on the line."""
+from fractions import *
+import pdb
 
 
 class LineSegment(object):
 
-    """This class stores a line as a vector and a point on the line."""
+    """
+    This class stores a line as a vector and a point on the line.
 
-    def __init__(self, vector, point):
+    The intersection method switches to a fraction representation
+    when the differences are smaller than a certain epsilon that is
+    set to 0.05 by default.
+    """
+
+    def __init__(self, vector, point, **kwargs):
         """Construct a LineSegment object."""
         super(LineSegment, self).__init__()
         self.vector = vector
         self.point = point
+        self._epsilon = kwargs.get('epsilon', 0.05)
 
     @classmethod
     def from_point_list(cls, points):
@@ -26,20 +35,35 @@ class LineSegment(object):
         Inspiration: http://stackoverflow.com/questions/563198/how-do
         -you-detect-where-two-line-segments-intersect
         """
+        def isSmall(number):
+            """Function to check if a number is very small."""
+            return abs(number) < self.epsilon
+
+        def floatVectortoFractionVector(vector):
+            return [Fraction.from_float(x) for x in vector]
+
         def intersection():
             """Test if the intersection lies on the segements if so compute it."""
-            u_numerator = -(p[0]*r[1]) + q[0]*r[1] + p[1]*s[0] - q[1]*s[0]
+            u_numerator = p[1]*r[0] - q[1]*r[0] - p[0]*r[1] + q[0]*r[1]
             u = u_numerator / rCrossS
             if (u >= 0 and u <= 1):
-                t_numerator = p[1]*r[0] - q[1]*r[0] - p[0]*r[1] + q[0]*r[1]
+                t_numerator = p[1]*s[0] - q[1]*s[0] - p[0]*s[1] + q[0]*s[1]
                 t = t_numerator / rCrossS
                 if (t >= 0 and t <= 1):
-                    return True
+                    x = p[0] + r[0] * t
+                    y = p[1] + r[1] * t
+
+                    pdb.set_trace()
+                    x1 = q[0] + s[0] * u
+                    y1 = q[1] + s[1] * u
+                    assert x1 == x
+                    assert y1 == y
+                    return [x, y]
             return False
 
         # def parallel():
         #     """Check in which way the lines are parallel."""
-        #     q_min_p_cross_r = p[1]*r[0] - q[1]*r[0] - p[0]*r[1] + q[0]*r[1]
+        #     q_min_p_cross_r = p[1]*r[0] - q[1]*r[0first, second] - p[0]*r[1] + q[0]*r[1]
         #     if not q_min_p_cross_r:
         #         # The lines are colinear
         #         p_min_q_cross_s = p[0]*r[0] - q[0]*r[0] - p[0]*s[0] + q[0]*s[0]
@@ -59,7 +83,14 @@ class LineSegment(object):
         q = other.point
         s = other.vector
 
-        rCrossS = -r[1] * s[0] + r[0] * s[1]
+        rCrossS = -(r[1]*s[0]) + r[0]*s[1]
+
+        if(isSmall(rCrossS)):
+            p = floatVectortoFractionVector(p)
+            q = floatVectortoFractionVector(q)
+            r = floatVectortoFractionVector(r)
+            s = floatVectortoFractionVector(s)
+            rCrossS = -(r[1]*s[0]) + r[0]*s[1]
 
         if(rCrossS):
             return intersection()
@@ -74,3 +105,7 @@ class LineSegment(object):
             'point = {obj.point}>'.format(obj=self)
         )
 
+if __name__ == '__main__':
+    l1 = LineSegment.from_point_list([[-24.0, 6.0], [4.0, 1.0]])
+    l2 = LineSegment.from_point_list([[-10.0, -6.0], [4.0, 3.0]])
+    l1.intersect(l2)
