@@ -16,9 +16,9 @@ class TestLinesegmentIntersection(unittest.TestCase):
         """The line segments intersect."""
         l1 = LineSegment.from_point_list([[-24.0, 6.0], [4.0, 1.0]])
         l2 = LineSegment.from_point_list([[-10.0, -6.0], [4.0, 3.0]])
-        intersectionPoint = [1.5652173913043477, 1.4347826086956523]
-        self.assertEqual(l1.intersect(l2), intersectionPoint)
-        self.assertEqual(l2.intersect(l1), intersectionPoint)
+        intersection_point = [1.5652173913043477, 1.4347826086956523]
+        self.assertEqual(l1.intersect(l2), intersection_point)
+        self.assertEqual(l2.intersect(l1), intersection_point)
 
     def test_non_intersecting_non_parallel_linesegments(self):
         """The line segments aren't parallel but do not intersect."""
@@ -57,7 +57,7 @@ class TestLinesegmentIntersection(unittest.TestCase):
 
     def test_colinear_equal(self):
         """A line segment does not intersect with itself."""
-        l1 = LineSegment.from_point_list([[1.0, 1.0], [5.0, 1, 0]])
+        l1 = LineSegment.from_point_list([[1.0, 1.0], [5.0, 1,0]])
         self.assertFalse(l1.intersect(l1))
 
 

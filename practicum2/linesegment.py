@@ -41,10 +41,10 @@ class LineSegment(object):
             """Test if the intersection lies on the segments if so compute it."""
             u_numerator = p[1]*r[0] - q[1]*r[0] - p[0]*r[1] + q[0]*r[1]
 
-            u = u_numerator / rCrossS
+            u = u_numerator / r_cross_s
             if (u >= 0 and u <= 1):
                 t_numerator = p[1]*s[0] - q[1]*s[0] - p[0]*s[1] + q[0]*s[1]
-                t = t_numerator / rCrossS
+                t = t_numerator / r_cross_s
                 if (t >= 0 and t <= 1):
                     x = p[0] + r[0] * t
                     y = p[1] + r[1] * t
@@ -73,9 +73,9 @@ class LineSegment(object):
         q = other.point
         s = other.vector
 
-        rCrossS = -(r[1]*s[0]) + r[0]*s[1]
+        r_cross_s = -(r[1]*s[0]) + r[0]*s[1]
 
-        if(rCrossS):
+        if(r_cross_s):
             return intersection()
         else:
             return False
