@@ -1,0 +1,204 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      6425,        195]
+NotebookOptionsPosition[      5875,        170]
+NotebookOutlinePosition[      6228,        186]
+CellTagsIndexPosition[      6185,        183]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[{
+ "Geometric Algorithms: Practicum 2A\n",
+ StyleBox["Line-Segment Intersection", "Chapter"]
+}], "Title",
+ CellChangeTimes->{{3.6203131433613653`*^9, 3.6203132031789637`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", " ", "Init", " ", "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"r", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"r00", ",", " ", "r01"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"p", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"p00", ",", " ", "p01"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"q", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"q00", ",", " ", "q01"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"s", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"s00", ",", " ", "s01"}], "}"}]}], ";"}], "\[IndentingNewLine]",
+    "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{
+     RowBox[{"Check", " ", "of", " ", "de", " ", "lijnen", " ", "q"}], " ", 
+     "\[Rule]", " ", 
+     RowBox[{
+      RowBox[{"s", " ", "en", " ", "p"}], " ", "\[Rule]", " ", 
+      RowBox[{"r", " ", "parallell", " ", "zijn"}]}]}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"rExtended", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"r000", ",", " ", "r001", ",", " ", "0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"sExtended", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"s000", ",", "r001", ",", " ", "0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"qExtended", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"q000", ",", "q001", ",", " ", "0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"pExtended", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"p000", ",", "p001", ",", " ", "0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Solving", " ", "for", " ", "t"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"rCrossS", " ", "=", " ", 
+     RowBox[{"Part", "[", 
+      RowBox[{
+       RowBox[{"Cross", "[", 
+        RowBox[{"rExtended", ",", " ", "sExtended"}], "]"}], ",", " ", "3"}], 
+      "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tTeller", " ", "=", " ", 
+     RowBox[{"Part", "[", 
+      RowBox[{
+       RowBox[{"Cross", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"qExtended", " ", "-", " ", "pExtended"}], ")"}], ",", " ", 
+         "sExtended"}], "]"}], ",", " ", "3"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"(*", 
+    RowBox[{"*", " ", "Solving", " ", "for", " ", "u"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"uTeller", " ", "=", " ", 
+     RowBox[{"Part", "[", 
+      RowBox[{
+       RowBox[{"Cross", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"qExtended", " ", "-", " ", "pExtended"}], ")"}], ",", " ", 
+         "rExtended"}], "]"}], ",", "3"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", " ", "\[IndentingNewLine]", 
+   RowBox[{"(*", " ", 
+    RowBox[{"Overlapping", " ", "case", " ", "1"}], " ", "*)"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"overlapTest1", " ", "=", " ", 
+     RowBox[{"Part", "[", 
+      RowBox[{
+       RowBox[{"Cross", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"qExtended", " ", "-", " ", "pExtended"}], ")"}], ",", " ", 
+         "rExtended"}], "]"}], ",", " ", "3"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"overlapTest2", " ", "=", " ", 
+     RowBox[{"Part", "[", 
+      RowBox[{
+       RowBox[{"Cross", "[", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"pExtended", " ", "-", " ", "qExtended"}], ")"}], ",", " ", 
+         "sExtended"}], "]"}], ",", " ", "3"}], "]"}]}], ";"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.620313197729998*^9, 3.620313380862606*^9}, {
+  3.620313505433661*^9, 3.620313526759863*^9}, {3.6203135913351707`*^9, 
+  3.620313596157991*^9}, {3.620313666853066*^9, 3.620313724534268*^9}, {
+  3.6203138120738697`*^9, 3.620313884528373*^9}, {3.620314024366362*^9, 
+  3.620314025895422*^9}, {3.6203144597760067`*^9, 3.620314504184415*^9}, {
+  3.620314538084062*^9, 3.620314603269182*^9}, {3.620314667159618*^9, 
+  3.6203147385581713`*^9}, {3.620314776947686*^9, 3.620314793879589*^9}, {
+  3.620315366194992*^9, 3.620315426236065*^9}, {3.620315791381667*^9, 
+  3.62031579898948*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"CForm", "[", 
+   RowBox[{"Dot", "[", 
+    RowBox[{"r", ",", " ", "r"}], "]"}], "]"}], 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.620314028482272*^9, 3.620314032117519*^9}, {
+  3.620314740393593*^9, 3.6203147417235947`*^9}, {3.620315428239846*^9, 
+  3.620315435264103*^9}, {3.620315801745242*^9, 3.620315801838414*^9}, {
+  3.620315857505734*^9, 3.620315904179957*^9}}],
+
+Cell["Power(r00,2) + Power(r01,2)", "Output",
+ CellChangeTimes->{3.6203159044216127`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["CForm[p + t * r]", "Input",
+ CellChangeTimes->{{3.620315168796537*^9, 3.620315190100225*^9}}],
+
+Cell["List(p00 + r00*t,p01 + r01*t)", "Output",
+ CellChangeTimes->{{3.620315180198865*^9, 3.6203151908978*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{960, 1152},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (June 27, \
+2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 189, 4, 136, "Title"],
+Cell[772, 28, 4289, 113, 386, "Input"],
+Cell[CellGroupData[{
+Cell[5086, 145, 419, 9, 46, "Input"],
+Cell[5508, 156, 89, 1, 40, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5634, 162, 99, 1, 29, InheritFromParent],
+Cell[5736, 165, 111, 1, 40, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
