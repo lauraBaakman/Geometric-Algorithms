@@ -1,4 +1,5 @@
 """ This class stores a line as a vector and a point on the line."""
+from __future__ import division
 from fractions import *
 import pdb
 
@@ -28,6 +29,7 @@ class LineSegment(object):
 
         return cls(vector, p1)
 
+    # TODO RATIONALS SLIM GEBRUIKEN
     def intersect(self, other):
         """
         Find the intersection of this LineSegment with other.
@@ -35,16 +37,10 @@ class LineSegment(object):
         Inspiration: http://stackoverflow.com/questions/563198/how-do
         -you-detect-where-two-line-segments-intersect
         """
-        def isSmall(number):
-            """Function to check if a number is very small."""
-            return abs(number) < self.epsilon
-
-        def floatVectortoFractionVector(vector):
-            return [Fraction.from_float(x) for x in vector]
-
         def intersection():
-            """Test if the intersection lies on the segements if so compute it."""
+            """Test if the intersection lies on the segments if so compute it."""
             u_numerator = p[1]*r[0] - q[1]*r[0] - p[0]*r[1] + q[0]*r[1]
+
             u = u_numerator / rCrossS
             if (u >= 0 and u <= 1):
                 t_numerator = p[1]*s[0] - q[1]*s[0] - p[0]*s[1] + q[0]*s[1]
@@ -52,12 +48,6 @@ class LineSegment(object):
                 if (t >= 0 and t <= 1):
                     x = p[0] + r[0] * t
                     y = p[1] + r[1] * t
-
-                    pdb.set_trace()
-                    x1 = q[0] + s[0] * u
-                    y1 = q[1] + s[1] * u
-                    assert x1 == x
-                    assert y1 == y
                     return [x, y]
             return False
 
@@ -84,13 +74,6 @@ class LineSegment(object):
         s = other.vector
 
         rCrossS = -(r[1]*s[0]) + r[0]*s[1]
-
-        if(isSmall(rCrossS)):
-            p = floatVectortoFractionVector(p)
-            q = floatVectortoFractionVector(q)
-            r = floatVectortoFractionVector(r)
-            s = floatVectortoFractionVector(s)
-            rCrossS = -(r[1]*s[0]) + r[0]*s[1]
 
         if(rCrossS):
             return intersection()
