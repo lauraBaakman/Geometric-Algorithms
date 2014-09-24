@@ -1,8 +1,87 @@
-\subsection{Intersection of Two Line Segments}
+%!TEX root = practicum2.tex
+\subsection*{The Intersection of two Line Segments}
+	From here on we will define the cross product of two dimension vectors \vec{v} and \vec{w} as following:
+	\begin{equation}
+		\vec{v} \times \vec{w} = - v_2 w_1 + v_1 w_2
+	\end{equation}
+	where $q_n$ represents the $n$'th element of vector \vec{q}.\\
+
+	In this section we will consider the intersection of the line segments $l_1$ and $l_2$ \cite{so} which are defined as:
+	\begin{align}
+		l_1 &= \vec{p} + t \vec{r} \label{eq:a:l1}\\
+		l_2 &= \vec{q} + u \vec{s} \label{eq:a:l2}.
+	\end{align}
+	Any point lies on $l_1$ if and only if that point can be expressed as \eqref{eq:a:l1} with $0 \leq t \leq 1$. Using this we can define the intersection \vec{I} of the two line segments as following: the line segments $l_1$ and $l_2$ intersect if we can find values for $t$ and $u$ such that $t, u \in [0, 1]$ and:
+		\begin{equation}
+			\vec{p} + t \vec{r} = \vec{q} + u \vec{s}
+		\end{equation}
+	Rewriting this equation gives us expressions for $u$ and $t$:
+	\begin{align}
+		t &= \frac{\vec{q} - \vec{p} \times \vec{s}}{\vec{r} \times \vec{s}} \label{eq:a:solt}\\
+		u &= \frac{\vec{q} - \vec{p} \times \vec{r}}{\vec{r} \times \vec{s}} \label{eq:a:solu}
+	\end{align}
+	If the denominator, ($\vec{r} \times \vec{s}$), of \eqref{eq:a:solt} or \eqref{eq:a:solu} is zero the lines are parallel, since the cross product of two parallel vectors is zero. This degenerate case will be discussed later on in this report.
+
+	If we know that we are not dividing by zero we can compute $u$ and $t$ and check if they are in the range $[0,1]$.\\
+
+	This intersection test is implemented in the class \t{LineSegment} of which a part is shown in \autoref{lst:a:lineSegmentUpToIntersect}. The code to compute \t{r_cross_s}, \t{u_numerator} and \t{t_numerator} was generated with Mathematica, see \autoref{lst:a:lineSegmentIntersectionMat}.\\
+
+	\begin{lstlisting}[float, language=Mathematica, label={lst:a:lineSegmentIntersectionMat}, caption={Mathematica code used to compute the value of \t{r_cross_s}, \t{u_numerator} and \t{t_numerator}.}]
+	rExtended = {r000, r001, 0};
+	sExtended = {s000, s001, 0};
+	qExtended = {q000, q001, 0};
+	pExtended = {p000, p001, 0};
+
+	rCrossS = Part[Cross[rExtended, sExtended], 3];
+	tNumerator = Part[Cross[(qExtended - pExtended), sExtended], 3];
+	uNumerator = Part[Cross[(qExtended - pExtended), rExtended], 3];
+	\end{lstlisting}
+
+	\lstinputlisting[float, firstline=50, lastline=49, label={lst:a:lineSegmentUpToIntersect}, caption={Part of the class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../linesegment.py}
 
 \subsection{Point in a Polygon}
+	To test if a point $q$ lies in a polygon $P$ we can count the number of intersections with edges of $P$ of a ray that starts at $q$ and ends at some fixed point. If we have entered the polygon as many times as we have exited it, we are thus outside the polygon. If the number of intersections is odd the point lies inside the polygon. \\
 
-\subsection{Implementation of the Algorithm}
+	The intersection of a ray and a line segment, the edges of $P$, is essentially the same as the intersection of two line segments with the notable difference that the scaling parameter of the ray should be greater than zero instead of greater than or equal to zero and smaller than or equal to one. 
 
-\subsection{General Implementation}
+	If the scaling parameter is zero the point lies on a edge, or vertex of the polygon instead of inside it. The code used to test if a line segment and a ray intersect is presented in \autoref{lst:a:lineSegmentRayIntersection}. It should be noted that we require $t \in [0, 1)$ to avoid counting intersections of a ray and a vertex of the polygon twice.\\
+
+	\lstinputlisting[float, firstline=50, lastline=74, label={lst:a:lineSegmentRayIntersection}, caption={Part of the class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../linesegment.py}
+
+	The code in \autoref{lst:a:lineSegmentRayIntersection} is used to test if a point $q$ lies in a circle by calling this method on all edges of the polygon in combination with the point $q$ as a parameter. See the method \t{point_in_polygon} in \autoref{lst:a:polygonIntersectionAlgorithmFinalize}.
+
+
+
+\subsection*{The Algorithm}
+	The implementation of the algorithm presented by \textcite{o1982new} is split over three methods in the class \t{PolygonIntersection} namely: \t{_algorithm_init} (\autoref{lst:a:polygonIntersectionAlgorithmInit}), \t{_algorithm_step}(\autoref{lst:a:polygonIntersectionAlgorithmStep}) and \t{_algorithm_finalize} (\autoref{lst:a:polygonIntersectionAlgorithmFinalize}).
+
+	\t{_algorithm_init} executes all the code before the start of the loop in the algorithm. Each call of \t{_algorithm_step} executes one step of the algorithm. \t{_algorithm_finalize} handles the case where more than $2 \cdot (|P| + |Q|)$ steps have been taken. 
+
+	These methods closely follow the pseudo-code from \citeauthor{o1982new}.
+
+	\lstinputlisting[float, firstline=227, lastline=232, label={lst:a:polygonIntersectionAlgorithmInit}, caption={The method \t{_algorithm_init} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+
+	\lstinputlisting[float, firstline=153, lastline=225, label={lst:a:polygonIntersectionAlgorithmStep}, caption={The method \t{_algorithm_step} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+
+	\lstinputlisting[float, firstline=127, lastline=151, label={lst:a:polygonIntersectionAlgorithmFinalize}, caption={The method \t{_algorithm_finalize} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+
+\subsection*{General Implementation}
+	To be able to give a step by step visualization of the algorithm I have made the class in which it is implemented an iterator. This allows the user to simply call the method \t{next} on the \t{PolygonIntersection} object. 
+
+	The \t{__init__} method, see \autoref{lst:a:polygonIntersectionInit}, of the iterator initializes the iterator and ensures that number of steps is limited before calling the earlier presented \t{_algorithm_init}. 
+
+	The \t{next} method (\autoref{lst:a:polygonIntersectionNext}) of the iterator increases the step counter and checks if another step is allowed. If allowed it calls \t{_algorithm_step}. If no more steps are allowed \t{_algorithm_finalize} is called before raising a \t{StopIteration} exception. 
+
+	\lstinputlisting[float, firstline=99, lastline=109, label={lst:a:polygonIntersectionInit}, caption={The method \t{__init__} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+
+	\lstinputlisting[float, firstline=115, lastline=125, label={lst:a:polygonIntersectionNext}, caption={The method \t{next} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+
+	The iterator is initiated by calling its constructor with two polygons of which the intersection needs to be computed, see \autoref{lst:a:mainMain}. Storing the resulting object, \t{pg}, globally allows us to call \t{next()} in \t{display()} when a certain key is pressed, see \autoref{lst:a:mainDisplay}.
+
+	\lstinputlisting[float, firstline=321, lastline=324, label={lst:a:mainMain}, caption={The construction of the \t{PolygonIntersection} object.}]{../assignment1A.py}
+
+	\lstinputlisting[float, firstline=298, lastline=303, label={lst:a:mainDisplay}, caption={Going one step forward.}]{../assignment1A.py}
+
+	Executing the algorithm on the provided sets \t{P} and \t{Q} results in the following set of intersections:
+	\todo[inline]{Resultaat van het uitvoeren op P en Q toevoegen!}
 

@@ -1,14 +1,19 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
 \usepackage[english]{babel}
 \usepackage{hyperref}
-
-%Code
-\usepackage{listings}
-\usepackage{color}
 
 %Accenten
 \usepackage[utf8]{inputenc} 
 \usepackage[T1]{fontenc}
+
+% Biblio
+\usepackage{csquotes}
+\usepackage[backend=biber, bibencoding=utf8]{biblatex}
+
+%Code
+\usepackage{listings}
+\usepackage{color}
 
 %Math
 \usepackage{mathtools}
@@ -34,10 +39,12 @@
 	keepspaces=true,
 	showspaces=false,
 	showstringspaces=false,
-	basicstyle=\footnotesize\ttfamily
+	basicstyle=\scriptsize\ttfamily
 }
 
-\renewcommand{\t}[1]{\lstinline{#1}}
+\renewcommand{\t}[1]{\lstinline[basicstyle=\normalsize\ttfamily]{#1}}
+
+\bibliography{biblio}
 
 % General lay-out
 \renewcommand{\thesection}{\Alph{section}}
@@ -49,12 +56,15 @@
 
 %Short cuts
 \newcommand{\p}[1]{\ensuremath{\vec{P_#1}}}
+\renewcommand{\vec}[1]{\ensuremath{\mathbf{#1}}}
 \renewcommand{\v}[1]{\ensuremath{\vec{v_#1}}}
 
-\title{Geometric Algorithms\\Assignment 1}
+\title{Geometric Algorithms\\Assignment 2}
 \author{Laura Baakman (s1869140)}
 
 \begin{document}
+
+\listoftodos
 
 \maketitle
 
@@ -64,18 +74,8 @@
 
 \section{~}
 \label{s:b}
-\input{b.tex}
+% \input{b.tex}
 
-\section{~}
-\label{s:c}
-\input{c.tex}
-
-\section{~}
-\label{s:d}
-\input{d.tex}
-
-\section{~}
-\label{s:e}
-\input{e.tex}
+\printbibliography
 
 \end{document}
