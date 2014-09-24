@@ -7,8 +7,10 @@ A New Linear Algorithm for Intersecting Convex Polygons
 JOSEPH O ROURKE, CHI BIN CHIEN, THOMAS OLSON, AND DAVID NADDOR
 h.bekker@rug.nl
 """
-
+import pdb
 import random
+
+from linesegment import LineSegment
 
 try:
     from OpenGL.GLUT import *
@@ -72,13 +74,26 @@ degP = [
     [75.542837591689178, 396.06840939472079]
 ]
 
+P = [
+    [600.0, 900.0],
+    [200.0, 900.0],
+    [200.0, 300.0],
+    [600.0, 300.0],
+]
+
+Q = [
+    [400.0, 600.0],
+    [100.0, 600.0],
+    [100.0, 100.0],
+    [400.0, 100.0],
+]
 
 # p and q are the active vertices of P and Q, p_minus, q_minus, p_Dot, q_Dot
 p, q, p_min, q_min, p_dot, q_dot = 0, 0, 0,  0, 0, 0
 pg = None
 
 width = 700  # screen x_size
-height = 700  # screen y_size
+height = 1000  # screen y_size
 
 
 def get_next(list, current_index):
@@ -104,13 +119,14 @@ class PolygonIntersection(object):
 
     """
 
-    def __init__(self, P, Q):
+    def __init__(self, set_P, set_Q):
         """Construct a PolygonIntersection object."""
         super(PolygonIntersection, self).__init__()
-        self._P = P
-        self._Q = Q
+        global P, Q
+        P = set_P
+        Q = set_Q
         self._current_step = 1
-        self._max_steps = 2 * (len(self._P) + len(self._Q))
+        self._max_steps = 2 * (len(P) + len(Q))
         self._first_intersection = None
 
         self._algorithm_init()
@@ -121,7 +137,7 @@ class PolygonIntersection(object):
 
     def next(self):
         """Take the next step."""
-        print "Step {}".format(self._current_step)
+        print "\nStep {}".format(self._current_step)
         if self._current_step < self._max_steps:
             self._current_step = self._current_step + 1
             self._algorithm_step()
@@ -132,13 +148,83 @@ class PolygonIntersection(object):
     def _algorithm_finalize(self):
         """Finalize the algorithm."""
         print "Finalizing :-)"
+        raise StopIteration(
+            "Jumped out of the algorithm since the last found intersection equalled the first.")
 
     def _algorithm_step(self):
         """Execute one iteration of the do-while of the algorithm."""
-        intersection = self.p_dot_ls.intersection(self.q_dot_ls)
+        def in_half_plane(x, plane_dot):
+            """Test if the point x is in the half plane defined by plane_dot and plane_min."""
+            return (
+                -(plane_dot[0][1] * plane_dot[1][0]) + plane_dot[0][0] * plane_dot[1][1] +
+                plane_dot[0][1] * x[0] - plane_dot[1][1] * x[0] -
+                plane_dot[0][0] * x[1] + plane_dot[1][0] * x[1]
+                >= 0
+            )
+
+        def advance(advancing_set, inside):
+            """Handle the advancement of the active edge."""
+            def advance_p():
+                """Advance p."""
+                global p, p_min, p_dot
+                if (inside == 'p'):
+                    return_points.append(p)
+                p = (p + 1) % len(P)
+                p_min = (p - 1 + len(P)) % len(P)
+                p_dot = [P[p_min], P[p]]
+
+            def advance_q():
+                """Advance q."""
+                global q, q_min, q_dot
+                if (inside == 'q'):
+                    return_points.append(q)
+                q = (q + 1) % len(Q)
+                q_min = (q - 1 + len(Q)) % len(Q)
+                q_dot = [Q[q_min], Q[q]]
+
+            {
+                'p': advance_p,
+                'q': advance_q
+            }.get(advancing_set)()
+
+        pdb.set_trace()
+        intersection = LineSegment.from_point_list(p_dot).intersect(
+            LineSegment.from_point_list(q_dot)
+        )
+        pdb.set_trace()
+
+        return_points = []
+        inside = None
+
         if(intersection):
-            pass
-        pass
+            if(not self._first_intersection):
+                self._first_intersection = intersection
+            elif(intersection == self._first_intersection):
+                return []
+            return_points.append(intersection)
+
+            if(in_half_plane(P[p], q_dot)):
+                inside = 'p'
+            else:
+                inside = 'q'
+
+        q_dot_cross_p_dot = (
+            p_dot[0][1] * q_dot[0][0] - p_dot[1][1] * q_dot[0][0] - p_dot[0][0] * q_dot[0][1] +
+            p_dot[1][0] * q_dot[0][1] - p_dot[0][1] * q_dot[1][0] + p_dot[1][1] * q_dot[1][0] +
+            p_dot[0][0] * q_dot[1][1] - p_dot[1][0] * q_dot[1][1]
+        )
+        if (q_dot_cross_p_dot >= 0):
+            if(in_half_plane(P[p], q_dot)):
+                advance('q', inside)
+            else:
+                advance('p', inside)
+        else:
+            if(in_half_plane(Q[q], p_dot)):
+                advance('p', inside)
+            else:
+                advance('q', inside)
+        pdb.set_trace()
+        return return_points
 
     def _algorithm_init(self):
         """Initialize the algorithm by selecting a random p and q."""
@@ -147,9 +233,6 @@ class PolygonIntersection(object):
         p_min, q_min = len(P) - 1, len(Q) - 1
         p_dot = [P[p_min], P[p]]
         q_dot = [Q[q_min], Q[q]]
-
-        self.p_dot_ls = LineSegment.from_point_list(p_dot)
-        self.q_dot_ls = LineSegment.from_point_list(q_dot)
 
 
 def display():
@@ -216,9 +299,8 @@ def keyboard(key, x, y):
     # q_dot means "q dot" see article
     q_dot = [[Q[q_min][0], Q[q_min][1]], [Q[q][0], Q[q][1]]]
     if key == 'n':  # do one step of the actual algorithm from the paper
-        print "one step"
         pg.next()
-    if key == 'q':
+    if key == 'Q':
         raise SystemExit
 
 
@@ -261,8 +343,5 @@ def main_without_visualization():
 
 
 if __name__ == '__main__':
-    print "REKENING HOUDEN MET DELINGEN DIE NIET LEKKER UITKOMEN BIJ"
-    "DE INTERSECTIE VAN LINE SEGMENTS?!?!"
-
     sys.exit(main())
     # main_without_visualization()
