@@ -26,10 +26,8 @@ class LineSegment(object):
         """Return a LineSegment object from p1 to p2."""
         [p1, p2] = points
         vector = [-p1[0] + p2[0], -p1[1] + p2[1]]
-
         return cls(vector, p1)
 
-    # TODO RATIONALS SLIM GEBRUIKEN
     def intersect(self, other):
         """
         Find the intersection of this LineSegment with other.
@@ -80,7 +78,7 @@ class LineSegment(object):
         else:
             return False
 
-    def intersect_with_line(self, other):
+    def intersect_with_ray(self, other):
         """Test if this line segments intersects with a line represented as a vector."""
         q = self.point
         s = self.vector
@@ -89,9 +87,11 @@ class LineSegment(object):
         r_cross_s = -(r[1]*s[0]) + r[0]*s[1]
         if(r_cross_s):
             u_numerator = -(q[1]*r[0]) + q[0]*r[1]
-
             u = u_numerator / r_cross_s
-            return (u >= 0 and u <= 1)
+            if (u >= 0 and u <= 1):
+                t_numerator = -(q[1] * s[0]) + q[0]*s[1]
+                t = t_numerator / r_cross_s
+                return (t >= 0)
         return False
 
     def __repr__(self):
@@ -101,8 +101,3 @@ class LineSegment(object):
             'vector = {obj.vector}, '
             'point = {obj.point}>'.format(obj=self)
         )
-
-if __name__ == '__main__':
-    l1 = LineSegment.from_point_list([[-24.0, 6.0], [4.0, 1.0]])
-    l2 = LineSegment.from_point_list([[-10.0, -6.0], [4.0, 3.0]])
-    l1.intersect(l2)

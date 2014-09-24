@@ -74,14 +74,13 @@ degP = [
     [75.542837591689178, 396.06840939472079]
 ]
 
-P = [
+P_test = [
     [600.0, 900.0],
     [200.0, 900.0],
     [200.0, 300.0],
     [600.0, 300.0],
 ]
-
-Q = [
+Q_test = [
     [400.0, 600.0],
     [100.0, 600.0],
     [100.0, 100.0],
@@ -91,19 +90,10 @@ Q = [
 # p and q are the active vertices of P and Q, p_minus, q_minus, p_Dot, q_Dot
 p, q, p_min, q_min, p_dot, q_dot = 0, 0, 0,  0, 0, 0
 pg = None
+intersection_points = []
 
 width = 700  # screen x_size
 height = 1000  # screen y_size
-
-
-def get_next(list, current_index):
-    """Get the index of the next element in a circular list."""
-    return (current_index + 1) % len(list)
-
-
-def get_previous(list, current_index):
-    """Get the index of the previous element in a circular list."""
-    return (current_index - 1) % len(list)
 
 
 class PolygonIntersection(object):
@@ -138,18 +128,31 @@ class PolygonIntersection(object):
     def next(self):
         """Take the next step."""
         print "\nStep {}".format(self._current_step)
-        if self._current_step < self._max_steps:
+        global intersection_points
+        if self._current_step <= self._max_steps:
             self._current_step = self._current_step + 1
-            self._algorithm_step()
+            points = self._algorithm_step()
+            intersection_points.extend(points)
         else:
-            self._algorithm_finalize()
-            raise StopIteration("Finished finding the intersection of the sets.")
+            points = self._algorithm_finalize()
+            intersection_points.extend(points)
+            raise StopIteration(
+                "Terminated the algorithm, since more than 2 * |P| * |Q| steps have been taken."
+            )
 
     def _algorithm_finalize(self):
-        """Finalize the algorithm."""
-        print "Finalizing :-)"
-        raise StopIteration(
-            "Jumped out of the algorithm since the last found intersection equalled the first.")
+        """Finalize the algorithm, is called when no intersection was found."""
+        p = random.randint(0, len(P) - 1)
+        q = random.randint(0, len(Q) - 1)
+
+    def _point_in_polygon(point, polygon):
+        """Test if the point lies in the polygon."""
+        def intersecting_vectors(v1, v2):
+            """Test if the line through """
+
+
+
+
 
     def _algorithm_step(self):
         """Execute one iteration of the do-while of the algorithm."""
@@ -187,11 +190,9 @@ class PolygonIntersection(object):
                 'q': advance_q
             }.get(advancing_set)()
 
-        pdb.set_trace()
         intersection = LineSegment.from_point_list(p_dot).intersect(
             LineSegment.from_point_list(q_dot)
         )
-        pdb.set_trace()
 
         return_points = []
         inside = None
@@ -223,12 +224,10 @@ class PolygonIntersection(object):
                 advance('p', inside)
             else:
                 advance('q', inside)
-        pdb.set_trace()
         return return_points
 
     def _algorithm_init(self):
         """Initialize the algorithm by selecting a random p and q."""
-        print "Initializing :-)"
         global p, q, p_min, q_min, p_dot, q_dot
         p_min, q_min = len(P) - 1, len(Q) - 1
         p_dot = [P[p_min], P[p]]
@@ -276,7 +275,7 @@ def display():
 def keyboard(key, x, y):
     """."""
     # p_min, q_min means p_minus q_minus resp., see article
-    global p, q, p_min, q_min, p_dot, q_dot
+    global p, q, p_min, q_min, p_dot, q_dot, intersection_points
     if key == 'p':  # advance active edge of P (test purpose)
         p += 1
         p_min = p - 1
@@ -320,7 +319,7 @@ def main(argv=None):
     global P, Q, p_min, q_min, p_dot, q_dot, pg
     if argv is None:
         argv = sys.argv
-    pg = PolygonIntersection(P, Q)
+    pg = PolygonIntersection(P_test, Q_test)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
