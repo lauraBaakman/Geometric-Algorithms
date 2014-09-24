@@ -80,6 +80,20 @@ class LineSegment(object):
         else:
             return False
 
+    def intersect_with_line(self, other):
+        """Test if this line segments intersects with a line represented as a vector."""
+        q = self.point
+        s = self.vector
+        r = other
+
+        r_cross_s = -(r[1]*s[0]) + r[0]*s[1]
+        if(r_cross_s):
+            u_numerator = -(q[1]*r[0]) + q[0]*r[1]
+
+            u = u_numerator / r_cross_s
+            return (u >= 0 and u <= 1)
+        return False
+
     def __repr__(self):
         """Print-friendly representation of the LineSegment object."""
         return (
