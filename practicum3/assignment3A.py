@@ -1,8 +1,21 @@
-""" #h.bekker@rug.nl."""
+"""
+h.bekker@rug.nl.
+
+Global variablen:
+    cens:   Array with a list of list where each sublist contains the coordinates
+            of center of one of the triangles of the triangulation.
+    edges:  Array with a list of list where each sublist contains the indices
+            of the points between which one of the edges of the triangulation runs.
+    triPts: Array with triangles, each triangle is represented as a list of three
+            indices into xa and ya.
+    neighs:  Array of integers giving the indices into cens
+            triPts, and neighs of the neighbors of each triangle
+"""
 
 from random import *
 import matplotlib.delaunay as triang
 import numpy
+import pdb
 
 
 try:
@@ -24,14 +37,20 @@ xl, yl, xyl, xa, ya, cens, edgs, triPts, neighs = [], [], [], [], [], [], [], []
 trWithPoint = []
 
 
-def generate_points():
+def generate_points(debug=False):
     """."""
     global xl, yl
-    for i in range(100):
-        x = 600 * random() + 50
-        y = 600 * random() + 50
-        xl.append(x)
-        yl.append(y)
+    if(debug):
+        xl = [150, 200, 250, 450, 600, 0]
+        yl = [550, 450, 500, 100, 550, 0]
+        print "Points: {}".format([xy for xy in zip(xl, yl)])
+    else:
+        number_of_points = 100
+        for i in range(number_of_points):
+            x = 600 * random() + 50
+            y = 600 * random() + 50
+            xl.append(x)
+            yl.append(y)
 
 
 def display():
@@ -81,12 +100,13 @@ def main(argv=None):
     global xl, yl, xyl, xa, ya, cens, edgs, triPts
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neigs = triang.delaunay(xa, ya)
+    pdb.set_trace()
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
