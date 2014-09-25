@@ -37,7 +37,7 @@
 	uNumerator = Part[Cross[(qExtended - pExtended), rExtended], 3];
 	\end{lstlisting}
 
-	\lstinputlisting[float, firstline=50, lastline=49, label={lst:a:lineSegmentUpToIntersect}, caption={Part of the class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../linesegment.py}
+	\lstinputlisting[float, firstline=7, lastline=44, label={lst:a:lineSegmentUpToIntersect}, caption={Part of the class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../linesegment.py}
 
 \subsection{Point in a Polygon}
 	To test if a point $q$ lies in a polygon $P$ we can count the number of intersections with edges of $P$ of a ray that starts at $q$ and ends at some fixed point. If we have entered the polygon as many times as we have exited it, we are thus outside the polygon. If the number of intersections is odd the point lies inside the polygon. \\
@@ -46,7 +46,7 @@
 
 	If the scaling parameter is zero the point lies on a edge, or vertex of the polygon instead of inside it. The code used to test if a line segment and a ray intersect is presented in \autoref{lst:a:lineSegmentRayIntersection}. It should be noted that we require $t \in [0, 1)$ to avoid counting intersections of a ray and a vertex of the polygon twice.\\
 
-	\lstinputlisting[float, firstline=50, lastline=74, label={lst:a:lineSegmentRayIntersection}, caption={Part of the class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../linesegment.py}
+	\lstinputlisting[float, firstline=46, lastline=63, label={lst:a:lineSegmentRayIntersection}, caption={Part of the class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../linesegment.py}
 
 	The code in \autoref{lst:a:lineSegmentRayIntersection} is used to test if a point $q$ lies in a circle by calling this method on all edges of the polygon in combination with the point $q$ as a parameter. See the method \t{point_in_polygon} in \autoref{lst:a:polygonIntersectionAlgorithmFinalize}.
 
@@ -59,11 +59,11 @@
 
 	These methods closely follow the pseudo-code from \citeauthor{o1982new}.
 
-	\lstinputlisting[float, firstline=227, lastline=232, label={lst:a:polygonIntersectionAlgorithmInit}, caption={The method \t{_algorithm_init} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=243, lastline=248, label={lst:a:polygonIntersectionAlgorithmInit}, caption={The method \t{_algorithm_init} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
 
-	\lstinputlisting[float, firstline=153, lastline=225, label={lst:a:polygonIntersectionAlgorithmStep}, caption={The method \t{_algorithm_step} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=166, lastline=241, label={lst:a:polygonIntersectionAlgorithmStep}, caption={The method \t{_algorithm_step} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
 
-	\lstinputlisting[float, firstline=127, lastline=151, label={lst:a:polygonIntersectionAlgorithmFinalize}, caption={The method \t{_algorithm_finalize} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=140, lastline=164, label={lst:a:polygonIntersectionAlgorithmFinalize}, caption={The method \t{_algorithm_finalize} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
 
 \subsection*{General Implementation}
 	To be able to give a step by step visualization of the algorithm I have made the class in which it is implemented an iterator. This allows the user to simply call the method \t{next} on the \t{PolygonIntersection} object. 
@@ -72,16 +72,15 @@
 
 	The \t{next} method (\autoref{lst:a:polygonIntersectionNext}) of the iterator increases the step counter and checks if another step is allowed. If allowed it calls \t{_algorithm_step}. If no more steps are allowed \t{_algorithm_finalize} is called before raising a \t{StopIteration} exception. 
 
-	\lstinputlisting[float, firstline=99, lastline=109, label={lst:a:polygonIntersectionInit}, caption={The method \t{__init__} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=112, lastline=122, label={lst:a:polygonIntersectionInit}, caption={The method \t{__init__} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
 
-	\lstinputlisting[float, firstline=115, lastline=125, label={lst:a:polygonIntersectionNext}, caption={The method \t{next} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=128, lastline=138, label={lst:a:polygonIntersectionNext}, caption={The method \t{next} in the class \t{PolygonIntersection}.}]{../assignment1A.py}
 
 	The iterator is initiated by calling its constructor with two polygons of which the intersection needs to be computed, see \autoref{lst:a:mainMain}. Storing the resulting object, \t{pg}, globally allows us to call \t{next()} in \t{display()} when a certain key is pressed, see \autoref{lst:a:mainDisplay}.
 
-	\lstinputlisting[float, firstline=321, lastline=324, label={lst:a:mainMain}, caption={The construction of the \t{PolygonIntersection} object.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=338, lastline=341, label={lst:a:mainMain}, caption={The construction of the \t{PolygonIntersection} object.}]{../assignment1A.py}
 
-	\lstinputlisting[float, firstline=298, lastline=303, label={lst:a:mainDisplay}, caption={Going one step forward.}]{../assignment1A.py}
+	\lstinputlisting[float, firstline=314, lastline=320, label={lst:a:mainDisplay}, caption={Going one step forward.}]{../assignment1A.py}
 
 	Executing the algorithm on the provided sets \t{P} and \t{Q} results in the following set of intersections:
-	\todo[inline]{Resultaat van het uitvoeren op P en Q toevoegen!}
 

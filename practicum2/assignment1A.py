@@ -55,6 +55,19 @@ Q = [
     [330.21222050606116, 661.78306198998234],
     [161.01348092439304, 573.71561497179664]
 ]
+R = [
+    [100, 100],
+    [400, 100],
+    [400, 600],
+    [100, 600]
+    ]
+
+S = [
+    [200, 300],
+    [600, 300],
+    [600, 900],
+    [200, 900]
+]
 
 # Degenerate instance of P. The first 3 points of P have been removed.
 # To test the algorithm for a degenerate problem instance calculate
@@ -169,6 +182,7 @@ class PolygonIntersection(object):
                 if (inside == 'p'):
                     global intersection_points
                     intersection_points.append(p)
+                    pdb.set_trace()
                 p = (p + 1) % len(P)
                 p_min = (p - 1 + len(P)) % len(P)
                 p_dot = [P[p_min], P[p]]
@@ -179,6 +193,7 @@ class PolygonIntersection(object):
                 if (inside == 'q'):
                     global intersection_points
                     intersection_points.append(q)
+                    pdb.set_trace()
                 q = (q + 1) % len(Q)
                 q_min = (q - 1 + len(Q)) % len(Q)
                 q_dot = [Q[q_min], Q[q]]
@@ -200,6 +215,7 @@ class PolygonIntersection(object):
             elif(intersection == self._first_intersection):
                 global intersection_points
                 intersection_points.append(intersection)
+                pdb.set_trace()
                 raise StopIteration(
                     "Terminated the algorithm, since we have reached the end of the intersection."
                 )
@@ -299,6 +315,7 @@ def keyboard(key, x, y):
         try:
             pg.next()
         except StopIteration:
+            pdb.set_trace()
             "Found the intersection: {}".format(intersection_points)
             raise SystemExit
     if key == 'Q':
@@ -321,7 +338,7 @@ def main(argv=None):
     global pg
     if argv is None:
         argv = sys.argv
-    pg = PolygonIntersection(P, Q)
+    pg = PolygonIntersection(R, S)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)

@@ -6,9 +6,7 @@ import pdb
 
 class LineSegment(object):
 
-    """
-    This class stores a line as a vector and a point on the line.
-    """
+    """This class stores a line as a vector and a point on the line."""
 
     def __init__(self, vector, point, **kwargs):
         """Construct a LineSegment object."""
@@ -24,9 +22,7 @@ class LineSegment(object):
         return cls(vector, p1)
 
     def intersect(self, other):
-        """
-        Find the intersection of this LineSegment with other.
-        """
+        """Find the intersection of this LineSegment with other."""
         p = self.point
         r = self.vector
         q = other.point
@@ -49,20 +45,21 @@ class LineSegment(object):
 
     def intersect_with_ray(self, ray):
         """Test if this line segments intersects with a line represented as a vector."""
+        pdb.set_trace()
         p = self.point
         r = self.vector
         q = ray
+        s = [-q[0], -q[1]]
 
-        denominator = -(q[1] * r[0]) + q[0] * r[1]
-        if(denominator):
-            t_numerator = -(p[1] * q[0]) + p[0] * q[1]
-            t = t_numerator / denominator
-            # < i.p.v. <= om dubbel tellen te voorkomen.
-            if(t <= 0 and t < 1):
-                u_numerator = p[1] * r[0] - q[1] * r[0] - p[0] * r[1] + q[0] * r[1]
-                u = u_numerator / denominator
-                # > i.p.v. >= want eeen punt op een vertex ligt niet in de polygon
-                return u > 0
+        r_cross_s = -(r[1]*s[0]) + r[0]*s[1]
+        if(r_cross_s):
+            t_numerator = p[1]*s[0] - q[1]*s[0] - p[0]*s[1] + q[0]*s[1]
+            t = t_numerator / r_cross_s
+            if(t >= 0 and t < 1):
+                u_numerator = p[1]*r[0] - q[1]*r[0] - p[0]*r[1] + q[0]*r[1]
+                u = u_numerator / r_cross_s
+                if(u >= 0):
+                    return True
         return False
 
     def __repr__(self):

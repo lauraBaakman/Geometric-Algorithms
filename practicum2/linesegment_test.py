@@ -64,36 +64,35 @@ class TestLinesegmentIntersection(unittest.TestCase):
 
 class TestLinesegmentIntersectionWithLine(unittest.TestCase):
 
-    """Unit test for the method intersection_with_line of the class line segment."""
+    """Unit test for the method intersection_with_ray of the class line segment."""
 
     def setUp(self):
         """."""
         pass
 
     def test_intersecting_lines(self):
-        """The line and LineSegment intersect."""
-        l1 = LineSegment.from_point_list([[-2, 0], [6, 0]])
-        l2 = [3, 1]
-        self.assertTrue(l1.intersect_with_ray(l2))
+        """The ray and LineSegment intersect."""
+        l1 = LineSegment.from_point_list([[-3, 3], [7, 3]])
+        ray = [4, 6]
+        self.assertTrue(l1.intersect_with_ray(ray))
 
-    def test_non_intersecting_lines(self):
-        """The line intersects the line of the LineSegment, but not the LineSegment."""
-        l1 = LineSegment.from_point_list([[1, 0], [6, 0]])
-        l2 = [3, 1]
-        self.assertFalse(l1.intersect_with_ray(l2))
+    def test_intersecting_lines_2(self):
+        """The ray and the line segment would intersect if the line segment was a line."""
+        l1 = LineSegment.from_point_list([[3, 3], [7, 3]])
+        ray = [4, 6]
+        self.assertFalse(l1.intersect_with_ray(ray))
 
-    def test_non_intersecting_lines(self):
-        """The ray starts below the line segment."""
-        l1 = LineSegment.from_point_list([[0, 2], [5, 1]])
-        l2 = [2, 1]
-        self.assertFalse(l1.intersect_with_ray(l2))
+    def test_intersectiing_lines_3(self):
+        """The ray and the line segment would intersect if the ray wasn't a ray."""
+        l1 = LineSegment.from_point_list([[-3, 3], [7, 3]])
+        ray = [2, 2]
+        self.assertFalse(l1.intersect_with_ray(ray))
 
     def test_parallel_lines(self):
-        """The line and the line segment are parallel."""
-        l1 = LineSegment.from_point_list([[0, 2], [5, 2]])
-        l2 = [1, 0]
-        pdb.set_trace()
-        self.assertFalse(l1.intersect_with_ray(l2))
+        """They are parallel."""
+        l1 = LineSegment.from_point_list([[-3, 3], [7, 3]])
+        ray = [0, 7]
+        self.assertFalse(l1.intersect_with_ray(ray))
 
 
 if __name__ == '__main__':
