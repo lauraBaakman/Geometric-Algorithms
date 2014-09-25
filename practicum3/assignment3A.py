@@ -9,7 +9,7 @@ Global variablen:
     triPts: Array with triangles, each triangle is represented as a list of three
             indices into xa and ya.
     neighs:  Array of integers giving the indices into cens
-            triPts, and neighs of the neighbors of each triangle
+            triPts, and neighs of the neighbors of each trianglegit
 """
 
 from random import *
