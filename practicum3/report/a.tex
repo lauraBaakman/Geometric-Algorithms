@@ -16,15 +16,18 @@ Based on these \eqref{eq:a:p1} through \eqref{eq:a:p3} we find that a point \vec
 
 Solving the resulting equation with Mathematica, see \autoref{lst:a:pointInTriangleMathematica}, gives us expressions for $a$ and $b$, namely:
 	\begin{align}
-	a &= -\frac{-\vec{p_{10}} \vec{p_{31}}+\vec{p_{10}} \vec{Q1}+\vec{p_{11}} \vec{p_{30}}-\vec{p_{11}}
-   \vec{Q0}-\vec{p_{30}} \vec{Q1}+\vec{p_{31}} \vec{Q0}}{-\vec{p_{10}}
-   \vec{p_{21}}+\vec{p_{10}} \vec{p_{31}}+\vec{p_{11}} \vec{p_{20}}-\vec{p_{11}}
-   \vec{p_{30}}-\vec{p_{20}} \vec{p_{31}}+\vec{p_{21}} \vec{p_{30}}}\\
-	b &= -\frac{-\vec{p_{10}} \vec{p_{21}}+\vec{p_{10}} \vec{Q1}+\vec{p_{11}} \vec{p_{20}}-\vec{p_{11}}
-   \vec{Q0}-\vec{p_{20}} \vec{Q1}+\vec{p_{21}} \vec{Q0}}{\vec{p_{10}}
-   \vec{p_{21}}-\vec{p_{10}} \vec{p_{31}}-\vec{p_{11}} \vec{p_{20}}+\vec{p_{11}}
-   \vec{p_{30}}+\vec{p_{20}} \vec{p_{31}}-\vec{p_{21}} \vec{p_{30}}}
+	a &= -\frac{-\vec{P_{1,0}} \vec{P_{3,1}}+\vec{P_{1,0}} \vec{Q1}+\vec{P_{1,1}} \vec{P_{3,0}}-\vec{P_{1,1}}
+   \vec{Q_0} - \vec{P_{3,0}} \cdot \vec{Q_1}+\vec{P_{3,1}} \cdot \vec{Q_0}}{ - \vec{P_{1,0}}
+   \vec{P_{2,1}}+\vec{P_{1,0}} \cdot \vec{P_{3,1}}+\vec{P_{1,1}} \cdot \vec{P_{20}} - \vec{P_{1,1}}
+   \vec{P_{3,0}} - \vec{P_{2,0}} \cdot \vec{P_{3,1}}+\vec{P_{2,1}} \cdot \vec{P_{3,0}}}\label{eq:a:a}\\
+	b &=  - \frac{ - \vec{P_{1,0}} \cdot \vec{P_{2,1}}+\vec{P_{1,0}} \cdot \vec{Q_1}+\vec{P_{1,1}} \cdot \vec{P_{2,0}} - \vec{P_{1,1}}
+   \vec{Q_0} - \vec{P_{2,0}} \cdot \vec{Q_1}+\vec{P_{2,1}} \cdot \vec{Q_0}}{\vec{P_{1,0}}
+   \vec{P_{2,1}} - \vec{P_{1,0}} \cdot \vec{P_{3,1}} - \vec{P_{1,1}} \cdot \vec{P_{2,0}}+\vec{P_{1,1}}
+   \vec{P_{3,0}}+\vec{P_{2,0}} \cdot \vec{P_{3,1}} - \vec{P_{2,1}} \cdot \vec{P_{3,0}}}\label{eq:a:b}
 	\end{align}
+where \vec{P_{r,s}} represents the $s$'th element of the point $r$ and \vec{Q_t} repsents the $t$'th element of the point \vec{Q}.
+
+In \eqref{eq:a:a} and \eqref{eq:a:b} are the same, this is the magnitude of the $\vec{v_1} \times \vec{v_2}$ if we represent the vectors as three dimensional by adding a $z$-coordinate of zero. If that cross product is zero $\vec{v_1}$ and $\vec{v_2}$ are parallel and thus the point \vec{Q} cannot be represented according to \eqref{eq:a:trianglePointEquation}.
 
 	\begin{lstlisting}[float, language=Mathematica, label={lst:a:pointInTriangleMathematica}, caption={Mathematica code used to compute the to compute $a$ and $b$.}]
 p1 = {p10, p11};
