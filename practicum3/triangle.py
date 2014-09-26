@@ -21,7 +21,7 @@ def point_in_triangle(triangle, point):
             p3[1] * point[0] + p1[0] * point[1] - p3[0] * point[1]
         )
         a = a_numerator / a_denominator
-        if(a > 0 and a <= 1):
+        if(a > 0 and a < 1):
             b_denominator = (
                 -(p1[1] * p2[0]) + p1[0] * p2[1] + p1[1] * p3[0]
                 - p2[1] * p3[0] - p1[0] * p3[1] + p2[0] * p3[1]
@@ -32,5 +32,5 @@ def point_in_triangle(triangle, point):
                     p2[1] * point[0] + p1[0] * point[1] - p2[0] * point[1]
                 )
                 b = b_numerator / b_denominator
-                return (a + b <= 1)
+                return (a + b < 1)
     return False
