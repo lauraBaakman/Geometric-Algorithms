@@ -14,7 +14,7 @@ class Test_triangle_point_in_triangle(unittest.TestCase):
     def test_point_in_triangle(self):
         """The point lies inside the triangle."""
         triangle = [[2, 1], [7, 2], [4, 6]]
-        point = [4, 6]
+        point = [4, 3]
         self.assertTrue(point_in_triangle(triangle, point))
 
     def test_point_is_triangle_vertex(self):
