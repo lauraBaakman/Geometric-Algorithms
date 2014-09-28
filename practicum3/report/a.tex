@@ -32,8 +32,7 @@ v2 = p3 - p1;
 p4 = p1 + a * v1 + b * v2;
 p41 = Part[p4, 1] == Q0;
 p42 = Part[p4, 2] == Q1;
-solution = Solve[{p41, p42}, {a, b}]
-	\end{lstlisting}
+solution = Solve[{p41, p42}, {a, b}]\end{lstlisting}
 
 Solving the resulting equation with Mathematica, see \autoref{lst:a:pointInTriangleMathematica}, gives us expressions for $a$ and $b$, namely:
 	\begin{align}
@@ -55,10 +54,8 @@ The method presented above is implemented in the method \t{point_in_triangle()} 
 
 \lstinputlisting[float, firstline=5, lastline=32, label={lst:a:pointInTriangle}, caption={The method \t{point_in_triangle()} in the module \t{triangle}.}]{../triangle.py}
 
-\subsection{Finding the Triangle Containing the Point}
+\subsection*{Finding the Triangle Containing the Point}
 We have simply checked for all triangles that result from the triangulation if the point lies inside that triangle, see \autoref{lst:a:findContainingTriangle} for the method \t{find_containing_triangle()}. \autoref{fig:a:triangulationWithPoint} shows the triangulation of 100 points generated randomly with the seed set to 505. The triangle that contains the point \t{lp} (305, 350) is shown in green, as is the point it self. The containing triangle is defined by the points: (\num{434.746175446}, \num{275.228689898}), (\num{292.651351959}, \num{371.369188947}), (\num{335.384364149}, \num{245.801849268}).
-
-
 
 \begin{figure}
 	\centering
