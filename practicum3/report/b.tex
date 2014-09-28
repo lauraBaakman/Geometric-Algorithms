@@ -1,1 +1,48 @@
 %!TEX root = practicum3.tex
+\subsection*{Line Segment Intersection}
+To find the intersection of the following two line segments
+	\begin{align}
+		s_1 &= \lambda_1 \cdot \vec{P_1} + (1 - \lambda_1) \cdot \vec{P_2}	& \text{for } 0 \leq \lambda_1 \leq 1\\
+		s_2 &= \lambda_2 \cdot \vec{P_3} + (1 - \lambda_2) \cdot \vec{P_4}	& \text{for } 0 \leq \lambda_2 \leq 1
+	\end{align}	
+we need to solve the equation:
+	\begin{align}\label{eq:b:linesegmentintersectionequation}
+		s_1 &= s_2\nonumber\\
+		\lambda_1 \cdot \vec{P_1} + (1 - \lambda_1) \cdot \vec{P_2} &= \lambda_2 \cdot \vec{P_3} + (1 - \lambda_2) \cdot \vec{P_4}.
+	\end{align}
+\autoref{eq:b:linesegmentintersectionequation} can be solved using the Mathematica code presented in \autoref{lst:b:mat_lineSegmentIntersection}. This results in an expression for $\lambda_1$ (\autoref{eq:b:lambda1}) and one for $\lambda_2$ (\autoref{eq:b:lambda2}).
+
+\begin{align}
+	\lambda_1 &= -
+	\frac{
+		-\vec{P_{2,x}} \vec{P_{3,y}}+\vec{P_{2,x}} \vec{P_{4,y}}+\vec{P_{2,y}} \vec{P_{3,x}}-\vec{P_{2,y}} \vec{P_{4,x}}-\vec{P_{3,x}}
+   		\vec{P_{4,y}}+\vec{P_{3,y}} \vec{P_{4,x}}}
+   {
+		q
+   } \label{eq:b:lambda1}\\
+	\lambda_2 &= -
+	\frac{
+		-\vec{P_{1,x}} \vec{P_{2,y}}+\vec{P_{1,x}} \vec{P_{4,y}}+\vec{P_{1,y}} \vec{P_{2,x}}-\vec{P_{1,y}} \vec{P_{4,x}}-\vec{P_{2,x}}
+   		\vec{P_{4,y}}+\vec{P_{2,y}} \vec{P_{4,x}}
+	}{
+		q
+	} \label{eq:b:lambda2}\\
+   \begin{split}
+      q &= 
+		-\vec{P_{1,x}} \vec{P_{3,y}}+\vec{P_{1,x}} \vec{P_{4,y}}+\vec{P_{1,y}}
+   		\vec{P_{3,x}}-\vec{P_{1,y}} \vec{P_{4,x}}+\vec{P_{2,x}} \vec{P_{3,y}}-\vec{P_{2,x}} \vec{P_{4,y}}\\
+   		&\quad -\vec{P_{2,y}}\vec{P_{3,x}}+\vec{P_{2,y}} \vec{P_{4,x}}   	
+   \end{split} \label{eq:b:q}
+\end{align}
+$q$ is the magnitude of the cross product of the vectors $\vec{v_1} = \vec{P_2} - \vec{P_1}$ and $\vec{v_2} = \vec{P_4} - \vec{P_3}$ when the vectors \vec{P_1} through \vec{P_4} are extended to three-dimensional space. If $q$ is zero the vectors \vec{v_1} and \vec{v_2} are parallel and the two line segments will thus never intersect. If they are not parallel the two line segments only intersect when $\lambda_1, \lambda_2 \in [0, 1]$.\\
+
+	\begin{lstlisting}[float, language=Mathematica, label={lst:b:mat_lineSegmentIntersection}, caption={Mathematica code used to solve \autoref{eq:b:linesegmentintersectionequation}.}]
+eq1 = lam1 p1x + (1 - lam1) p2x == lam2  p3x + (1 - lam2) p4x
+eq2 = lam1 p1y + (1 - lam1) p2y == lam2  p3y + (1 - lam2) p4y
+Solve[eq1 == eq2 {lam1, lam2}]\end{lstlisting}
+
+Based on the presented equations we have defined the method \t{line_segments_intersect} that takes two line segements defined by their endpoints and return \t{None} if they do not intersect and the intersection point if they do intersect. The code of that method is presented in \autoref{lst:b:intersectLineSegments}.
+
+\lstinputlisting[float, label={lst:b:intersectLineSegments}, caption={The method \t{line_segments_intersect()}.}]{../linesegment.py}
+
+\subsection*{Projection of a Point on a Plane}
