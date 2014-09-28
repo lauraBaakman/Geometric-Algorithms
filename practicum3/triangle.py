@@ -1,6 +1,5 @@
 """Module with methods that handle things related to triangles."""
 from __future__ import division
-import pdb
 
 
 def point_in_triangle(triangle, point):
@@ -17,7 +16,6 @@ def point_in_triangle(triangle, point):
         -p1[1] * p2[0] + p1[0] * p2[1] + p1[1] * p3[0]
         - p2[1] * p3[0] - p1[0] * p3[1] + p2[0] * p3[1]
     )
-    # pdb.set_trace()
     if(v1_cross_v2):
         a_numerator = (
             p1[1] * p3[0] - p1[0] * p3[1] - p1[1] * point[0] +
