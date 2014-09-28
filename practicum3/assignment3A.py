@@ -17,7 +17,6 @@ Global variablen:
 from random import *
 import matplotlib.delaunay as triang
 import numpy
-import pdb
 from triangle import point_in_triangle
 
 
@@ -30,8 +29,8 @@ except:
     print '''Go get it: http://atrpms.net/'''
     exit(2)
 
-width = 850
-height = 850
+width = 700
+height = 700
 points = []
 seed(505)  # seed value of random
 lp = [305, 350]
@@ -67,16 +66,31 @@ def display():
     for i in range(len(xl)):
         print "xl[i]", xl[i]
         glVertex2f(xl[i], yl[i])
+
     # Draw the point
-    glColor3f(0.0, 0.0, 1.0)
+    glColor3f(0.0, 0.7, 1.0)
     glVertex(lp[0], lp[1])
     glEnd()
+
     # Draw Delaunay Triangulation
     glColor3f(1.0, 0.0, 1.0)
     glBegin(GL_LINES)
     for i in range(len(edgs)):
         glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
         glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
+
+    # Draw containing triangle
+    glColor3f(0.0, 0.7, 1.0)
+    containing_triangle = find_containing_triangle(lp)
+    glVertex2f(xl[containing_triangle[0]],  yl[containing_triangle[0]])
+    glVertex2f(xl[containing_triangle[1]],  yl[containing_triangle[1]])
+
+    glVertex2f(xl[containing_triangle[0]],  yl[containing_triangle[0]])
+    glVertex2f(xl[containing_triangle[2]],  yl[containing_triangle[2]])
+
+    glVertex2f(xl[containing_triangle[1]],  yl[containing_triangle[1]])
+    glVertex2f(xl[containing_triangle[2]],  yl[containing_triangle[2]])
+
     glEnd()
     glutSwapBuffers()
 
@@ -104,7 +118,7 @@ def main(argv=None):
     global xl, yl, xyl, xa, ya, cens, edgs, triPts
     if argv is None:
         argv = sys.argv
-    generate_points(True)
+    generate_points()
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
@@ -131,7 +145,6 @@ def find_containing_triangle(point):
 
     """
     global triPts, lp, xl, yl
-    pdb.set_trace()
     for triangle in triPts:
         [p1, p2, p3] = triangle
         if(point_in_triangle(
@@ -142,6 +155,16 @@ def find_containing_triangle(point):
             ],
             lp
         )):
+            print (
+                "The triangle that contains the point ({lp_x},{lp_y}):"
+                "({p1_x}, {p1_y}), ({p2_x}, {p2_y}), ({p3_x}, {p3_y})"
+                .format(
+                    lp_x=lp[0], lp_y=lp[1],
+                    p1_x=xl[p1], p1_y=yl[p1],
+                    p2_x=xl[p2], p2_y=yl[p2],
+                    p3_x=xl[p3], p3_y=yl[p3],
+                )
+            )
             return triangle
 
 
