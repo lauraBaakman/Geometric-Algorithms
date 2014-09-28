@@ -2,6 +2,8 @@
 h.bekker@rug.nl.
 
 Global variablen:
+    xa:     X-coordinates of the triangulated points in an array.
+    xl:     X-coordinates of the triangulated points in a list.
     cens:   Array with a list of list where each sublist contains the coordinates
             of center of one of the triangles of the triangulation.
     edges:  Array with a list of list where each sublist contains the indices
@@ -16,6 +18,7 @@ from random import *
 import matplotlib.delaunay as triang
 import numpy
 import pdb
+from triangle import point_in_triangle
 
 
 try:
@@ -64,6 +67,7 @@ def display():
     for i in range(len(xl)):
         print "xl[i]", xl[i]
         glVertex2f(xl[i], yl[i])
+    # Draw the point
     glColor3f(0.0, 0.0, 1.0)
     glVertex(lp[0], lp[1])
     glEnd()
@@ -106,7 +110,7 @@ def main(argv=None):
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neigs = triang.delaunay(xa, ya)
-    pdb.set_trace()
+    find_containing_triangle(lp)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
@@ -117,6 +121,29 @@ def main(argv=None):
     glutKeyboardFunc(keyboard)
     glutMainLoop()
     return
+
+
+def find_containing_triangle(point):
+    """
+    Find the triangle of the triangulation that contains the point point.
+
+    The triangle is returned as an index in the global array triPts.
+
+    """
+    global triPts, lp, xl, yl
+    pdb.set_trace()
+    for triangle in triPts:
+        [p1, p2, p3] = triangle
+        if(point_in_triangle(
+            [
+                [xl[p1], yl[p1]],
+                [xl[p2], yl[p2]],
+                [xl[p3], yl[p3]]
+            ],
+            lp
+        )):
+            return triangle
+
 
 if __name__ == '__main__':
     sys.exit(main())
