@@ -9,7 +9,7 @@ We try to determine if the point \vec{Q} lies in the triangle defined by the poi
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.9\textwidth, frame]{./img/1_triangle_point-01}
+	\includegraphics[width=0.9\textwidth, frame]{./img/a_triangle_point-01}
 	\caption{A triangle defined by the points $\vec{P_1}$, $\vec{P_2}$ and $\vec{P_3}$, with the vectors $\vec{v_1}$ and $\vec{v_2}$. The grey area covers all points that can be described according to \eqref{eq:a:trianglePointEquation}.}
 	\label{fig:a:triangle_point}
 \end{figure}
@@ -56,6 +56,15 @@ The method presented above is implemented in the method \t{point_in_triangle()} 
 \lstinputlisting[float, firstline=5, lastline=32, label={lst:a:pointInTriangle}, caption={The method \t{point_in_triangle()} in the module \t{triangle}.}]{../triangle.py}
 
 \subsection{Finding the Triangle Containing the Point}
-We have simply checked for all triangles that result from the triangulation if the point lies inside that triangle, see \autoref{lst:a:findContainingTriangle}.
+We have simply checked for all triangles that result from the triangulation if the point lies inside that triangle, see \autoref{lst:a:findContainingTriangle} for the method \t{find_containing_triangle()}. \autoref{fig:a:triangulationWithPoint} shows the triangulation of 100 points generated randomly with the seed set to 505. The triangle that contains the point \t{lp} (305, 350) is shown in green, as is the point it self. The containing triangle is defined by the points: (\num{434.746175446}, \num{275.228689898}), (\num{292.651351959}, \num{371.369188947}), (\num{335.384364149}, \num{245.801849268}).
 
-\lstinputlisting[float, firstline=5, lastline=32, label={lst:a:findContainingTriangle}, caption={The method \t{find_containing_triangle()}.}]{../assignment3A.py}
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.5\textwidth]{./img/a_triangulationWithPoint}
+	\caption{The triangulation of one hundred points, the triangle shown in green contains the point \t{lp}, also shown in green.}
+	\label{fig:a:triangulationWithPoint}
+\end{figure}
+
+\lstinputlisting[float, firstline=140, lastline=168, label={lst:a:findContainingTriangle}, caption={The method \t{find_containing_triangle()}.}]{../assignment3A.py}
