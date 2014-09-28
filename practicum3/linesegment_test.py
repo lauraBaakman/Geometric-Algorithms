@@ -29,7 +29,9 @@ class Test_triangle_point_in_triangle(unittest.TestCase):
         p4 = [9, 8]
         result = line_segments_intersect([p1, p2], [p3, p4])
         answer = [3, 2]
-        self.assertEqual(result, answer)
+        pdb.set_trace()
+        self.assertAlmostEqual(result[0], answer[0])
+        self.assertAlmostEqual(result[1], answer[1])
 
     def test_intersecting_line_segments_on_end_point(self):
         """The line segments intersect on the first endpoint of a vertex."""
@@ -39,7 +41,8 @@ class Test_triangle_point_in_triangle(unittest.TestCase):
         p4 = [1, 7]
         result = line_segments_intersect([p1, p2], [p3, p4])
         answer = p1
-        self.assertEqual(result, answer)
+        self.assertAlmostEqual(result[0], answer[0])
+        self.assertAlmostEqual(result[1], answer[1])
 
     def test_intersecting_line_segments_on_end_point_2(self):
         """The line segments intersect on the last endpoint of a vertex."""
@@ -49,7 +52,8 @@ class Test_triangle_point_in_triangle(unittest.TestCase):
         p4 = [6, 7]
         result = line_segments_intersect([p1, p2], [p3, p4])
         answer = p2
-        self.assertEqual(result, answer)
+        self.assertAlmostEqual(result[0], answer[0])
+        self.assertAlmostEqual(result[1], answer[1])
 
     def test_intersecting_line_segments_that_dont_intersect(self):
         """The line segments would intersect if they were lines."""

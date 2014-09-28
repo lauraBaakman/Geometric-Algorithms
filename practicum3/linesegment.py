@@ -1,5 +1,6 @@
 """Module with methods that handle things related to line segments."""
 from __future__ import division
+import pdb
 
 
 def line_segments_intersect(segment_1, segment_2):
@@ -10,6 +11,7 @@ def line_segments_intersect(segment_1, segment_2):
         segment: List of two points, where each point is a list
             with the x and y coordinate of an endpoint of the line segment.
     """
+    pdb.set_trace()
     [p1, p2] = segment_1
     [p3, p4] = segment_2
     q = (
@@ -18,7 +20,7 @@ def line_segments_intersect(segment_1, segment_2):
     )
     if(q):
         lambda_1 = (
-            -(p2[1] * p3[0] - p2[0] * p3[1] - p2[1] * p4[0] + p3[1] * p4[0]
+            (p2[1] * p3[0] - p2[0] * p3[1] - p2[1] * p4[0] + p3[1] * p4[0]
                 + p2[0] * p4[1] - p3[0] * p4[1]) / q
         )
         if(lambda_1 >= 0 and lambda_1 <= 1):
