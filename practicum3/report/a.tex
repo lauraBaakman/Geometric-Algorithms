@@ -6,13 +6,34 @@ We try to determine if the point \vec{Q} lies in the triangle defined by the poi
 \begin{equation} \label{eq:a:trianglePointEquation}
 	\vec{P} = \vec{P_1} + a \cdot \vec{v_1} + b \cdot \vec{v_2}.
 \end{equation}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=0.9\textwidth, frame]{./img/1_triangle_point-01}
+	\caption{A triangle defined by the points $\vec{P_1}$, $\vec{P_2}$ and $\vec{P_3}$, with the vectors $\vec{v_1}$ and $\vec{v_2}$. The grey area covers all points that can be described according to \eqref{eq:a:trianglePointEquation}.}
+	\label{fig:a:triangle_point}
+\end{figure}
+
 For all points to the right of \vec{P_1} $a > 0$ and $b > 0$. The points that define the triangle can all be expressed according to \eqref{eq:a:trianglePointEquation}:
 \begin{align}
 	\vec{P_1} &= \vec{P_1} + 0 \cdot \vec{v_1} + 0 \cdot \vec{v_2} \label{eq:a:p1}\\ 
 	\vec{P_2} &= \vec{P_1} + 1 \cdot \vec{v_1} + 0 \cdot \vec{v_2} \label{eq:a:p2}\\ 
 	\vec{P_3} &= \vec{P_1} + 0 \cdot \vec{v_1} + 1 \cdot \vec{v_2} \label{eq:a:p3}.
 \end{align}
-Based on these \eqref{eq:a:p1} through \eqref{eq:a:p3} we find that a point \vec{Q} lies on the triangle if it can be expressed according to \eqref{eq:a:trianglePointEquation} with $a,b \in (0,1)$ and with $a + b < 1$. 
+If $a + b == 1$ the point lies on the edge between $\vec{P_2}$ and $\vec{P_3}$. Based on \autoref{eq:a:p1} through \ref{eq:a:p3} we find that a point \vec{Q} lies on the triangle if it can be expressed according to \eqref{eq:a:trianglePointEquation} with $a,b \in (0,1)$ and with $a + b < 1$. 
+
+	\begin{lstlisting}[float, language=Mathematica, label={lst:a:pointInTriangleMathematica}, caption={Mathematica code used to compute the to compute $a$ and $b$.}]
+p1 = {p10, p11};
+p2 = {p20, p21};
+p3 = {p30, p31};
+v1 = p2 - p1;
+v2 = p3 - p1;
+
+p4 = p1 + a * v1 + b * v2;
+p41 = Part[p4, 1] == Q0;
+p42 = Part[p4, 2] == Q1;
+solution = Solve[{p41, p42}, {a, b}]
+	\end{lstlisting}
 
 Solving the resulting equation with Mathematica, see \autoref{lst:a:pointInTriangleMathematica}, gives us expressions for $a$ and $b$, namely:
 	\begin{align}
@@ -25,31 +46,16 @@ Solving the resulting equation with Mathematica, see \autoref{lst:a:pointInTrian
    \vec{P_{2,1}} - \vec{P_{1,0}} \cdot \vec{P_{3,1}} - \vec{P_{1,1}} \cdot \vec{P_{2,0}}+\vec{P_{1,1}}
    \vec{P_{3,0}}+\vec{P_{2,0}} \cdot \vec{P_{3,1}} - \vec{P_{2,1}} \cdot \vec{P_{3,0}}}\label{eq:a:b}
 	\end{align}
-where \vec{P_{r,s}} represents the $s$'th element of the point $r$ and \vec{Q_t} repsents the $t$'th element of the point \vec{Q}.
+where \vec{P_{r,s}} represents the $s$'th element of the point $r$ and \vec{Q_t} represent the $t$'th element of the point \vec{Q}.
 
-In \eqref{eq:a:a} and \eqref{eq:a:b} are the same, this is the magnitude of the $\vec{v_1} \times \vec{v_2}$ if we represent the vectors as three dimensional by adding a $z$-coordinate of zero. If that cross product is zero $\vec{v_1}$ and $\vec{v_2}$ are parallel and thus the point \vec{Q} cannot be represented according to \eqref{eq:a:trianglePointEquation}.
+The denominator of \eqref{eq:a:a} and \eqref{eq:a:b} are the same, this is the magnitude of $\vec{v_1} \times \vec{v_2}$ where the vectors are made three-dimensional by adding a $z$-coordinate of zero, If that cross product is zero \vec{v_1} and \vec{v_2} are parallel and \eqref{eq:a:trianglePointEquation} can thus be only used to represent points on a line parallel to $\vec{v_1}$ and through $\vec{P_1}$. \\
 
-	\begin{lstlisting}[float, language=Mathematica, label={lst:a:pointInTriangleMathematica}, caption={Mathematica code used to compute the to compute $a$ and $b$.}]
-p1 = {p10, p11};
-p2 = {p20, p21};
-p3 = {p30, p31};
-v1 = p2 - p1;
-v2 = p3 - p1;
+% Implementatie
+The method presented above is implemented in the method \t{point_in_triangle()} in the module \t{triangle}, see \autoref{lst:a:pointInTriangle}.
 
-p4 = p1 + a * v1 + b * v2;
-p41 = Part[p4, 1] == Q0;
-p42 = Part[p4, 2] == pp1;
-solution = Solve[{p41, p42}, {a, b}]
-	\end{lstlisting}
+\lstinputlisting[float, firstline=5, lastline=32, label={lst:a:pointInTriangle}, caption={The method \t{point_in_triangle()} in the module \t{triangle}.}]{../triangle.py}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=0.9\textwidth, frame]{./img/1_triangle_point-01}
-	\caption{A triangle defined by the points $\vec{P_1}$, $\vec{P_2}$ and $\vec{P_3}$, with the vectors $\vec{v_1}$ and $\vec{v_2}$. The grey area covers all points that can be described according to \eqref{eq:a:trianglePointEquation}.}
-	\label{fig:a:triangle_point}
-\end{figure}
+\subsection{Finding the Triangle Containing the Point}
+We have simply checked for all triangles that result from the triangulation if the point lies inside that triangle, see \autoref{lst:a:findContainingTriangle}.
 
-
-
-
-\subsection{Finding the Triangle}
+\lstinputlisting[float, firstline=5, lastline=32, label={lst:a:findContainingTriangle}, caption={The method \t{find_containing_triangle()}.}]{../assignment3A.py}
