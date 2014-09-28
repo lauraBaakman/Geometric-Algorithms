@@ -1,10 +1,9 @@
 """Module with unit tests for the linesegment module."""
 import unittest
 from linesegment import *
-import pdb
 
 
-class Test_triangle_point_in_triangle(unittest.TestCase):
+class Test_line_segment_intersect(unittest.TestCase):
 
     """Unit tests for the method line_segments_intersect in the module linesegment."""
 
@@ -29,7 +28,6 @@ class Test_triangle_point_in_triangle(unittest.TestCase):
         p4 = [9, 8]
         result = line_segments_intersect([p1, p2], [p3, p4])
         answer = [3, 2]
-        pdb.set_trace()
         self.assertAlmostEqual(result[0], answer[0])
         self.assertAlmostEqual(result[1], answer[1])
 
