@@ -144,7 +144,7 @@ def find_containing_triangle(point):
     The triangle is returned as an index in the global array triPts.
 
     """
-    global triPts, lp, xl, yl
+    global triPts, xl, yl
     for triangle in triPts:
         [p1, p2, p3] = triangle
         if(point_in_triangle(
@@ -153,13 +153,13 @@ def find_containing_triangle(point):
                 [xl[p2], yl[p2]],
                 [xl[p3], yl[p3]]
             ],
-            lp
+            point
         )):
             print (
                 "The triangle that contains the point ({lp_x},{lp_y}):"
                 "({p1_x}, {p1_y}), ({p2_x}, {p2_y}), ({p3_x}, {p3_y})"
                 .format(
-                    lp_x=lp[0], lp_y=lp[1],
+                    lp_x=point[0], lp_y=point[1],
                     p1_x=xl[p1], p1_y=yl[p1],
                     p2_x=xl[p2], p2_y=yl[p2],
                     p3_x=xl[p3], p3_y=yl[p3],
