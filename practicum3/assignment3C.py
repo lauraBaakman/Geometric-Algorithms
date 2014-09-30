@@ -24,14 +24,19 @@ p0 = [200, 566]
 p1 = [550, 200]
 
 
-def generate_points():
+def generate_points(debug=False):
     """."""
     global xl, yl
-    for i in range(100):
-        x = 600*random()+50
-        y = 600*random()+50
-        xl.append(x)
-        yl.append(y)
+    if(debug):
+        xl = [150, 200, 250, 450, 600, 0, 0, 640]
+        yl = [550, 450, 500, 100, 550, 0, 650, 10]
+        print "Points: {}".format([xy for xy in zip(xl, yl)])
+    else:
+        for i in range(100):
+            x = 600*random()+50
+            y = 600*random()+50
+            xl.append(x)
+            yl.append(y)
 
 
 def pInTriangle(p, a, b, c):
@@ -116,7 +121,7 @@ def main(argv=None):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, trWithPoint
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     # print "xl", xl
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
