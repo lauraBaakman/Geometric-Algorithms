@@ -140,7 +140,8 @@ def find_containing_triangle(p, triPts=triPts, xl=xl, yl=yl):
     """
     Find the triangle of the triangulation that contains the point p.
 
-    The triangle is returned as an index in the global array triPts.
+    The triangle is returned as an index in the global array triPts and
+    as three indices in the global arrays xl and yl.
 
     """
     for idx, triangle in enumerate(triPts):
