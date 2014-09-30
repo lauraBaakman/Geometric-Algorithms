@@ -27,8 +27,6 @@ def line_segments_intersect(segment_1, segment_2):
                     + p1[0] * p4[1] - p2[0] * p4[1]) / q
             )
             if(lambda_2 >= 0 and lambda_2 <= 1):
-                x = lambda_1 * p1[0] + (1 - lambda_1) * p2[0]
-                y = lambda_1 * p1[1] + (1 - lambda_1) * p2[1]
                 return [
                     lambda_1 * p1[0] + (1 - lambda_1) * p2[0],
                     lambda_1 * p1[1] + (1 - lambda_1) * p2[1]
