@@ -209,6 +209,11 @@ def find_intersected_edges():
     for intersection in intersection_points:
         print ("({x}, {y})".format(x=intersection[0], y=intersection[1]))
 
+def find_edges_on_path():
+    """
+    Find the edges on the path from p0 to p1.
+    """
+
 
 if __name__ == '__main__':
     sys.exit(main())
