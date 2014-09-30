@@ -78,10 +78,14 @@ def display():
     for i in range(len(edgs)):
         glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
         glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
+    glEnd()
 
     # Draw containing triangle
     glColor3f(0.0, 0.7, 1.0)
+    glLineWidth(5.0)
+    glBegin(GL_LINES)
     (_, containing_triangle) = find_containing_triangle(lp, triPts, xl, yl)
+
     glVertex2f(xl[containing_triangle[0]],  yl[containing_triangle[0]])
     glVertex2f(xl[containing_triangle[1]],  yl[containing_triangle[1]])
 
@@ -90,8 +94,8 @@ def display():
 
     glVertex2f(xl[containing_triangle[1]],  yl[containing_triangle[1]])
     glVertex2f(xl[containing_triangle[2]],  yl[containing_triangle[2]])
-
     glEnd()
+
     glutSwapBuffers()
 
 
@@ -118,7 +122,7 @@ def main(argv=None):
     global xl, yl, xyl, xa, ya, cens, edgs, triPts, lp
     if argv is None:
         argv = sys.argv
-    generate_points(True)
+    generate_points()
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
@@ -136,7 +140,7 @@ def main(argv=None):
     return
 
 
-def find_containing_triangle(p, triPts=triPts, xl=xl, yl=yl):
+def find_containing_triangle(p, triPts, xl, yl):
     """
     Find the triangle of the triangulation that contains the point p.
 
