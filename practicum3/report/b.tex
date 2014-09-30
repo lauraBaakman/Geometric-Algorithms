@@ -1,48 +1,109 @@
 %!TEX root = practicum3.tex
 \subsection*{Line Segment Intersection}
-To find the intersection of the following two line segments
+	To find the intersection of the following two line segments
+		\begin{align}
+			s_1 &= \lambda_1 \cdot \vec{P_1} + (1 - \lambda_1) \cdot \vec{P_2}	& \text{for } 0 \leq \lambda_1 \leq 1\\
+			s_2 &= \lambda_2 \cdot \vec{P_3} + (1 - \lambda_2) \cdot \vec{P_4}	& \text{for } 0 \leq \lambda_2 \leq 1
+		\end{align}	
+	we need to solve the equation:
+		\begin{align}\label{eq:b:linesegmentintersectionequation}
+			s_1 &= s_2\nonumber\\
+			\lambda_1 \cdot \vec{P_1} + (1 - \lambda_1) \cdot \vec{P_2} &= \lambda_2 \cdot \vec{P_3} + (1 - \lambda_2) \cdot \vec{P_4}.
+		\end{align}
+	\autoref{eq:b:linesegmentintersectionequation} can be solved using the Mathematica code presented in \autoref{lst:b:mat_lineSegmentIntersection}. This results in an expression for $\lambda_1$ (\autoref{eq:b:lambda1}) and one for $\lambda_2$ (\autoref{eq:b:lambda2}).
+
 	\begin{align}
-		s_1 &= \lambda_1 \cdot \vec{P_1} + (1 - \lambda_1) \cdot \vec{P_2}	& \text{for } 0 \leq \lambda_1 \leq 1\\
-		s_2 &= \lambda_2 \cdot \vec{P_3} + (1 - \lambda_2) \cdot \vec{P_4}	& \text{for } 0 \leq \lambda_2 \leq 1
-	\end{align}	
-we need to solve the equation:
-	\begin{align}\label{eq:b:linesegmentintersectionequation}
-		s_1 &= s_2\nonumber\\
-		\lambda_1 \cdot \vec{P_1} + (1 - \lambda_1) \cdot \vec{P_2} &= \lambda_2 \cdot \vec{P_3} + (1 - \lambda_2) \cdot \vec{P_4}.
+		\lambda_1 &= -
+		\frac{
+			-\vec{P_{2,x}} \vec{P_{3,y}}+\vec{P_{2,x}} \vec{P_{4,y}}+\vec{P_{2,y}} \vec{P_{3,x}}-\vec{P_{2,y}} \vec{P_{4,x}}-\vec{P_{3,x}}
+	   		\vec{P_{4,y}}+\vec{P_{3,y}} \vec{P_{4,x}}}
+	   {
+			q
+	   } \label{eq:b:lambda1}\\
+		\lambda_2 &= -
+		\frac{
+			-\vec{P_{1,x}} \vec{P_{2,y}}+\vec{P_{1,x}} \vec{P_{4,y}}+\vec{P_{1,y}} \vec{P_{2,x}}-\vec{P_{1,y}} \vec{P_{4,x}}-\vec{P_{2,x}}
+	   		\vec{P_{4,y}}+\vec{P_{2,y}} \vec{P_{4,x}}
+		}{
+			q
+		} \label{eq:b:lambda2}\\
+	   \begin{split}
+	      q &= 
+			-\vec{P_{1,x}} \vec{P_{3,y}}+\vec{P_{1,x}} \vec{P_{4,y}}+\vec{P_{1,y}}
+	   		\vec{P_{3,x}}-\vec{P_{1,y}} \vec{P_{4,x}}+\vec{P_{2,x}} \vec{P_{3,y}}-\vec{P_{2,x}} \vec{P_{4,y}}\\
+	   		&\quad\quad -\vec{P_{2,y}}\vec{P_{3,x}}+\vec{P_{2,y}} \vec{P_{4,x}}   	
+	   \end{split} \label{eq:b:q}
 	\end{align}
-\autoref{eq:b:linesegmentintersectionequation} can be solved using the Mathematica code presented in \autoref{lst:b:mat_lineSegmentIntersection}. This results in an expression for $\lambda_1$ (\autoref{eq:b:lambda1}) and one for $\lambda_2$ (\autoref{eq:b:lambda2}).
+	$q$ is the magnitude of the cross product of the vectors $\vec{v_1} = \vec{P_2} - \vec{P_1}$ and $\vec{v_2} = \vec{P_4} - \vec{P_3}$ when the vectors \vec{P_1} through \vec{P_4} are extended to three-dimensional space. If $q$ is zero the vectors \vec{v_1} and \vec{v_2} are parallel and the two line segments will thus never intersect. If they are not parallel the two line segments only intersect when $\lambda_1, \lambda_2 \in [0, 1]$.\\
 
-\begin{align}
-	\lambda_1 &= -
-	\frac{
-		-\vec{P_{2,x}} \vec{P_{3,y}}+\vec{P_{2,x}} \vec{P_{4,y}}+\vec{P_{2,y}} \vec{P_{3,x}}-\vec{P_{2,y}} \vec{P_{4,x}}-\vec{P_{3,x}}
-   		\vec{P_{4,y}}+\vec{P_{3,y}} \vec{P_{4,x}}}
-   {
-		q
-   } \label{eq:b:lambda1}\\
-	\lambda_2 &= -
-	\frac{
-		-\vec{P_{1,x}} \vec{P_{2,y}}+\vec{P_{1,x}} \vec{P_{4,y}}+\vec{P_{1,y}} \vec{P_{2,x}}-\vec{P_{1,y}} \vec{P_{4,x}}-\vec{P_{2,x}}
-   		\vec{P_{4,y}}+\vec{P_{2,y}} \vec{P_{4,x}}
-	}{
-		q
-	} \label{eq:b:lambda2}\\
-   \begin{split}
-      q &= 
-		-\vec{P_{1,x}} \vec{P_{3,y}}+\vec{P_{1,x}} \vec{P_{4,y}}+\vec{P_{1,y}}
-   		\vec{P_{3,x}}-\vec{P_{1,y}} \vec{P_{4,x}}+\vec{P_{2,x}} \vec{P_{3,y}}-\vec{P_{2,x}} \vec{P_{4,y}}\\
-   		&\quad -\vec{P_{2,y}}\vec{P_{3,x}}+\vec{P_{2,y}} \vec{P_{4,x}}   	
-   \end{split} \label{eq:b:q}
-\end{align}
-$q$ is the magnitude of the cross product of the vectors $\vec{v_1} = \vec{P_2} - \vec{P_1}$ and $\vec{v_2} = \vec{P_4} - \vec{P_3}$ when the vectors \vec{P_1} through \vec{P_4} are extended to three-dimensional space. If $q$ is zero the vectors \vec{v_1} and \vec{v_2} are parallel and the two line segments will thus never intersect. If they are not parallel the two line segments only intersect when $\lambda_1, \lambda_2 \in [0, 1]$.\\
+		\begin{lstlisting}[float, language=Mathematica, label={lst:b:mat_lineSegmentIntersection}, caption={Mathematica code used to solve \autoref{eq:b:linesegmentintersectionequation}.}]
+	eq1 = lam1 p1x + (1 - lam1) p2x == lam2  p3x + (1 - lam2) p4x
+	eq2 = lam1 p1y + (1 - lam1) p2y == lam2  p3y + (1 - lam2) p4y
+	Solve[eq1 == eq2 {lam1, lam2}]\end{lstlisting}
 
-	\begin{lstlisting}[float, language=Mathematica, label={lst:b:mat_lineSegmentIntersection}, caption={Mathematica code used to solve \autoref{eq:b:linesegmentintersectionequation}.}]
-eq1 = lam1 p1x + (1 - lam1) p2x == lam2  p3x + (1 - lam2) p4x
-eq2 = lam1 p1y + (1 - lam1) p2y == lam2  p3y + (1 - lam2) p4y
-Solve[eq1 == eq2 {lam1, lam2}]\end{lstlisting}
+	\subsubsection*{The Implementation}
+		Based on the presented equations we have defined the method \t{line_segments_intersect} that takes two line segements defined by their endpoints and return \t{False} if they do not intersect and the intersection point if they do intersect. The code of that method is presented in \autoref{lst:b:intersectLineSegments}.
 
-Based on the presented equations we have defined the method \t{line_segments_intersect} that takes two line segements defined by their endpoints and return \t{None} if they do not intersect and the intersection point if they do intersect. The code of that method is presented in \autoref{lst:b:intersectLineSegments}.
-
-\lstinputlisting[float, label={lst:b:intersectLineSegments}, caption={The method \t{line_segments_intersect()}.}]{../linesegment.py}
+		\lstinputlisting[float, label={lst:b:intersectLineSegments}, caption={The method \t{line_segments_intersect()}.}]{../linesegment.py}
 
 \subsection*{Projection of a Point on a Plane}
+	To find the projection of a point \vec{P_0} on a plane $A$ defined by \vec{P_1}, \vec{P_2} and \vec{P_3} we need to define the projection of the point and the plane in such a way that we can find an intersection.
+
+		\subsubsection*{The Plane}
+		We can define the plane defined by the points \vec{P_1}, \vec{P_2} and \vec{P_3} by using the fact that the dot product of two vectors is zero if they are perpendicular. Thus a vector $\vec{q}$ is in the plane iff:
+			\begin{equation}
+				\vec{q} \cdot \vec{n} = 0.
+			\end{equation}
+		Where $\vec{n}$ is the normal of the plane, which is defined as:
+			 \begin{equation}
+			 	\vec{n} = (\vec{P_1} - \vec{P_2}) \times (\vec{P_3} - \vec{P_1}).
+			 \end{equation}
+		To determine if a point \vec{P} lies in the plane we define a vector through that point that lies in the plane, thus we find that all points $\vec{P}$ lie in the plane iff:
+			\begin{equation} \label{eq:b:plane}
+				(\vec{P} - \vec{P_1}) \cdot \vec{n} = 0
+			\end{equation}\\
+
+	\subsubsection*{The Projection Vector}
+		Since the projection of the point $\vec{P_0}$, $\vec{P_0}'$ only has a different $z$-coordinate, we know that we can reach the projection point by starting at $\vec{P_0}$ and moving along the vector $\begin{bmatrix}0 &0 &1\end{bmatrix}$. The line through $\vec{P_0}$ and the projection $\vec{P_0}'$ of that point is thus defined as:
+			\begin{equation}\label{eq:b:line}
+			 	\vec{P_0} + \lambda \cdot \begin{bmatrix} 0\\ 0\\ 1\end{bmatrix}
+			 \end{equation} 
+
+	\subsubsection*{The Projection}
+		Based on the definition of the plane \eqref{eq:b:plane} and the projection vector \eqref{eq:b:line} we need to solve the following equation to find the projection:
+			\begin{equation}\label{eq:b:projection}
+				\left( \left(\vec{P_0} + \lambda \cdot  \begin{bmatrix} 0\\ 0\\ 1\end{bmatrix} \right) - \vec{P_1} \right) \cdot \vec{n} = 0
+			\end{equation}
+		The point $\vec{P_0}'$ is then found by filling the computed $\lambda$ in into \autoref{eq:b:line}. Since the $z$-coordinate of \vec{P_0} is zero and the third element of the vector $\begin{bmatrix}0 &0 &1\end{bmatrix}$ is one, the $z$-coordinate of the projection point is $\lambda$.\\
+
+		\autoref{eq:b:projection} can be solved in Mathematica using the code presented in \autoref{lst:b:mat_planePointProjection}. The formula for $\lambda$ is then:
+      		\begin{equation}\label{eq:b:lambda}
+      			\lambda = 
+				\frac{
+					\begin{aligned}
+		  				  	\vec{P_{0,x}} \vec{P_{1,y}} \vec{P_{2,z}}-\vec{P_{0,x}} \vec{P_{1,y}} \vec{P_{3,z}}-\vec{P_{0,x}} \vec{P_{1,z}} \vec{P_{2,y}} +\vec{P_{0,x}} \vec{P_{1,z}} \vec{P_{3,y}}+\vec{P_{0,x}} \vec{P_{2,y}} \vec{P_{3,z}}-\vec{P_{0,x}} \vec{P_{2,z}} \vec{P_{3,y}} - \\
+		  				  	\vec{P_{0,y}} \vec{P_{1,x}} \vec{P_{2,z}}+\vec{P_{0,y}} \vec{P_{1,x}} \vec{P_{3,z}}+\vec{P_{0,y}} \vec{P_{1,z}} \vec{P_{2,x}} -\vec{P_{0,y}} \vec{P_{1,z}} \vec{P_{3,x}}-\vec{P_{0,y}} \vec{P_{2,x}} \vec{P_{3,z}}+\vec{P_{0,y}} \vec{P_{2,z}} \vec{P_{3,x}} - \\
+		  				  	\vec{P_{1,x}} \vec{P_{2,y}} \vec{P_{3,z}}+\vec{P_{1,x}} \vec{P_{2,z}} \vec{P_{3,y}}+\vec{P_{1,y}} \vec{P_{2,x}} \vec{P_{3,z}} -\vec{P_{1,y}} \vec{P_{2,z}} \vec{P_{3,x}}-\vec{P_{1,z}} \vec{P_{2,x}} \vec{P_{3,y}}+\vec{P_{1,z}} \vec{P_{2,y}} \vec{P_{3,x}}~~ \\
+		      		\end{aligned}
+  				}{
+		      		\begin{aligned}
+						-\vec{P_{1,x}} \vec{P_{2,y}}+\vec{P_{1,x}} \vec{P_{3,y}}+\vec{P_{1,y}} \vec{P_{2,x}} - \vec{P_{1,y}} \vec{P_{3,x}}-\vec{P_{2,x}} \vec{P_{3,y}}+\vec{P_{2,y}} \vec{P_{3,x}}
+					\end{aligned}
+		      	}
+			\end{equation}
+		If the numerator is zero the plane $A$ is the $x,y$-plane. If the denominator is zero, the plane $A$ is perpendicular to the project vector, and thus there is no projection point or there are infinitely many projection points.
+
+	\begin{lstlisting}[float, language=Mathematica, label={lst:b:mat_planePointProjection}, caption={Mathematica code used to solve \autoref{eq:b:projection}.}]
+p0 = {p0x, p0y, 0};
+p1 = {p1x, p1y, p1z};
+p2 = {p2x, p2y, p2z};
+p3 = {p3x, p3y, p3z};
+zvec = {0, 0, 1};
+
+n = Cross[(p2 - p1), (p3 - p1)];
+Solve[((p0 + lambda * zvec) - p1) . n == {0, 0, 0}, lambda]\end{lstlisting}		
+
+	\subsubsection*{The Implementation}
+	Using the formula presented in \autoref{eq:b:lambda} we can define the function \t{project_point_on_plane([p1, p2, p3], p0)} that computes the projection of the point \t{p0} on the plane defined by \t{p1, p2, p3}, see \autoref{lst:b:pointPlaneProjection}.
+
+	\lstinputlisting[float, label={lst:b:pointPlaneProjection}, caption={The method \t{project_point_on_plane()}.}]{../plane.py}
