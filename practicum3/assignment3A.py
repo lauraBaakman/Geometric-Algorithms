@@ -1,7 +1,7 @@
 """
 h.bekker@rug.nl.
 
-Global variablen:
+Global variables:
     xa:     X-coordinates of the triangulated points in an array.
     xl:     X-coordinates of the triangulated points in a list.
     cens:   Array with a list of list where each sublist contains the coordinates
@@ -11,7 +11,7 @@ Global variablen:
     triPts: Array with triangles, each triangle is represented as a list of three
             indices into xa and ya.
     neighs:  Array of integers giving the indices into cens
-            triPts, and neighs of the neighbors of each trianglegit
+            triPts, and neighs of the neighbors of each triangle.
 """
 
 from random import *
