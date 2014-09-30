@@ -81,7 +81,7 @@ def display():
 
     # Draw containing triangle
     glColor3f(0.0, 0.7, 1.0)
-    containing_triangle = find_containing_triangle(lp)
+    (_, containing_triangle) = find_containing_triangle(lp, triPts, xl, yl)
     glVertex2f(xl[containing_triangle[0]],  yl[containing_triangle[0]])
     glVertex2f(xl[containing_triangle[1]],  yl[containing_triangle[1]])
 
@@ -115,16 +115,15 @@ def keyboard(key, x, y):
 
 def main(argv=None):
     """."""
-    global xl, yl, xyl, xa, ya, cens, edgs, triPts
+    global xl, yl, xyl, xa, ya, cens, edgs, triPts, lp
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neigs = triang.delaunay(xa, ya)
-    find_containing_triangle(lp)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
@@ -137,15 +136,14 @@ def main(argv=None):
     return
 
 
-def find_containing_triangle(point):
+def find_containing_triangle(p, triPts=triPts, xl=xl, yl=yl):
     """
-    Find the triangle of the triangulation that contains the point point.
+    Find the triangle of the triangulation that contains the point p.
 
     The triangle is returned as an index in the global array triPts.
 
     """
-    global triPts, xl, yl
-    for triangle in triPts:
+    for idx, triangle in enumerate(triPts):
         [p1, p2, p3] = triangle
         if(point_in_triangle(
             [
@@ -153,19 +151,19 @@ def find_containing_triangle(point):
                 [xl[p2], yl[p2]],
                 [xl[p3], yl[p3]]
             ],
-            point
+            p
         )):
             print (
                 "The triangle that contains the point ({lp_x},{lp_y}):"
                 "({p1_x}, {p1_y}), ({p2_x}, {p2_y}), ({p3_x}, {p3_y})"
                 .format(
-                    lp_x=point[0], lp_y=point[1],
+                    lp_x=p[0], lp_y=p[1],
                     p1_x=xl[p1], p1_y=yl[p1],
                     p2_x=xl[p2], p2_y=yl[p2],
                     p3_x=xl[p3], p3_y=yl[p3],
                 )
             )
-            return triangle
+            return (idx, triangle)
 
 
 if __name__ == '__main__':

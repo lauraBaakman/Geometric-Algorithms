@@ -18,6 +18,7 @@ import matplotlib.delaunay as triang
 import numpy
 import pdb
 
+from assignment3A import find_containing_triangle
 from linesegment import line_segments_intersect
 
 try:
@@ -46,8 +47,10 @@ def generate_points(debug=False):
     """."""
     global xl, yl
     if(debug):
-        xl = [150, 200, 250, 450, 600, 0, 0, 640]
-        yl = [550, 450, 500, 100, 550, 0, 650, 10]
+        # xl = [150, 200, 250, 450, 600, 0, 0, 640]
+        # yl = [550, 450, 500, 100, 550, 0, 650, 10]
+        xl = [10, 650, 10, 650]
+        yl = [10, 10, 650, 650]
         print "Points: {}".format([xy for xy in zip(xl, yl)])
     else:
         for i in range(100):
@@ -121,12 +124,13 @@ def display():
     glEnd()
 
     # draw intersection points on walk line
-    glColor3f(0.0, 1.0, 0.0)
-    glPointSize(4)
-    glBegin(GL_POINTS)
-    for point in intersection_points:
-        glVertex2f(point[0], point[1])
-    glEnd()
+    if(intersection_points):
+        glColor3f(0.0, 1.0, 0.0)
+        glPointSize(4)
+        glBegin(GL_POINTS)
+        for point in intersection_points:
+            glVertex2f(point[0], point[1])
+        glEnd()
 
     glutSwapBuffers()
 
@@ -154,16 +158,16 @@ def main(argv=None):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, trWithPoint
     if argv is None:
         argv = sys.argv
-    generate_points()
-    # print "xl", xl
+    generate_points(True)
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
     # transform array data to list data (for delaunay())
     xa = numpy.array(xl)
     ya = numpy.array(yl)
-    cens, edgs, triPts, neigs = triang.delaunay(xa, ya)
+    cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
 
-    find_intersected_edges()
+    # find_intersected_edges()
+    find_edges_on_path()
 
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
@@ -209,10 +213,53 @@ def find_intersected_edges():
     for intersection in intersection_points:
         print ("({x}, {y})".format(x=intersection[0], y=intersection[1]))
 
+def print_point(t):
+    """."""
+    print ("({}, {})".format(xl[t], yl[t]))
+
+def print_triangle(t):
+    print_point(triPts[t][0])
+    print_point(triPts[t][1])
+    print_point(triPts[t][2])
+
 def find_edges_on_path():
     """
     Find the edges on the path from p0 to p1.
+
+    Doesn't handle the case where the path goes through a vertex!
     """
+    def orientation(a, b, c):
+        """Return true if the points a, b, c define a triangle counter clockwise."""
+        return (
+            (-a[1] * b[0] + a[0] * b[1] + a[1] * c[0]
+             - b[1] * c[0] - a[0] * c[1] + b[0] * c[1]) < 0
+        )
+
+    def find_crossed_edge(t):
+        """Find the crossed edge when moving along p0-p1 from triangle t."""
+        # t index in triPts
+        global neighs, triPts, p0
+        # t_Vertices: index in xl and yl
+        t_vertices = set(triPts[t])
+        for n in (x for x in neighs[t] if x != -1):
+            #  n: index in triPts
+            # shared_edge: indeces in xl and yl
+            shared_edge = list(t_vertices.intersection(set(triPts[n])))
+            #  eo, e1: punten
+            e0 = [xl[shared_edge[0]], yl[shared_edge[0]]]
+            e1 = [xl[shared_edge[1]], yl[shared_edge[1]]]
+            if(orientation(p0, e0, e1) is not orientation(p1, e0, e1)):
+                return (shared_edge, n)
+        raise StandardError("find_cross_edge hasn't found an edge to"
+                            "cross, maybe the path goes through a vertex?")
+
+    global p0, p1, intersected_line_segments
+    (t, _) = find_containing_triangle(p0, triPts, xl, yl)
+    (t1, _) = find_containing_triangle(p1, triPts, xl, yl)
+    while t != t1:
+        (e, t) = find_crossed_edge(t)
+        pdb.set_trace()
+        intersected_line_segments.append(e)
 
 
 if __name__ == '__main__':
