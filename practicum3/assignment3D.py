@@ -1,12 +1,31 @@
-"""."""
+"""
+h.bekker@rug.nl.
+
+Global variables:
+    xa:     X-coordinates of the triangulated points in an array.
+    xl:     X-coordinates of the triangulated points in a list.
+    cens:   Array with a list of list where each sublist contains the coordinates
+            of center of one of the triangles of the triangulation.
+    edges:  Array with a list of list where each sublist contains the indices
+            of the points between which one of the edges of the triangulation runs.
+    triPts: Array with triangles, each triangle is represented as a list of three
+            indices into xa and ya.
+    neighs:  Array of integers giving the indices into cens
+            triPts, and neighs of the neighbors of each triangle.
+"""
 import sys
 from sys import *
 import string
 from random import *
 from math import *
-import operator
+# import operator
 import matplotlib.delaunay as triang
 import numpy
+import pdb
+
+from assignment3A import find_containing_triangle
+from linesegment import line_segments_intersect
+from plane import project_point_on_plane
 
 try:
     from OpenGL.GLUT import *
@@ -32,6 +51,9 @@ lightOneColor = (0.99, 0.99, 0.99, 1.0)
 dl = 0  # display list
 rot = 0  # rotation used in openGL Press x or z, see keyboard function
 
+# The 3D linesegments and triangles of the path from p0 to p1
+path_edges, path_triangles = [], []
+
 
 def read_points():
     """."""
@@ -44,16 +66,24 @@ def read_points():
         zl.append(float(b[2]))
 
 
-def generate_points():
+def generate_points(debug=False):
     """."""
-    for i in range(100):
-        x = 600 * random() + 50
-        y = 600 * random() + 50
-        r = sqrt((x - 300)**2 + (y - 300)**2)
-        z = 300 - 40 * cos(r / 50)
-        xl.append(x)
-        yl.append(y)
-        zl.append(z)
+    if(debug):
+        global xl, yl, zl
+        xl = [150, 200, 250, 450, 600, 0, 0, 640]
+        yl = [550, 450, 500, 100, 550, 0, 650, 10]
+        zl = [100, 200, 150, 80, 250, 40, 50, 200]
+        print "Points: {}".format([xyz for xyz in zip(xl, yl, zl)])
+    else:
+        nPoints = 100
+        for i in range(nPoints):
+            x = 600 * random() + 50
+            y = 600 * random() + 50
+            r = sqrt((x - 300)**2 + (y - 300)**2)
+            z = 300 - 40 * cos(r / 50)
+            xl.append(x)
+            yl.append(y)
+            zl.append(z)
 
 
 def pInTriangle(p, a, b, c):
@@ -105,10 +135,10 @@ def generate_dl():
     glColor3f(0.99, 0.3, 0.3)
     glLineWidth(3)
     glBegin(GL_LINES)
-    for i in range(2):
-        # the height 250.0 is fictitious you have to calculate the correct path
-        glVertex3f(p0[0], p0[1], 250.0)
-        glVertex3f(p1[0], p1[1], 250.0)
+    pdb.set_trace()
+    for edge in path_edges:
+        glVertex3f(edge[0][0], edge[0][1], edge[0][2])
+        glVertex3f(edge[1][0], edge[1][1], edge[1][2])
     glEnd()
     glEndList()
 
@@ -178,7 +208,7 @@ def main(argv=None):
     # global width, height
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     # read_points()
 
     for i in range(len(xl)):
@@ -187,10 +217,12 @@ def main(argv=None):
     # transform array data to list data (for delaunay())
     xa = numpy.array(xl)
     ya = numpy.array(yl)
-    cens, edgs, triPts, neigs = triang.delaunay(xa, ya)
+    cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
     intersections = 0
     for i in range(len(triPts)):
         triNormal.append(normal(xyzl[triPts[i][0]], xyzl[triPts[i][1]], xyzl[triPts[i][2]]))
+
+    find_path()
 
     glutInit(argv)
     glutCreateWindow("Mount Elk")
@@ -217,6 +249,60 @@ def main(argv=None):
     generate_dl()
     glutMainLoop()
     return
+
+
+def find_neighbouring_edge_intersected_by_s(triangle_idx):
+    """Find the the 2 and 3d intersection point along s on the edge neighbouring triangle_idx."""
+    for n in (x for x in neighs[triangle_idx] if x not in path_triangles):
+        shared_edge = list(set(triPts[triangle_idx]).intersection(set(triPts[n])))
+        intersection_point_2d = line_segments_intersect(
+            [[xl[shared_edge[0]], yl[shared_edge[0]]],
+             [xl[shared_edge[1]], yl[shared_edge[1]]]], [p0, p1]
+        )
+        if(intersection_point_2d):
+            intersection_point_3d = project_point_on_plane(get_triangle(n), intersection_point_2d)
+            print("Found a neighbour: {} ({}-{})".format(n, shared_edge[0], shared_edge[1]))
+            return (n, intersection_point_3d)
+    raise AssertionError("No neighbouring edge could be found...")
+
+
+def get_triangle(triPts_idx):
+    """Return a triangle as a list of 2D points based on its index in triPts/neighs/cens."""
+    (p1, p2, p3) = triPts[triPts_idx]
+    return ([
+        [xl[p1], yl[p1], zl[p1]],
+        [xl[p2], yl[p2], zl[p2]],
+        [xl[p3], yl[p3], zl[p3]]
+    ])
+
+
+def find_path():
+    """Find the path from p0 to p1 in the triangulation."""
+    # Find the triangles containing p0 and p1
+    (t0, _) = find_containing_triangle(p0, triPts, xl, yl)
+    (t1, _) = find_containing_triangle(p1, triPts, xl, yl)
+
+    global path_edges, path_triangles
+
+    # Current triangle while finding the path
+    t = t0
+
+    # Current point while finding the path
+    p = project_point_on_plane(get_triangle(t0), p0)
+    path_triangles.append(-1)
+    path_triangles.append(t)
+
+    while t != t1:
+        e0 = p
+        (t, p) = find_neighbouring_edge_intersected_by_s(t)
+        path_triangles.append(t)
+        path_edges.append([e0, p])
+    pdb.set_trace()
+    path_triangles.pop(0)
+    path_edges.append([
+        p,
+        project_point_on_plane(get_triangle(t1), p1)
+    ])
 
 if __name__ == '__main__':
     sys.exit(main())
