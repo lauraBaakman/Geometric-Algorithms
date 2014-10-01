@@ -31,8 +31,6 @@
 \usepackage{subcaption}
 \usepackage[export]{adjustbox}
 
-\usepackage{todonotes}
-
 % Code lay-out
 \definecolor{light-gray}{gray}{0.95}
 \usepackage{courier}
@@ -49,10 +47,11 @@
 
 \renewcommand{\t}[1]{\lstinline[basicstyle=\normalsize\ttfamily]{#1}}
 
-\bibliography{biblio}
-
 % General lay-out
 \renewcommand{\thesection}{\Alph{section}}
+\addto\extrasenglish{%
+  \renewcommand{\sectionautorefname}{Assignment}%
+}
 
 %Math
 \renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}}
@@ -80,8 +79,11 @@
 \input{b.tex}
 
 \section{~}
+\label{s:c}
 \input{c.tex}
 
-\printbibliography
+\section{~}
+\label{s:d}
+\input{d.tex}
 
 \end{document}

@@ -131,11 +131,10 @@ def generate_dl():
         glVertex3fv(xyzl[triPts[i][2]])
     glEnd()
 
-    # draw fictitious path
+    # draw path
     glColor3f(0.99, 0.3, 0.3)
     glLineWidth(3)
     glBegin(GL_LINES)
-    pdb.set_trace()
     for edge in path_edges:
         glVertex3f(edge[0][0], edge[0][1], edge[0][2])
         glVertex3f(edge[1][0], edge[1][1], edge[1][2])
@@ -208,8 +207,8 @@ def main(argv=None):
     # global width, height
     if argv is None:
         argv = sys.argv
-    generate_points(True)
-    # read_points()
+    # generate_points()
+    read_points()
 
     for i in range(len(xl)):
         xyl.append([xl[i], yl[i]])
@@ -221,10 +220,11 @@ def main(argv=None):
     intersections = 0
     for i in range(len(triPts)):
         triNormal.append(normal(xyzl[triPts[i][0]], xyzl[triPts[i][1]], xyzl[triPts[i][2]]))
-
     find_path()
-
+    print("Path length: {}".format(path_length(path_edges)))
+    print("Line segments: {}".format(path_edges))
     glutInit(argv)
+    glutInitWindowSize(width, height)
     glutCreateWindow("Mount Elk")
     glClearDepth(1.0)
     glEnable(GL_DEPTH_TEST)
@@ -234,7 +234,6 @@ def main(argv=None):
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
     glEnable(GL_DEPTH_TEST)
-    glutInitWindowSize(width, height)
     glutInitWindowPosition(100, 100)
     glLightfv(GL_LIGHT0, GL_POSITION, lightOnePosition)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightOneColor)
@@ -261,8 +260,8 @@ def find_neighbouring_edge_intersected_by_s(triangle_idx):
         )
         if(intersection_point_2d):
             intersection_point_3d = project_point_on_plane(get_triangle(n), intersection_point_2d)
-            print("Found a neighbour: {} ({}-{})".format(n, shared_edge[0], shared_edge[1]))
             return (n, intersection_point_3d)
+
     raise AssertionError("No neighbouring edge could be found...")
 
 
@@ -297,12 +296,21 @@ def find_path():
         (t, p) = find_neighbouring_edge_intersected_by_s(t)
         path_triangles.append(t)
         path_edges.append([e0, p])
-    pdb.set_trace()
     path_triangles.pop(0)
     path_edges.append([
         p,
         project_point_on_plane(get_triangle(t1), p1)
     ])
+
+
+def euclidean_distance(a, b):
+    """Compute the euclidean distance between the n-dimensional points a and b."""
+    return(sqrt(sum([(a_i - b_i)**2 for a_i, b_i in zip(a, b)])))
+
+
+def path_length(edges):
+    """Compute the length, using euclidean distance of the path defined by the edges."""
+    return(sum([euclidean_distance(p1, p2) for [p1, p2] in edges]))
 
 if __name__ == '__main__':
     sys.exit(main())
