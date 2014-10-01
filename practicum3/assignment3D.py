@@ -47,10 +47,10 @@ def read_points():
 def generate_points():
     """."""
     for i in range(100):
-        x = 600*random()+50
-        y = 600*random()+50
-        r = sqrt((x-300)**2 + (y-300)**2)
-        z = 300 - 40 * cos(r/50)
+        x = 600 * random() + 50
+        y = 600 * random() + 50
+        r = sqrt((x - 300)**2 + (y - 300)**2)
+        z = 300 - 40 * cos(r / 50)
         xl.append(x)
         yl.append(y)
         zl.append(z)
@@ -167,12 +167,15 @@ def keyboard(key, x, y):
     if key == chr(122):
         rot = (rot-2) % 360
         glutPostRedisplay()
+    # Q
+    if key == 'Q':
+        raise SystemExit
 
 
 def main(argv=None):
     """."""
     global xl, yl, zl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, trWithPoint
-    global width, height
+    # global width, height
     if argv is None:
         argv = sys.argv
     generate_points()
