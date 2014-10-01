@@ -118,7 +118,7 @@ def reshape3D(w, h):
     glViewport(0, 0,  width,  height)
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
-    gluPerspective(60.0, w/h, 0.2, 10.0)
+    gluPerspective(60.0, (w + 0.0)/h, 0.2, 10.0)
     glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
     gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0)
@@ -172,6 +172,7 @@ def keyboard(key, x, y):
 def main(argv=None):
     """."""
     global xl, yl, zl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, trWithPoint
+    global width, height
     if argv is None:
         argv = sys.argv
     generate_points()
@@ -189,6 +190,7 @@ def main(argv=None):
         triNormal.append(normal(xyzl[triPts[i][0]], xyzl[triPts[i][1]], xyzl[triPts[i][2]]))
 
     glutInit(argv)
+    glutCreateWindow("Mount Elk")
     glClearDepth(1.0)
     glEnable(GL_DEPTH_TEST)
     glClearColor(1.0, 1.0, 1.0, 0.0)
@@ -199,7 +201,6 @@ def main(argv=None):
     glEnable(GL_DEPTH_TEST)
     glutInitWindowSize(width, height)
     glutInitWindowPosition(100, 100)
-    glutCreateWindow("Mount Elk")
     glLightfv(GL_LIGHT0, GL_POSITION, lightOnePosition)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightOneColor)
     glEnable(GL_LIGHT0)
