@@ -17,12 +17,29 @@ class DCEL(object):
     """
 
     @classmethod
-    def from_delaunay_triangulation(xl, yl, edgs, triPts, neighs):
+    def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay. """
+        def first_triangle():
+            return None
+
+        def get_CCW_edges():
+            return None
+
         triangle_queue = Queue(0)
         while not(triangle_queue.is_empty()):
+            current_triangle = triangle_queue.dequeue()
 
-            triangle_queue.enqueue(p)
+            # Add the neighbours to the queue
+            triangle_queue.enqueue(
+                [x for x in neighs[current_triangle] if not(x == -1)]
+            )
+
+            if(not current_triangle):
+                edges = first_triangle()
+            else:
+                # Find neighbouring edge that is in triangulation
+                edges = get_CCW_edges()
+            print edges
 
     def __init__(self, vertices, edges, faces):
         """Construct a DCEL object."""
@@ -76,3 +93,11 @@ class Queue(object):
         return (
             '<Queue : {obj._queue}>'.format(obj=self)
         )
+
+if __name__ == '__main__':
+    xl = [0, 2, 2, 1]
+    yl = [4, 4, 2, 2, 1]
+    edges = [[0, 1], [1, 2], [2, 0], [2, 3], [3, 0]]
+    triangles = [[0, 1, 2], [0, 2, 3]]
+    neighs = [[1, -1, -1], [0, -1, -1]]
+    d = DCEL.from_delaunay_triangulation(xl, yl, edges, triangles, neighs)
