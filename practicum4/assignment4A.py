@@ -25,21 +25,28 @@ xl, yl, xyl, xa, ya, cens, edgs, triPts, neighs = [], [], [], [], [], [], [], []
 trWithPoint = []
 
 
-def generate_points():
+def generate_points(debug=False):
     """."""
     global xl, yl
-    for i in range(100):
-        x = 600 * random() + 50
-        y = 600 * random() + 50
-        xl.append(x)
-        yl.append(y)
-        xyl.append([x, y])
+    if(debug):
+        xl = [150, 200, 250, 450, 600, 10]
+        yl = [550, 450, 500, 100, 550, 10]
+        print "Points: {}".format([xy for xy in zip(xl, yl)])
+    else:
+        for i in range(100):
+            x = 600 * random() + 50
+            y = 600 * random() + 50
+            xl.append(x)
+            yl.append(y)
+            xyl.append([x, y])
+
 
 def keyboard(key, x, y):
     """Handle keyboard events."""
     print key
     if key == 'Q':
         raise SystemExit
+
 
 def display():
     """."""
@@ -93,7 +100,7 @@ def main(argv=None):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
