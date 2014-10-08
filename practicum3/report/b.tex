@@ -44,7 +44,7 @@
 	\subsubsection*{The Implementation}
 		Based on the presented equations we have defined the method \t{line_segments_intersect} that takes two line segements defined by their endpoints and return \t{False} if they do not intersect and the intersection point if they do intersect. The code of that method is presented in \autoref{lst:b:intersectLineSegments}.
 
-		\lstinputlisting[float, label={lst:b:intersectLineSegments}, caption={The method \t{line_segments_intersect()}.}]{../linesegment.py}
+		\lstinputlisting[float, label={lst:b:intersectLineSegments}, caption={The module \t{linesegement} with the method \t{line_segments_intersect()}.}]{../linesegment.py}
 
 \subsection*{Projection of a Point on a Plane}
 	To find the projection of a point \vec{P_0} on a plane $A$ defined by \vec{P_1}, \vec{P_2} and \vec{P_3} we need to define the projection of the point and the plane in such a way that we can find an intersection.
@@ -106,4 +106,4 @@ Solve[((p0 + lambda * zvec) - p1) . n == {0, 0, 0}, lambda]\end{lstlisting}
 	\subsubsection*{The Implementation}
 	Using the formula presented in \autoref{eq:b:lambda} we can define the function \t{project_point_on_plane([p1, p2, p3], p0)} that computes the projection of the point \t{p0} on the plane defined by \t{p1, p2, p3}, see \autoref{lst:b:pointPlaneProjection}.
 
-	\lstinputlisting[float, label={lst:b:pointPlaneProjection}, caption={The method \t{project_point_on_plane()}.}]{../plane.py}
+	\lstinputlisting[float, label={lst:b:pointPlaneProjection}, caption={The module \t{plane} with the method \t{project_point_on_plane()}.}]{../plane.py}

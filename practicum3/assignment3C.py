@@ -121,7 +121,7 @@ def display():
         glVertex2f(xl[edge[1]],  yl[edge[1]])
     glEnd()
 
-    # draw intersection points on walk line
+    # draw intersection points on walk line if they have been computed
     if(intersection_points):
         glColor3f(0.0, 1.0, 0.0)
         glPointSize(6)
