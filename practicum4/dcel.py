@@ -1,5 +1,7 @@
 """Classes to represent a DCEL."""
 import pdb
+
+from delaunyUtils import *
 # from face import Face
 # from halfedge import HalfEdge
 # from vertex import Vertex
@@ -19,27 +21,38 @@ class DCEL(object):
     @classmethod
     def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay. """
-        def first_triangle():
-            return None
+        def first_triangle(triangle):
+            """Return the vertices of the first triangle counter clockwise."""
+            [p1, p2, p3] = getTriangleVertices(triangle, xl, yl, triangles)
+            det = (
+                -(p1[1] * p2[0]) + p1[0] * p2[1] + p1[1] * p3[0]
+                - p2[1] * p3[0] - p1[0] * p3[1] + p2[0] * p3[1]
+            )
+            if(det > 0):
+                # The points are CCW
+                return [p1, p2, p3]
+            # The points are CW, or colinear (Det == 0), shouldn't happen
+            return [p1, p3, p2]
 
-        def get_CCW_edges():
+        def get_CCW_edges(triangle):
             return None
 
         triangle_queue = Queue(0)
         while not(triangle_queue.is_empty()):
             current_triangle = triangle_queue.dequeue()
 
-            # Add the neighbours to the queue
+            if(not current_triangle):
+                edges = first_triangle(current_triangle)
+            else:
+                edges = get_CCW_edges(current_triangle)
+            print edges
+
+
+            # Add the neighbours to the queue, together wit the face
+            # created for this triangle to easier find the bootstrapping neighbour
             triangle_queue.enqueue(
                 [x for x in neighs[current_triangle] if not(x == -1)]
             )
-
-            if(not current_triangle):
-                edges = first_triangle()
-            else:
-                # Find neighbouring edge that is in triangulation
-                edges = get_CCW_edges()
-            print edges
 
     def __init__(self, vertices, edges, faces):
         """Construct a DCEL object."""
