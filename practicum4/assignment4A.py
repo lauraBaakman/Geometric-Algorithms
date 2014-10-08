@@ -1,4 +1,17 @@
-""" h.bekker@rug.nl """
+""" h.bekker@rug.nl.
+
+Global variables:
+    xa:     X-coordinates of the triangulated points in an array.
+    xl:     X-coordinates of the triangulated points in a list.
+    cens:   Array with a list of list where each sublist contains the coordinates
+            of center of one of the triangles of the triangulation.
+    edges:  Array with a list of list where each sublist contains the indices
+            of the points between which one of the edges of the triangulation runs.
+    triPts: Array with triangles, each triangle is represented as a list of three
+            indices into xa and ya.
+    neighs:  Array of integers giving the indices into cens
+            triPts, and neighs of the neighbors of each triangle.
+"""
 from random import *
 from math import *
 import matplotlib.delaunay as triang

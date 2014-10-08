@@ -20,6 +20,9 @@ class DCEL(object):
     def from_delaunay_triangulation(xl, yl, edgs, triPts, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay. """
         triangle_queue = Queue(0)
+        while not(triangle_queue.is_empty()):
+
+            triangle_queue.enqueue(p)
 
     def __init__(self, vertices, edges, faces):
         """Construct a DCEL object."""
@@ -55,10 +58,14 @@ class Queue(object):
         return p
 
     def enqueue(self, p):
-        """Enqueue the next object."""
-        if(not (p in self._old_elements)):
-            self._queue.append(p)
-            self._old_elements.append(p)
+        """Enqueue the next object(s)."""
+        if(isinstance(p, list)):
+            for element in p:
+                self.enqueue(element)
+        else:
+            if(not (p in self._old_elements)):
+                self._queue.append(p)
+                self._old_elements.append(p)
 
     def is_empty(self):
         """Return true if the queue is empty."""

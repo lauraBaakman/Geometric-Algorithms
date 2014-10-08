@@ -53,6 +53,13 @@ class Test_queue(unittest.TestCase):
         self.assertItemsEqual(self.queue._queue, [p1])
         self.assertItemsEqual(self.queue._old_elements, [self.p, p1])
 
+    def test_enqueue_with_list(self):
+        """ Test enqueue when a list is passed."""
+        p1 = [1, 2, 3]
+        self.queue.enqueue(p1)
+        self.assertItemsEqual(self.queue._queue, [0, 1, 2, 3])
+        self.assertItemsEqual(self.queue._old_elements, [0, 1, 2, 3])
+
     def test_is_empty_filled_queue(self):
         """."""
         self.assertFalse(self.queue.is_empty())
