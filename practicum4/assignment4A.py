@@ -8,7 +8,7 @@ Global variables:
     edges:  Array with a list of list where each sublist contains the indices
             of the points between which one of the edges of the triangulation runs.
     triPts: Array with triangles, each triangle is represented as a list of three
-            indices into xa and ya.
+            indices into xa and ya. Sorted in CW order.
     neighs:  Array of integers giving the indices into cens
             triPts, and neighs of the neighbors of each triangle.
 """

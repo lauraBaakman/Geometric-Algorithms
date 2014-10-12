@@ -21,7 +21,20 @@ class DCEL(object):
     @classmethod
     def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
-        dcl_vertices, dcl_edges, dcl_faces = [], [], []
+        dcel = cls([], [], [])
+
+        # Add triangles
+        for t in triangles:
+            triangle_edges = getTriangleEdges(xl, yl, triangle)
+
+            # Add the vertices of triangle t
+            for v in vertices:
+                # vertex =
+                # dcel.add_vertex()
+
+        # set twins
+
+        # handle containg face
 
         # Call the actual DCL constructor
         return cls(dcl_vertices, dcl_edges, dcl_faces)
@@ -32,10 +45,3 @@ class DCEL(object):
         self.vertices = vertices
         self.edges = edges
         self.faces = faces
-
-if __name__ == '__main__':
-    xl = [0, 2, 2, 1]
-    yl = [4, 4, 2, 1]
-    edges = [[0, 1], [1, 2], [2, 0], [2, 3], [3, 0]]
-    triangles = [[0, 2, 1], [0, 3, 2]]
-    neighs = [[1, -1, -1], [0, -1, -1]]

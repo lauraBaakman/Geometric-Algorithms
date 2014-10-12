@@ -1,11 +1,10 @@
 """."""
 
 
-def getTriangleVertices(idx, xl, yl, triangles):
-    """Get the triangle by idx as a list of vertices."""
-    t = triangles[idx]
+def get_triangle_vertices(xl, yl, triangle):
+    """Return the vertices of triangle, triangle is a list of indices in xl and yl."""
     return ([
-        [xl[t[0]], yl[t[0]]],
-        [xl[t[1]], yl[t[1]]],
-        [xl[t[2]], yl[t[2]]],
+        [xl[triangle[0]], yl[triangle[0]]],
+        [xl[triangle[1]], yl[triangle[1]]],
+        [xl[triangle[2]], yl[triangle[2]]],
     ])
