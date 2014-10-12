@@ -32,3 +32,10 @@ class DCEL(object):
         self.vertices = vertices
         self.edges = edges
         self.faces = faces
+
+if __name__ == '__main__':
+    xl = [0, 2, 2, 1]
+    yl = [4, 4, 2, 1]
+    edges = [[0, 1], [1, 2], [2, 0], [2, 3], [3, 0]]
+    triangles = [[0, 2, 1], [0, 3, 2]]
+    neighs = [[1, -1, -1], [0, -1, -1]]
