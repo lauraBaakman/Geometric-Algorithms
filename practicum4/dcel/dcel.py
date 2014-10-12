@@ -23,7 +23,6 @@ class DCEL(object):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
         dcl_vertices, dcl_edges, dcl_faces = [], [], []
 
-
         # Call the actual DCL constructor
         return cls(dcl_vertices, dcl_edges, dcl_faces)
 
