@@ -13,7 +13,6 @@ class TestDelaunyUtils(unittest.TestCase):
 
     def setUp(self):
         """."""
-        pdb.set_trace()
         self.xl = [150, 200, 250, 450, 600, 10]
         self.yl = [550, 450, 500, 100, 550, 10]
         xa = numpy.array(self.xl)
@@ -22,10 +21,9 @@ class TestDelaunyUtils(unittest.TestCase):
 
     def test_get_triangle_vertices(self):
         """Test the method get_triangle_vertices."""
-        pdb.set_trace()
         triangle_idx = 0
         computed_vertices = get_triangle_vertices(self.xl, self.yl, self.triangles[triangle_idx])
-        correct_vertices = [[10, 10], [450, 100], [200, 450]]
+        correct_vertices = [[10, 10], [200, 450], [450, 100]]
         self.assertEqual(computed_vertices[0], correct_vertices[0])
         self.assertEqual(computed_vertices[1], correct_vertices[1])
         self.assertEqual(computed_vertices[2], correct_vertices[2])
