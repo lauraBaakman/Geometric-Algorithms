@@ -17,6 +17,7 @@ class HalfEdge(object):
 
 
     """
+
     def __init__(self, origin, twin=None, incident_face, nxt, prev):
         """Construct a HalfEdge object."""
         super(HalfEdge, self).__init__()
@@ -29,3 +30,10 @@ class HalfEdge(object):
     def get_destination(self):
         """Get the destination of this half_edge."""
         return self.twin.origin
+
+    def get_origin_and_destination(self):
+        """Return the origin and destination of the vertex as two points."""
+        destination = None
+        if(self.twin):
+            destination = self.twin.origin.coordinates
+        return([self.origin.coordinates, destination])

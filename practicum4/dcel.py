@@ -1,10 +1,10 @@
 """Classes to represent a DCEL."""
 import pdb
 
-from delaunyUtils import *
+import delaunyUtils as du
 # from face import Face
 # from halfedge import HalfEdge
-# from vertex import Vertex
+from vertex import Vertex
 
 
 class DCEL(object):
@@ -22,22 +22,16 @@ class DCEL(object):
     def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
         dcel = cls([], [], [])
+        pdb.set_trace()
 
-        # Add triangles
         for t in triangles:
-            triangle_edges = getTriangleEdges(xl, yl, triangle)
+            triangle_vertices = [Vertex(x) for x in du.get_triangle_vertices(xl, yl, t)]
+            print triangle_vertices
+            # triangle_edges = [HalfEdge(x) for x in triangle_vertices]
+            # for edge_idx, edge in enumerate(triangle_edges):
+            #     pass
 
-            # Add the vertices of triangle t
-            for v in vertices:
-                # vertex =
-                # dcel.add_vertex()
-
-        # set twins
-
-        # handle containg face
-
-        # Call the actual DCL constructor
-        return cls(dcl_vertices, dcl_edges, dcl_faces)
+        return dcel
 
     def __init__(self, vertices, edges, faces):
         """Construct a DCEL object."""
