@@ -31,13 +31,6 @@ class HalfEdge(object):
         """Get the destination of this half_edge as a vertex."""
         return self.twin.origin
 
-    def get_origin_and_destination(self):
-        """Return the origin and destination of the vertex as a list of coordinates."""
-        destination = None
-        if(self.twin):
-            destination = self.twin.origin.coordinates
-        return([self.origin.coordinates, destination])
-
     def __repr__(self):
         """Print-friendly representation of the HalfEdge object."""
         twin_origin = None
