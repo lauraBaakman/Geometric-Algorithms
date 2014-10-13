@@ -1,7 +1,9 @@
 """The class vertex."""
+import pdb
 
 
 class Vertex(object):
+
     """
     Class to represent a vertex.
 
@@ -17,16 +19,17 @@ class Vertex(object):
         self.incident_edge = incident_edge
 
     def __repr__(self):
+        # TODO Outgoing edge representeren als de origin en destination van die vertex.
         """Print-friendly representation of the Vertex object."""
-        incident_edge_vertices = None
+        incident_edge_origin = None
         if(self.incident_edge):
-            incident_edge_vertices = self.incident_edge.get_origin_and_destination()
+            incident_edge_origin = self.incident_edge.origin.coordinates
         return (
             '<Vertex ('
             'coordinates = {obj.coordinates}, '
-            'incident_edge = {incident_edge_vertices}>'
+            'incident_edge = {incident_edge_origin}>'
             .format(
                 obj=self,
-                incident_edge_vertices=incident_edge_vertices
+                incident_edge_origin=incident_edge_origin
             )
         )

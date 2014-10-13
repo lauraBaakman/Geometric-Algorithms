@@ -22,16 +22,15 @@ class DCEL(object):
     def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
         dcel = cls([], [], [])
-        pdb.set_trace()
-
         for t in triangles:
             triangle_vertices = [Vertex(x) for x in du.get_triangle_vertices(xl, yl, t)]
             triangle_edges = [HalfEdge(x) for x in triangle_vertices]
             triangle_face = Face(triangle_edges[0])
-            print triangle_face
-            # for edge_idx, edge in enumerate(triangle_edges):
-            #     pass
-
+            for edge_idx, edge in enumerate(triangle_edges):
+                edge.nxt = triangle_edges[(edge_idx + 1) % 3]
+                edge.prev = triangle_edges[(edge_idx + 3 - 1) % 3]
+                edge.incident_face = triangle_face
+                triangle_vertices[edge_idx].incident_edge = edge
         return dcel
 
     def __init__(self, vertices, edges, faces):

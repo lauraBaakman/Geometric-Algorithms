@@ -1,5 +1,5 @@
 """The class halfEdge."""
-
+import pdb
 
 class HalfEdge(object):
 
@@ -37,7 +37,9 @@ class HalfEdge(object):
         if(self.twin):
             twin_origin = self.twin.origin.coordinates
 
-        incident_face_edge = getattr(self.incident_face, 'outer_component', None)
+        incident_face_edge = None
+        if(self.incident_face):
+            incident_face_edge = self.incident_face.to_string()
 
         nxt_origin = None
         if(self.nxt):

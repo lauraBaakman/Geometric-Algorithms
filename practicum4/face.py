@@ -19,10 +19,16 @@ class Face(object):
         self.outer_component = outer_component
         self.inner_components = inner_components
 
+    def to_string(self):
+        """Return string representation of this object to be used by other classes reprs."""
+        return '<Face (outer_component: {outer})>'.format(
+            outer=self.outer_component.origin.coordinates
+        )
+
     def __repr__(self):
         """Print-friendly representation of the Face object."""
         return (
             '<Face ('
-            'outer_component = {obj.outer_component.get_origin_and_destination()}, '
+            'outer_component = {obj.outer_component.origin}, '
             'inner_components = {obj.inner_components}>'.format(obj=self)
         )
