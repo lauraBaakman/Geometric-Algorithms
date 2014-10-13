@@ -3,7 +3,7 @@ import pdb
 
 import delaunyUtils as du
 # from face import Face
-# from halfedge import HalfEdge
+from halfedge import HalfEdge
 from vertex import Vertex
 
 
@@ -26,8 +26,7 @@ class DCEL(object):
 
         for t in triangles:
             triangle_vertices = [Vertex(x) for x in du.get_triangle_vertices(xl, yl, t)]
-            print triangle_vertices
-            # triangle_edges = [HalfEdge(x) for x in triangle_vertices]
+            triangle_edges = [HalfEdge(x) for x in triangle_vertices]
             # for edge_idx, edge in enumerate(triangle_edges):
             #     pass
 
