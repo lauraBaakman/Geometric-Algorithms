@@ -1,6 +1,7 @@
 """The class halfEdge."""
 import pdb
 
+
 class HalfEdge(object):
 
     """
@@ -42,19 +43,19 @@ class HalfEdge(object):
         """Print-friendly representation of the HalfEdge object."""
         twin_origin = None
         if(self.twin):
-            twin_origin = self.twin.origin.coordinates
+            twin_origin = self.twin.as_points()
 
         incident_face_edge = None
         if(self.incident_face):
-            incident_face_edge = self.incident_face.to_string()
+            incident_face_edge = self.incident_face.outer_component.as_points()
 
-        nxt_origin = None
+        nxt_edge = None
         if(self.nxt):
-            nxt_origin = self.nxt.origin.coordinates
+            nxt_edge = self.nxt.as_points()
 
-        prev_origin = None
+        prev_edge = None
         if(self.prev):
-            prev_origin = self.prev.origin.coordinates
+            prev_edge = self.prev.as_points()
         return (
             '<HalfEdge ('
             'origin = {obj.origin.coordinates}, '
@@ -65,8 +66,8 @@ class HalfEdge(object):
             .format(
                 obj=self,
                 twin=twin_origin,
-                next=nxt_origin,
-                prev=prev_origin,
+                next=nxt_edge,
+                prev=prev_edge,
                 face=incident_face_edge
             )
         )

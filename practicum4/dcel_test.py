@@ -24,13 +24,28 @@ class TestDCEL(unittest.TestCase):
         dc = DCEL.from_delaunay_triangulation(
             self.xl, self.yl, self.edges, self.triangles, self.neighs
         )
+        vertices = []
 
-        # Very simple check on the vertices of the DCEL
+        # Check if the DCEL doesn't have more vertices than the triangulation
+        self.assertEqual(len(self.xl), len(dc.vertices))
+
+        # Check if the DCEL contains all the vertices of the triangulation
         for (x, y) in zip(self.xl, self.yl):
             vertex = Vertex([x, y])
+            vertices.append(vertex)
             self.assertIn(vertex, dc.vertices)
 
-        print dc.edges
+        # TODO: Check the incident edges of the vertices
+        print "Vertices:"
+        for vertex in dc.vertices:
+            print vertex
+        print "Edges:"
+        for edge in dc.edges:
+            print edge
+        print "Faces:"
+        for face in dc.faces:
+            print face
+
 
 class TestHalfEdge(unittest.TestCase):
 

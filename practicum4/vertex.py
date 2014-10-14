@@ -26,7 +26,7 @@ class Vertex(object):
             incident_edge_points = self.incident_edge.as_points()
         return (
             '<Vertex ('
-            'coordinates = {obj.coordinates}, '
+            'coordinates = {obj.coordinates},\t'
             'incident_edge = {incident_edge_points}>'
             .format(
                 obj=self,
