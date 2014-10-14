@@ -35,7 +35,7 @@ class Vertex(object):
         )
 
     def __eq__(self, other):
-        """Chekc if two objects are equal."""
+        """Chekc if two objects are equal by comparing only their coordinates."""
         if type(other) is type(self):
             return self.coordinates == other.coordinates
         return False

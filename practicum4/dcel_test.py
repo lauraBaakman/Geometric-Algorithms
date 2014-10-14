@@ -36,15 +36,16 @@ class TestDCEL(unittest.TestCase):
             self.assertIn(vertex, dc.vertices)
 
         # TODO: Check the incident edges of the vertices
-        print "Vertices:"
-        for vertex in dc.vertices:
-            print vertex
+        # print "Vertices:"
+        # for vertex in dc.vertices:
+        #     print vertex
+        print len(dc.edges)
         print "Edges:"
         for edge in dc.edges:
             print edge
-        print "Faces:"
-        for face in dc.faces:
-            print face
+        # print "Faces:"
+        # for face in dc.faces:
+        #     print face
 
 
 class TestHalfEdge(unittest.TestCase):
