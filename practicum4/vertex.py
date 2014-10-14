@@ -33,3 +33,13 @@ class Vertex(object):
                 incident_edge_points=incident_edge_points
             )
         )
+
+    def __eq__(self, other):
+        """Chekc if two objects are equal."""
+        if type(other) is type(self):
+            return self.coordinates == other.coordinates
+        return False
+
+    def __neq__(self, other):
+        """Check if two objects are not equal."""
+        return not self.__eq__(other)

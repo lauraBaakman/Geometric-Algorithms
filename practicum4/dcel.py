@@ -25,7 +25,6 @@ class DCEL(object):
             return edge.nxt.origin.coordinates == twin.origin.coordinates
 
         dcel = cls()
-        pdb.set_trace()
         for t in triangles:
             triangle_vertices = [Vertex(x) for x in du.get_triangle_vertices(xl, yl, t)]
             triangle_edges = [HalfEdge(x) for x in triangle_vertices]

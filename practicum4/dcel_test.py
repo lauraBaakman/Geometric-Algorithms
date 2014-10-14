@@ -24,9 +24,13 @@ class TestDCEL(unittest.TestCase):
         dc = DCEL.from_delaunay_triangulation(
             self.xl, self.yl, self.edges, self.triangles, self.neighs
         )
-        for vertex in dc.vertices:
-            print vertex
 
+        # Very simple check on the vertices of the DCEL
+        for (x, y) in zip(self.xl, self.yl):
+            vertex = Vertex([x, y])
+            self.assertIn(vertex, dc.vertices)
+
+        print dc.edges
 
 class TestHalfEdge(unittest.TestCase):
 
