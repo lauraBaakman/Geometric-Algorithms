@@ -27,6 +27,13 @@ class HalfEdge(object):
         self.nxt = nxt
         self.prev = prev
 
+    def as_points(self):
+        """Return the edge as the coordinates of the origin and destination."""
+        if(self.twin):
+            return [self.origin.coordinates, self.twin.origin.coordinates]
+        else:
+            return [self.origin.coordinates, None]
+
     def get_destination(self):
         """Get the destination of this half_edge as a vertex."""
         return self.twin.origin

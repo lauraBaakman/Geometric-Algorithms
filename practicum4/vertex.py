@@ -21,15 +21,15 @@ class Vertex(object):
     def __repr__(self):
         # TODO Outgoing edge representeren als de origin en destination van die vertex.
         """Print-friendly representation of the Vertex object."""
-        incident_edge_origin = None
+        incident_edge_points = None
         if(self.incident_edge):
-            incident_edge_origin = self.incident_edge.origin.coordinates
+            incident_edge_points = self.incident_edge.as_points()
         return (
             '<Vertex ('
             'coordinates = {obj.coordinates}, '
-            'incident_edge = {incident_edge_origin}>'
+            'incident_edge = {incident_edge_points}>'
             .format(
                 obj=self,
-                incident_edge_origin=incident_edge_origin
+                incident_edge_points=incident_edge_points
             )
         )

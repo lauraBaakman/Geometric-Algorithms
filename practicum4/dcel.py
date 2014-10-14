@@ -48,7 +48,6 @@ class DCEL(object):
             [twin for twin in edges_without_twins if isTwin(edge, twin)]
             edges_without_twins.remove(twin)
             (edge.twin, twin.twin) = (twin, edge)
-        print dcel
         return dcel
 
     def add_vertex(self, vertex):
