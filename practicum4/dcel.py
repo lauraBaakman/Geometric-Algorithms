@@ -29,7 +29,6 @@ class DCEL(object):
                 dcel.add_vertex(Vertex(x))
                 for x in du.get_triangle_vertices(xl, yl, t)
             ]
-
             # Add edges of the triangle
             triangle_edges = []
             for vertex_idx, origin in enumerate(triangle_vertices):
@@ -46,40 +45,24 @@ class DCEL(object):
                 triangle_vertices[edge_idx].incident_edge = edge
             dcel.faces.append(triangle_face)
 
-            # TODO: Fix the twins
+        edges_without_twins = list(dcel.edges)
+        for edge in edges_without_twins:
+            edges_without_twins.remove(edge)
+            twin_list = [
+                twin for twin in edges_without_twins
+                if (
+                    twin.origin.coordinates == edge.twin.coordinates and
+                    twin.twin.coordinates == edge.origin.coordinates
+                )
+            ]
+            print "{} - {}".format(edge, twin)
+            if(twin_list):
+                # TODO: Set twins!
+                twin = twin_list[0]
+                edges_without_twins.remove(twin)
 
             # TODO: containing face
         return dcel
-
-    # def add_edge(self, edge, destination=None):
-    #     """Add an edge to the DCEL if the edge doesn't already exist."""
-    #     # To compare an edge we need its origin and its twin
-    #     if(edge.twin):
-    #         try:
-    #             edge_idx = self.edges.index(edge)
-    #             return self.edges[edge_idx]
-    #         except Exception:
-    #             self.edges.append(edge)
-    #             return edge
-    #     elif(destination):
-    #         duplicates = [
-    #             x for x in self.edges
-    #             if (
-    #                 x.origin == edge.origin and
-    #                 x.twin.origin == destination
-    #             )
-    #         ]
-    #         if(not duplicates):
-    #             self.edges.append(edge)
-    #             return edge
-    #         else:
-    #             assert(len(duplicates) == 1)
-    #             return duplicates[0]
-    #     else:
-    #         raise Exception(
-    #             'add_edge expects edges that have a'
-    #             'twin or that the parameter destination is set.'
-    #         )
 
     def add_edge(self, edge):
         """Add a edge to the DCEL if the edge doesn't already exists."""
