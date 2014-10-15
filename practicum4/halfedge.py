@@ -27,22 +27,37 @@ class HalfEdge(object):
         self.nxt = nxt
         self.prev = prev
 
-    def as_points(self):
-        """Return the edge as the coordinates of the origin and destination."""
-        return [self.origin.coordinates, self.twin.origin.coordinates]
-
     def get_destination(self):
         """Return the destination of the halfedge as a vertex."""
         return self.twin.origin
 
+    def __eq__(self, other):
+        """Check if two half edges are equal."""
+        if type(other) is type(self):
+                return (
+                    self.origin == other.origin and
+                    self.twin.origin == other.twin.origin
+                )
+        return False
+
+    def __neq__(self, other):
+        """Check if two objects are not equal."""
+        return not self.__eq__(other)
+
+    def as_points(self):
+        """Return the edge as the coordinates of the origin and destination."""
+        return [self.origin.coordinates, self.twin.origin.coordinates]
+
     def __repr__(self):
         """Print-friendly representation of the HalfEdge object."""
-        # pdb.set_trace()
         twin_origin = self.twin.as_points()
 
         incident_face_edge = None
         if(self.incident_face):
-            incident_face_edge = self.incident_face.outer_component.as_points()
+            if(self.incident_face.outer_component):
+                incident_face_edge = self.incident_face.outer_component.as_points()
+            else:
+                incident_face_edge = [c.as_points() for c in self.incident_face.inner_components]
 
         nxt_edge = None
         if(self.nxt):
@@ -67,16 +82,3 @@ class HalfEdge(object):
                 face=incident_face_edge
             )
         )
-
-    def __eq__(self, other):
-        """Check if two half edges are equal."""
-        if type(other) is type(self):
-                return (
-                    self.origin == other.origin and
-                    self.twin.origin == other.twin.origin
-                )
-        return False
-
-    def __neq__(self, other):
-        """Check if two objects are not equal."""
-        return not self.__eq__(other)

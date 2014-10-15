@@ -24,7 +24,7 @@ class DCEL(object):
         def add_containing_face_to_dcel():
             containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]
             edge = containing_face_edges.pop()
-            face = Face(edge)
+            face = Face(outer_component=None, inner_components=[edge])
             dcel.faces.append(face)
             first_edge = edge
             previous_edge = [

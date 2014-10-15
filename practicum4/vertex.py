@@ -17,6 +17,16 @@ class Vertex(object):
         self.coordinates = coordinates
         self.incident_edge = incident_edge
 
+    def __eq__(self, other):
+        """Chekc if two objects are equal by comparing only their coordinates."""
+        if type(other) is type(self):
+            return self.coordinates == other.coordinates
+        return False
+
+    def __neq__(self, other):
+        """Check if two objects are not equal."""
+        return not self.__eq__(other)
+
     def as_points(self):
         """Return the vertex as a set of points."""
         return self.coordinates
@@ -35,13 +45,3 @@ class Vertex(object):
                 incident_edge_points=incident_edge_points
             )
         )
-
-    def __eq__(self, other):
-        """Chekc if two objects are equal by comparing only their coordinates."""
-        if type(other) is type(self):
-            return self.coordinates == other.coordinates
-        return False
-
-    def __neq__(self, other):
-        """Check if two objects are not equal."""
-        return not self.__eq__(other)

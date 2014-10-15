@@ -40,12 +40,15 @@ class Face(object):
 
     def __repr__(self):
         """Print-friendly representation of the Face object."""
+        outer = None
+        if(self.outer_component):
+            outer = self.outer_component.as_points()
         return (
             '<Face ('
             'outer_component = {outer},\t '
             'inner_components = {inners}>\n'
             .format(
-                outer=self.outer_component.as_points(),
+                outer=outer,
                 inners=[c.as_points() for c in self.inner_components]
             )
         )
