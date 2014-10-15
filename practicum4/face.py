@@ -33,7 +33,6 @@ class Face(object):
         """Return all edges of this face in CCW order."""
         def get_edges_helper(current_edge, edges):
             if(self.outer_component == current_edge):
-                pdb.set_trace()
                 return edges
             else:
                 edges.append(current_edge)

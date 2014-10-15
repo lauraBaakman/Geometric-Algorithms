@@ -26,7 +26,6 @@ class DCEL(object):
             edge = containing_face_edges.pop()
             face = Face(edge)
             dcel.faces.append(face)
-            pdb.set_trace()
             first_edge = edge
             previous_edge = [
                 e for e in containing_face_edges if e.get_destination() == edge.origin
@@ -47,7 +46,6 @@ class DCEL(object):
             edge_2.prev = edge
             edge_2.nxt = first_edge
             edge.nxt = edge_2
-            pdb.set_trace()
 
         def add_triangle_edges():
             triangles_edges = []
