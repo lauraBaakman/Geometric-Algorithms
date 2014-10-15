@@ -120,6 +120,40 @@ def display_outer_boudary():
     glutSwapBuffers()
 
 
+def display_inspect_convex_hull():
+    """Display the convex hull of the points and show that it is the actual convex hull."""
+    glClear(GL_COLOR_BUFFER_BIT)
+    # Draw lines between all points
+    glColor3f(1.0, 0.4, 0.7)
+    glBegin(GL_LINES)
+    for (x1, y1) in zip(xl, yl):
+        for (x2, y2) in zip(xl, yl):
+            glVertex2f(x1, y1)
+            glVertex2f(x2, y2)
+    glEnd()
+    # Draw points
+    glLineWidth(1.0)
+    glColor3f(1.0, 1.0, 1.0)
+    glPointSize(3)
+    glBegin(GL_POINTS)
+    for i in range(len(xl)):
+        glVertex2f(xl[i], yl[i])
+    glColor3f(0.0, 0.0, 1.0)
+    glEnd()
+    # Draw the outer boundary
+    global dcel
+    face = [face for face in dcel.faces if face.inner_components]
+    edges = face[0].get_edges_inner_component()
+    glColor3f(0.0, 1.0, 0.0)
+    glBegin(GL_LINES)
+    for edge in edges:
+        destination = edge.get_destination().as_points()
+        glVertex2f(edge.origin.as_points()[0], edge.origin.as_points()[1])
+        glVertex2f(destination[0],  destination[1])
+    glEnd()
+    glutSwapBuffers()
+
+
 def draw_circle(c, r):
     """."""
     # draws a circle, center c, radius r
@@ -174,6 +208,7 @@ if __name__ == '__main__':
             "Showing that the boundary of the Delaunay triangulation"
             " is the convex hull of the triangulated points."
         )
+        main(display_inspect_convex_hull)
     elif opts[1] == '-dt':
         print "Showing the Delauny triangulation and colouring its boundary."
         main(display_outer_boudary)
