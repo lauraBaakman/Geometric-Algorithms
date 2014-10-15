@@ -1,0 +1,38 @@
+%!TEX root = practicum4.tex
+\subsection{Creating the DCEL}
+To create a DCEL one needs a couple of base classes, namely \t{Vertex}, \t{HalfEdge} and \t{Face}. 
+
+\subsubsection*{Vertex}
+	The definition of the class \t{Vertex} and its methods that are pertinent now are presented in \autoref{lst:a:vertex}. In line with the provided definition a \t{Vertex} has a set of coordinates representing its location, \t{coordinates}, and an edge, \t{incident_edge}, that has the \t{Vertex} as its origin.
+
+	I have overridden the equality definition since using the default definition could lead to infinite recursion. As the default compares all attributes of the class, which would mean comparing two \t{Vertex}'s and two \t{HalfEdge}s. Comparing two \t{HalfEdge}s means comparing, among others, its \t{origin}s which would lead to comparing two \t{Vertex}s which would lead to comparing two \t{HalfEdge}s and so on and so forth.
+
+	Since each \t{Vertex} is uniquely defined by its \t{coordinates} we only compare those when checking the equality of two \t{Vertex}s.
+	\lstinputlisting[firstline=14, lastline=28, label={lst:a:vertex}, caption={The definition of the class \t{Vertex}.}]{../vertex.py}
+
+\subsubsection*{HalfEdge}
+	A \t{HalfEdge} is a directed edge which is represented by its \t{origin}, a \t{Vertex} and a \t{twin}, which is the \t{HalfEdge} with this \t{HalfEdge}'s origin as its destination and this \t{HalfEdge}'s destination as its origin. The implementation of the class \t{HalfEdge} and the methods relevant to this discussion are presented in \autoref{lst:a:halfEdge}.
+
+	Furthermore each \t{HalfEdge} stores an incident face and a next and previous edge. The \t{incident_face} is the face that is to the left-handed side when walking along this edge. The attributes \t{nxt} represent the edge one should take on arriving on the \t{HalfEdge}'s destination when traversing the boundaries of its \t{incident_face}, \t{prev} is the \t{HalfEdge} one came from on the same walk. 
+
+	The method \t{get_destination} returns the destination of the \t{HalfEdge} this is the same as the \t{origin} of its \t{twin}.
+
+	The \t{__eq__} method of \t{HalfEdge} has been overridden to avoid infinite recursion when comparing \t{HalfEdge}'s and to make it possible to compare an \t{HalfEdge} without the \t{nxt}, \t{incident_face} or \t{prev} property. This will not lead to any problems since an \t{HalfEdge} is uniquely defined by its origin and destination.
+	\lstinputlisting[firstline=21, lastline=45, label={lst:a:halfEdge}, caption={The definition of the class \t{HalfEdge}.}]{../halfedge.py}
+
+\subsubsection*{Face}
+	A \t{Face} is defined by an \t{outer_component}: a directed edge that when traversed keeps the face on the left and a list of \t{inner_components}: which stores an \t{HalfEdge} of the outer boundary of each hole in the \t{fFace}. The definition of the class \t{Face} is provided in \autoref{lst:a:face}. 
+	\lstinputlisting[firstline=16, lastline=20, label={lst:a:face}, caption={The definition of the class \t{Face}.}]{../halfedge.py}
+
+\todo[inline]{Introduceer de vertex, edge en face}
+\todo[inline]{Geef algemene algoritme voeg driehoek na driehoek toe}
+\todo[inline]{Driehoek toevoegen}
+\todo[inline]{Containing plane toevoegen}
+\todo[inline]{Geometrische operaties nodig gehad?}
+
+\subsection{Walking Along the Outer Boundary}
+\todo[inline]{Bespreek number of vertices en get Edges in face}
+\todo[inline]{Highlight segments -> plaatje}
+\todo[inline]{Plot punten en de outer boundary van de DCEL en plot alle lijnen tussen alle punten om te checken of de outer boundary de convex hull is}
+
+% \lstinputlisting[float, firstline=143, lastline=171, label={lst:a:findContainingTriangle}, caption={The method \t{find_containing_triangle()}.}]{../assignment3A.py}

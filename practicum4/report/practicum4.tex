@@ -1,0 +1,77 @@
+\documentclass[a4paper]{article}
+\usepackage{a4wide}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+
+\usepackage{todonotes}
+
+%Accenten
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+
+% Biblio
+\usepackage{csquotes}
+\usepackage[backend=biber, bibencoding=utf8]{biblatex}
+
+%Code
+\usepackage{listings}
+\usepackage{color}
+
+%Math
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{siunitx}
+\sisetup{output-exponent-marker=e, bracket-negative-numbers, open-bracket={\text{-}}, close-bracket={}, round-mode=figures,round-precision=3, scientific-notation=true}
+
+%Plaatjes
+\usepackage{graphicx}
+\usepackage[small,bf]{caption}
+\usepackage{subcaption}
+\usepackage[export]{adjustbox}
+
+% Code lay-out
+\definecolor{light-gray}{gray}{0.95}
+\usepackage{courier}
+\lstset{language=Python, 
+	tabsize = 4, 	
+	columns=flexible, 
+	breaklines = true, 
+	backgroundcolor=\color{light-gray},
+	keepspaces=true,
+	showspaces=false,
+	showstringspaces=false,
+	basicstyle=\scriptsize\ttfamily
+}
+
+\renewcommand{\t}[1]{\lstinline[basicstyle=\normalsize\ttfamily]{#1}}
+
+% General lay-out
+\renewcommand{\thesection}{\Alph{section}}
+\addto\extrasenglish{%
+  \renewcommand{\sectionautorefname}{Assignment}%
+}
+
+%Math
+\renewcommand{\vec}[1]{\ensuremath{\boldsymbol{#1}}}
+\providecommand{\abs}[1]{\lvert#1\rvert}
+\providecommand{\norm}[1]{\lVert#1\rVert}
+
+%Short cuts
+\newcommand{\p}[1]{\ensuremath{\vec{P_#1}}}
+\renewcommand{\vec}[1]{\ensuremath{\mathbf{#1}}}
+\renewcommand{\v}[1]{\ensuremath{\vec{v_#1}}}
+
+\title{Geometric Algorithms\\Assignment 4}
+\author{Laura Baakman (s1869140)}
+
+\begin{document}
+
+\maketitle
+
+\section{~}
+\label{s:a}
+\input{a.tex}
+
+\end{document}
