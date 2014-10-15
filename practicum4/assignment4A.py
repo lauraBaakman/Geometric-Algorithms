@@ -15,7 +15,7 @@ Global variables:
 from random import *
 from math import *
 import sys
-import getopt
+
 
 import matplotlib.delaunay as triang
 import numpy
@@ -154,6 +154,27 @@ def display_inspect_convex_hull():
     glutSwapBuffers()
 
 
+def display_circumscribed_circles():
+    """Display the circumscribed circle of three triangles."""
+    glClear(GL_COLOR_BUFFER_BIT)
+    # Draw points
+    glLineWidth(1.0)
+    glColor3f(1.0, 1.0, 1.0)
+    glPointSize(3)
+    glBegin(GL_POINTS)
+    for i in range(len(xl)):
+        glVertex2f(xl[i], yl[i])
+    glColor3f(0.0, 0.0, 1.0)
+    glEnd()
+    # Draw circles
+    global dcel
+    triangles = random.sample([face for face in dcel.face if dcel.outer_component], 3)
+    for triangle in triangles:
+        center, radius = triangle.get_circle_through_vertices()
+        draw_circle(center, radius)
+    glutSwapBuffers()
+
+
 def draw_circle(c, r):
     """."""
     # draws a circle, center c, radius r
@@ -202,7 +223,7 @@ def main(displayFunction, argv=None, ):
     return
 
 if __name__ == '__main__':
-    (_, opts) = getopt.getopt(sys.argv[1:], "cd")
+    opts = sys.argv[1:]
     if opts and opts[0] == '-ch':
         print (
             "Showing that the boundary of the Delaunay triangulation"
@@ -212,6 +233,9 @@ if __name__ == '__main__':
     elif opts and opts[0] == '-dt':
         print "Showing the Delauny triangulation and colouring its boundary."
         main(display_outer_boudary)
+    elif opts and opts[0] == '-circle':
+        print "Drawing the circumscribed circle for three random triangles."
+        main(display_circumscribed_circles)
     else:
         print (
             "Showing the Delauny triangulation. To show other visualizations"
@@ -219,5 +243,6 @@ if __name__ == '__main__':
             "\t-dt: The Delauny Triangulation with the outer boundary highlighted (assignment A)\n"
             "\t-ch: The outer boundary of the Delauny triangulation, its vertices and"
             "all possible line segments between the vertices. (assignment A)\n"
+            "\t-circle: Draw circumscribed circles for three triangles."
         )
         main(display)
