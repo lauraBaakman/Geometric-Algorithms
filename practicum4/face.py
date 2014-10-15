@@ -30,6 +30,18 @@ class Face(object):
 
         return number_of_vertices_helper(self.outer_component.nxt)
 
+    def get_edges(self):
+        """Return all edges of this face in CCW order."""
+        def get_edges_helper(current_edge, edges):
+            if(self.outer_component == current_edge):
+                pdb.set_trace()
+                return edges
+            else:
+                edges.append(current_edge)
+                return get_edges_helper(current_edge.nxt, edges)
+
+        return get_edges_helper(self.outer_component.nxt, [self.outer_component])
+
     def __repr__(self):
         """Print-friendly representation of the Face object."""
         return (

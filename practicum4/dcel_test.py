@@ -19,21 +19,21 @@ class TestDCEL(unittest.TestCase):
         ya = numpy.array(self.yl)
         self.centres, self.edges, self.triangles, self.neighs = triang.delaunay(xa, ya)
 
-    def test_from_delaunay_triangulation(self):
-        """."""
-        dc = DCEL.from_delaunay_triangulation(
-            self.xl, self.yl, self.edges, self.triangles, self.neighs
-        )
-        vertices = []
+    # def test_from_delaunay_triangulation(self):
+    #     """."""
+    #     dc = DCEL.from_delaunay_triangulation(
+    #         self.xl, self.yl, self.edges, self.triangles, self.neighs
+    #     )
+    #     vertices = []
 
-        # Check if the DCEL doesn't have more vertices than the triangulation
-        self.assertEqual(len(self.xl), len(dc.vertices))
+    #     # Check if the DCEL doesn't have more vertices than the triangulation
+    #     self.assertEqual(len(self.xl), len(dc.vertices))
 
-        # Check if the DCEL contains all the vertices of the triangulation
-        for (x, y) in zip(self.xl, self.yl):
-            vertex = Vertex([x, y])
-            vertices.append(vertex)
-            self.assertIn(vertex, dc.vertices)
+    #     # Check if the DCEL contains all the vertices of the triangulation
+    #     for (x, y) in zip(self.xl, self.yl):
+    #         vertex = Vertex([x, y])
+    #         vertices.append(vertex)
+    #         self.assertIn(vertex, dc.vertices)
 
 
 class TestHalfEdge(unittest.TestCase):
@@ -82,15 +82,20 @@ class TestFace(unittest.TestCase):
 
     def test_number_of_vertices_triangle(self):
         """Test the method number_of_vertices on a triangle."""
-        pdb.set_trace()
         face = self.dcel.faces[0]
         result_returned = face.number_of_vertices()
         result_correct = 3
         self.assertEqual(result_returned, result_correct)
 
-    def test_number_of_vertices_polygon(self):
-        """Test the method number_of_vertices on a polygon that is not a triangle."""
-        pass
+    def test_get_edges_triangle(self):
+        """Test the method get_edges on a triangle."""
+        face = self.dcel.faces[0]
+        edges_correct = []
+        edges_correct.append(self.dcel.edges[0])
+        edges_correct.append(self.dcel.edges[2])
+        edges_correct.append(self.dcel.edges[4])
+        edges_returned = face.get_edges()
+        self.assertItemsEqual(edges_returned, edges_correct)
 
 if __name__ == '__main__':
     unittest.main()
