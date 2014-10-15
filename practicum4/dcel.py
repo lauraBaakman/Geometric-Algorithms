@@ -34,8 +34,14 @@ class DCEL(object):
             for vertex_idx, origin in enumerate(triangle_vertices):
                 # Destination of the edge in this triangle that has vertex as origin
                 destination = triangle_vertices[(vertex_idx + 1) % 3]
-                edge = dcel.add_edge(HalfEdge(origin, twin=destination))
-                triangle_edges.append(edge)
+                edge_1 = HalfEdge(origin)
+                edge_2 = HalfEdge(destination, twin=edge_1)
+                edge_1.twin = edge_2
+                edge_1 = dcel.add_edge(edge_1)
+                edge_2.twin = edge_1
+                edge_2 = dcel.add_edge(edge_2)
+                edge_1.twin = edge_2
+                triangle_edges.append(edge_1)
 
             triangle_face = Face(triangle_edges[0])
             for edge_idx, edge in enumerate(triangle_edges):
@@ -44,22 +50,6 @@ class DCEL(object):
                 edge.incident_face = triangle_face
                 triangle_vertices[edge_idx].incident_edge = edge
             dcel.faces.append(triangle_face)
-
-        edges_without_twins = list(dcel.edges)
-        for edge in edges_without_twins:
-            edges_without_twins.remove(edge)
-            twin_list = [
-                twin for twin in edges_without_twins
-                if (
-                    twin.origin.coordinates == edge.twin.coordinates and
-                    twin.twin.coordinates == edge.origin.coordinates
-                )
-            ]
-            print "{} - {}".format(edge, twin)
-            if(twin_list):
-                # TODO: Set twins!, gevonden twins checken!.
-                twin = twin_list[0]
-                edges_without_twins.remove(twin)
 
             # TODO: containing face
         return dcel

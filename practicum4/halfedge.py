@@ -31,23 +31,16 @@ class HalfEdge(object):
 
     def as_points(self):
         """Return the edge as the coordinates of the origin and destination."""
-        if(self.twin):
-            if(isinstance(self.twin, HalfEdge)):
-                return [self.origin.coordinates, self.twin.origin.coordinates]
-            else:
-                return [self.origin.coordinates, self.twin.coordinates]
-        else:
-            return [self.origin.coordinates, None]
+        return [self.origin.coordinates, self.twin.origin.coordinates]
 
     def get_destination(self):
-        """Get the destination of this half_edge as a vertex."""
+        """Return the destination of the halfedge as a vertex."""
         return self.twin.origin
 
     def __repr__(self):
         """Print-friendly representation of the HalfEdge object."""
-        twin_origin = None
-        if(self.twin):
-            twin_origin = self.twin.as_points()
+        # pdb.set_trace()
+        twin_origin = self.twin.as_points()
 
         incident_face_edge = None
         if(self.incident_face):
@@ -64,7 +57,7 @@ class HalfEdge(object):
         return (
             '<HalfEdge ('
             'origin = {obj.origin.coordinates}, '
-            'twin = {obj.twin.coordinates}, '
+            'twin = {twin}, '
             'nxt = {next}, '
             'prev = {prev}, '
             'incident_face = {face}>'
@@ -79,13 +72,7 @@ class HalfEdge(object):
 
     def __eq__(self, other):
         """Check if two half edges are equal."""
-        if type(other) is type(self) and type(other.twin) is type(self.twin):
-            if isinstance(self.twin, Vertex):
-                return (
-                    self.origin == other.origin and
-                    self.twin == other.twin
-                )
-            else:
+        if type(other) is type(self):
                 return (
                     self.origin == other.origin and
                     self.twin.origin == other.twin.origin

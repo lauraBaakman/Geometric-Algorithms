@@ -23,7 +23,6 @@ class Vertex(object):
         return self.coordinates
 
     def __repr__(self):
-        # TODO Outgoing edge representeren als de origin en destination van die vertex.
         """Print-friendly representation of the Vertex object."""
         incident_edge_points = None
         if(self.incident_edge):
