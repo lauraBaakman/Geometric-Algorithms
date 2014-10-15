@@ -28,6 +28,8 @@ except:
     print '''Go get it: http://atrpms.net/'''
     exit(2)
 
+from dcel import DCEL
+
 pi = 3.14159265358979323846
 width = 700
 height = 700
@@ -37,6 +39,7 @@ seed(505)  # seed value of random
 ls = []
 xl, yl, xyl, xa, ya, cens, edgs, triPts, neighs = [], [], [], [], [], [], [], [], []
 trWithPoint = []
+dcel = None
 
 
 def generate_points(debug=False):
@@ -63,7 +66,7 @@ def keyboard(key, x, y):
 
 
 def display():
-    """."""
+    """Display the Delaunay triangulation."""
     glClear(GL_COLOR_BUFFER_BIT)
     # Draw points
     glLineWidth(1.0)
@@ -80,6 +83,39 @@ def display():
     for i in range(len(edgs)):
         glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
         glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
+    glEnd()
+    glutSwapBuffers()
+
+
+def display_outer_boudary():
+    """Display the Delaunay triangulation and its outer boundary."""
+    glClear(GL_COLOR_BUFFER_BIT)
+    # Draw points
+    glLineWidth(1.0)
+    glColor3f(1.0, 1.0, 1.0)
+    glPointSize(3)
+    glBegin(GL_POINTS)
+    for i in range(len(xl)):
+        glVertex2f(xl[i], yl[i])
+    glColor3f(0.0, 0.0, 1.0)
+    glEnd()
+    # Draw Delaunay Triangulation
+    glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_LINES)
+    for i in range(len(edgs)):
+        glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
+        glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
+    glEnd()
+    # Draw the outer boundary
+    global dcel
+    face = [face for face in dcel.faces if face.inner_components]
+    edges = face[0].get_edges_inner_component()
+    glColor3f(0.0, 1.0, 0.0)
+    glBegin(GL_LINES)
+    for edge in edges:
+        destination = edge.get_destination().as_points()
+        glVertex2f(edge.origin.as_points()[0], edge.origin.as_points()[1])
+        glVertex2f(destination[0],  destination[1])
     glEnd()
     glutSwapBuffers()
 
@@ -111,13 +147,15 @@ def reshape(wid, hgt):
 
 def main(displayFunction, argv=None, ):
     """."""
-    global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts
+    global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points(True)
+    generate_points()
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
+    # Generate the DCEL
+    dcel = DCEL.from_delaunay_triangulation(xl, yl, triPts)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
@@ -136,9 +174,9 @@ if __name__ == '__main__':
             "Showing that the boundary of the Delaunay triangulation"
             " is the convex hull of the triangulated points."
         )
-        main(display)
     elif opts[1] == '-dt':
         print "Showing the Delauny triangulation and colouring its boundary."
+        main(display_outer_boudary)
     else:
-        print "Showing the Delauny triangulation and colouring its boundary"
-
+        print "Showing the Delauny triangulation."
+        main(display)

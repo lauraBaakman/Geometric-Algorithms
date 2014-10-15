@@ -28,15 +28,18 @@ class Face(object):
                 return 1 + number_of_vertices_helper(current_edge.nxt)
         return number_of_vertices_helper(self.outer_component.nxt)
 
-    def get_edges(self):
+    def get_edges_inner_component(self, inner_component_idx=0):
         """Return all edges of this face in CCW order."""
         def get_edges_helper(current_edge, edges):
-            if(self.outer_component == current_edge):
+            if(self.inner_components[inner_component_idx] == current_edge):
                 return edges
             else:
                 edges.append(current_edge)
                 return get_edges_helper(current_edge.nxt, edges)
-        return get_edges_helper(self.outer_component.nxt, [self.outer_component])
+        return get_edges_helper(
+            self.inner_components[inner_component_idx].nxt,
+            [self.inner_components[inner_component_idx]]
+        )
 
     def __repr__(self):
         """Print-friendly representation of the Face object."""
