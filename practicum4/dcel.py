@@ -19,7 +19,7 @@ class DCEL(object):
     """
 
     @classmethod
-    def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
+    def from_delaunay_triangulation(cls, xl, yl, triangles):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
         def add_containing_face_to_dcel():
             containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]

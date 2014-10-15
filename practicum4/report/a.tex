@@ -21,14 +21,59 @@ To create a DCEL one needs a couple of base classes, namely \t{Vertex}, \t{HalfE
 	\lstinputlisting[firstline=21, lastline=45, label={lst:a:halfEdge}, caption={The definition of the class \t{HalfEdge}.}]{../halfedge.py}
 
 \subsubsection*{Face}
-	A \t{Face} is defined by an \t{outer_component}: a directed edge that when traversed keeps the face on the left and a list of \t{inner_components}: which stores an \t{HalfEdge} of the outer boundary of each hole in the \t{fFace}. The definition of the class \t{Face} is provided in \autoref{lst:a:face}. 
-	\lstinputlisting[firstline=16, lastline=20, label={lst:a:face}, caption={The definition of the class \t{Face}.}]{../halfedge.py}
+	A \t{Face} is defined by an \t{outer_component}: a \t{HalfEdge} that when traversed keeps the face on the left and a list \t{inner_components}: which stores \t{HalfEdge}s of the outer boundaries of each hole in the \t{Face}. The definition of the class \t{Face} is provided in \autoref{lst:a:face}. 
+	\lstinputlisting[firstline=16, lastline=20, label={lst:a:face}, caption={The definition of the class \t{Face}.}]{../face.py}
 
-\todo[inline]{Introduceer de vertex, edge en face}
-\todo[inline]{Geef algemene algoritme voeg driehoek na driehoek toe}
-\todo[inline]{Driehoek toevoegen}
-\todo[inline]{Containing plane toevoegen}
-\todo[inline]{Geometrische operaties nodig gehad?}
+\subsubsection*{From a Delauny Triangulation to a DCEL}
+	To represent a DCEL I have introduced the method \t{from_delauny_triangulation} that given the triangles and vertices of a Delauny Triangulation as provided by \t{matplotlib.delaunay.delaunay()} and returns a DCEl which is defined as in \autoref{lst:a:dcel:constructor}.
+
+	\lstinputlisting[firstline=101, lastline=106, label={lst:a:dcel:constructor}, caption={The constructor the class \t{DCEL}.}]{../dcel.py}
+
+	To generate a DCEL from a Delauny Triangulation without geometric operations the following algorithm is used:
+		\begin{enumerate}
+			\item \label{alg:a:forEachTriangle} for each triangle \t{t} of the triangulation
+				\begin{enumerate}
+					\item \label{alg:a:addVertices} Add \t{t}'s vertices to the DCEL if they do not already exist, otherwise get the existing vertices from the DCEL.
+					\item \label{alg:a:addEdge} Add \t{t}'s edges and the twins of those edges to the DCEL if they do not already exist, otherwise get the existing edges from the DCEL.
+					\item \label{alg:a:createFace} Add a face with one of the edges from the previous step to the as its outer component to the DCEl.  The triangles in a Delauny triangulation do not have inner faces.
+					\item \label{alg:a:setEdges} Set the next and previous edge of the edges from step \ref{alg:a:addEdge} and add the face created in \ref{alg:a:createFace} as its face.
+				\end{enumerate}
+			\item \label{alg:a:addContainingFace} Add the face that has the triangulation as its inner component to the DCEL, and update the half edges that from the outer boundary of the triangulation.
+		\end{enumerate}
+
+	The method \t{from_delaunay_triangulation} is presented in \autoref{lst:a:from_delaunay_triangulation} without its local methods, these are presented in \autoref{lst:a:add_triangle_edges} and \autoref{lst:a:add_containing_face_to_dcel}. The code presented in \autoref{lst:a:from_delaunay_triangulation} executes step \ref{alg:a:addVertices} and calls the necessary methods for the other steps.
+
+	\lstinputlisting[linerange={22-23,73-81}, label={lst:a:from_delaunay_triangulation}, caption={The method \t{from_delaunay_triangulation()} without its local methods.}]{../dcel.py}
+
+	The method \t{get_triangle_vertices()} is defined in the module \t{delaunyUtils}, see \autoref{lst:a:delaunyUtils} which contains methods that perform often used methods on the results of \t{matplotlib.delaunay.delaunay()}. This method returns the vertices of the triangle in counter-clockwise order, using the fact that the order of the vertices of a triangle as returned by \t{matplotlib.delaunay.delaunay()} is in clockwise order.
+
+	\lstinputlisting[linerange={4-10}, label={lst:a:delaunyUtils}, caption={The method \t{get_triangle_vertices} in the module \t{delaunyUtils}.}]{../delaunyUtils.py}	
+
+	The function \t{add_vertex}, presented in \autoref{lst:a:add_vertex}, checks before adding a vertex if that \t{Vertex} is already in the DCEL. If that is the older \t{Vertex} is returned, otherwise the new \t{Vertex} is added and returned.\\
+
+	\lstinputlisting[linerange={92-99}, label={lst:a:add_vertex}, caption={The method \t{add_vertex} in the class \t{DCEL}.}]{../dcel.py}	
+
+	The local method, \t{add_triangle_edges}, presented in \autoref{lst:a:add_triangle_edges}, adds the edges and the face of the current triangle to the \t{DCEL}. Which corresponds with step \ref{alg:a:addEdge} through \ref{alg:a:setEdges}.
+
+	\lstinputlisting[linerange={50-71}, label={lst:a:add_triangle_edges}, caption={The method \t{add_triangle_edges()}.}]{../dcel.py}
+
+	The function \t{add_edge}, see \autoref{lst:a:add_edge}, called in \t{add_triangle_edges} works the same as the method \t{add_vertex}. \t{edge_1} is the \t{HalfEdge} of the current triangle, since we know that the three vertices in \t{triangle_vertices} are in CCW-order we know that the destination of the current edge is the vertex before this edge in that list.
+
+	The constant setting of \t{edge_1} and \t{edge_2} is to ensure that the references to the twin of an edge contain the oldest instance of that edge, thus the \t{HalfEdge} returned by \t{add_edge}.
+
+	When the edges of the current triangle and their twins are added to the \t{DCEL}, \t{triangles_edges} contains all the \t{HalfEdge}s that when traversed in their order in the list walk around the boundary of the current triangle while keeping that face on the left side.
+
+	We then create a new face, using one of the edges of the triangle as its incident edge, and add this to the \t{DCEL}. We then set the \t{nxt}, \t{prev} of the edges and the \t{incident_edge} of the vertices of the triangle using our knowledge of the order of the \t{HalfEdges} in \t{triangles_edges}.
+
+	\lstinputlisting[linerange={83-90}, label={lst:a:add_edge}, caption={The method \t{add_edge()} in the class \t{DCEL}.}]{../dcel.py}
+
+	When we have walked through all triangles of the triangulation only the \t{HalfEdge}s that make up the boundary of the triangulation do not have the attributes \t{nxt}, \t{prev} and \t{incident_face} set. These edges have been created since their twins are a \t{HalfEdge} of the triangles in the triangulation that have two or less neighbours.
+
+	The method \t{add_containing_face_to_dcel} adds the unbounded face whose hole is defined by these edges to the \t{DCEL}, see \autoref{lst:a:add_containing_face_to_dcel}. 
+
+	\lstinputlisting[linerange={24-48}, label={lst:a:add_containing_face_to_dcel}, caption={The method \t{add_containing_face_to_dcel()}.}]{../dcel.py}
+
+	To make searching in this subset of edges more efficient the list with edges of the \t{DCEL} without incident face is copied and each \t{HalfEdge} that has received a \t{incident_face} is removed from the list. \\
 
 \subsection{Walking Along the Outer Boundary}
 \todo[inline]{Bespreek number of vertices en get Edges in face}
