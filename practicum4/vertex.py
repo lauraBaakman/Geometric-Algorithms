@@ -18,6 +18,10 @@ class Vertex(object):
         self.coordinates = coordinates
         self.incident_edge = incident_edge
 
+    def as_points(self):
+        """Return the vertex as a set of points."""
+        return self.coordinates
+
     def __repr__(self):
         # TODO Outgoing edge representeren als de origin en destination van die vertex.
         """Print-friendly representation of the Vertex object."""

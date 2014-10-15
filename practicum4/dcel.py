@@ -57,7 +57,7 @@ class DCEL(object):
             ]
             print "{} - {}".format(edge, twin)
             if(twin_list):
-                # TODO: Set twins!
+                # TODO: Set twins!, gevonden twins checken!.
                 twin = twin_list[0]
                 edges_without_twins.remove(twin)
 
