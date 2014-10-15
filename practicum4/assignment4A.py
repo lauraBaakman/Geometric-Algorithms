@@ -177,8 +177,6 @@ def display_circumscribed_circles():
     global dcel, cens
     triangle_idxs = sample(
         xrange(len([face for face in dcel.faces if face.outer_component])), 3)
-    import pdb
-    pdb.set_trace()
     for triangle_idx in triangle_idxs:
         triangle = dcel.faces[triangle_idx]
         (_, vertices) = triangle.outer_component.get_incident_face()

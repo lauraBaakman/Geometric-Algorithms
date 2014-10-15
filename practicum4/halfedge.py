@@ -49,7 +49,7 @@ class HalfEdge(object):
         return [self.origin.coordinates, self.twin.origin.coordinates]
 
     def get_incident_face(self):
-        """Return the vertices and edges of the incident face."""
+        """Return the edges and vertices of the incident face."""
         def get_incident_face_helper(current_edge, edges, vertices):
             if(self == current_edge):
                 return (edges, vertices)
