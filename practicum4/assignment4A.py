@@ -166,12 +166,23 @@ def display_circumscribed_circles():
         glVertex2f(xl[i], yl[i])
     glColor3f(0.0, 0.0, 1.0)
     glEnd()
+    # Draw Delaunay Triangulation
+    glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_LINES)
+    for i in range(len(edgs)):
+        glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
+        glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
+    glEnd()
     # Draw circles
     global dcel
-    triangles = random.sample([face for face in dcel.face if dcel.outer_component], 3)
-    for triangle in triangles:
+    triangle_idxs = sample(
+        xrange(len([face for face in dcel.faces if face.outer_component])), 3)
+    import pdb
+    pdb.set_trace()
+    for triangle_idx in triangle_idxs:
+        triangle = dcel.faces[triangle_idx]
         center, radius = triangle.get_circle_through_vertices()
-        draw_circle(center, radius)
+    #     # draw_circle(center, radius)
     glutSwapBuffers()
 
 
@@ -205,7 +216,7 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)

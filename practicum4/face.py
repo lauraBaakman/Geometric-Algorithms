@@ -55,3 +55,10 @@ class Face(object):
                 inners=[c.as_points() for c in self.inner_components]
             )
         )
+
+    def get_circle_through_vertices(self):
+        """Return the center and the radius of the circle through the vertices of the face."""
+        import pdb
+        (_, vertices) = self.outer_component.get_incident_face()
+        pdb.set_trace()
+        print vertices

@@ -48,6 +48,17 @@ class HalfEdge(object):
         """Return the edge as the coordinates of the origin and destination."""
         return [self.origin.coordinates, self.twin.origin.coordinates]
 
+    def get_incident_face(self):
+        """Return the vertices and edges of the incident face."""
+        def get_incident_face_helper(current_edge, edges, vertices):
+            if(self == current_edge):
+                return (edges, vertices)
+            else:
+                edges.append(current_edge)
+                vertices.append(current_edge.origin)
+                return get_incident_face_helper(current_edge.nxt, edges, vertices)
+        return get_incident_face_helper(self.nxt, [self], [self.origin])
+
     def __repr__(self):
         """Print-friendly representation of the HalfEdge object."""
         twin_origin = self.twin.as_points()
