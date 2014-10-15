@@ -1,5 +1,4 @@
 """The class face."""
-import pdb
 
 
 class Face(object):

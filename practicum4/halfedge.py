@@ -1,6 +1,4 @@
 """The class halfEdge."""
-import pdb
-from vertex import Vertex
 
 
 class HalfEdge(object):

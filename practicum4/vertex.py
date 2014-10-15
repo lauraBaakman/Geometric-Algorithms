@@ -1,5 +1,4 @@
 """The class vertex."""
-import pdb
 
 
 class Vertex(object):
