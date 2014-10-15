@@ -27,7 +27,6 @@ class Face(object):
                 return 1
             else:
                 return 1 + number_of_vertices_helper(current_edge.nxt)
-
         return number_of_vertices_helper(self.outer_component.nxt)
 
     def get_edges(self):
@@ -39,7 +38,6 @@ class Face(object):
             else:
                 edges.append(current_edge)
                 return get_edges_helper(current_edge.nxt, edges)
-
         return get_edges_helper(self.outer_component.nxt, [self.outer_component])
 
     def __repr__(self):

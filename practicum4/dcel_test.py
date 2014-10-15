@@ -19,21 +19,21 @@ class TestDCEL(unittest.TestCase):
         ya = numpy.array(self.yl)
         self.centres, self.edges, self.triangles, self.neighs = triang.delaunay(xa, ya)
 
-    # def test_from_delaunay_triangulation(self):
-    #     """."""
-    #     dc = DCEL.from_delaunay_triangulation(
-    #         self.xl, self.yl, self.edges, self.triangles, self.neighs
-    #     )
-    #     vertices = []
+    def test_from_delaunay_triangulation(self):
+        """."""
+        dc = DCEL.from_delaunay_triangulation(
+            self.xl, self.yl, self.edges, self.triangles, self.neighs
+        )
+        vertices = []
 
-    #     # Check if the DCEL doesn't have more vertices than the triangulation
-    #     self.assertEqual(len(self.xl), len(dc.vertices))
+        # Check if the DCEL doesn't have more vertices than the triangulation
+        self.assertEqual(len(self.xl), len(dc.vertices))
 
-    #     # Check if the DCEL contains all the vertices of the triangulation
-    #     for (x, y) in zip(self.xl, self.yl):
-    #         vertex = Vertex([x, y])
-    #         vertices.append(vertex)
-    #         self.assertIn(vertex, dc.vertices)
+        # Check if the DCEL contains all the vertices of the triangulation
+        for (x, y) in zip(self.xl, self.yl):
+            vertex = Vertex([x, y])
+            vertices.append(vertex)
+            self.assertIn(vertex, dc.vertices)
 
 
 class TestHalfEdge(unittest.TestCase):

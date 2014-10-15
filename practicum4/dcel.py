@@ -53,6 +53,28 @@ class DCEL(object):
             dcel.faces.append(triangle_face)
 
         containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]
+        edge = containing_face_edges.pop()
+        first_edge = edge
+        previous_edge = [
+            e for e in containing_face_edges if e.get_destination() == edge.origin
+        ]
+        edge.prev = previous_edge[0]
+        face = Face(edge)
+        while len(containing_face_edges) > 1:
+            edge.incident_face = face
+            next_edge = [
+                e for e in containing_face_edges if e.origin == edge.get_destination()
+            ]
+            edge.nxt = next_edge[0]
+            next_edge[0].prev = edge
+            edge = next_edge[0]
+            containing_face_edges.remove(next_edge[0])
+        edge_2 = containing_face_edges.pop()
+        edge.incident_face = face
+        edge_2.incident_face = face
+        edge_2.prev = edge
+        edge_2.nxt = first_edge
+        edge.nxt = edge_2
         return dcel
 
     def add_edge(self, edge):
