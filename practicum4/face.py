@@ -1,4 +1,5 @@
 """The class face."""
+import pdb
 
 
 class Face(object):
@@ -18,6 +19,16 @@ class Face(object):
         super(Face, self).__init__()
         self.outer_component = outer_component
         self.inner_components = inner_components
+
+    def number_of_vertices(self):
+        """Return the number of vertices that define the face."""
+        def number_of_vertices_helper(current_edge):
+            if(self.outer_component == current_edge):
+                return 1
+            else:
+                return 1 + number_of_vertices_helper(current_edge.nxt)
+
+        return number_of_vertices_helper(self.outer_component.nxt)
 
     def __repr__(self):
         """Print-friendly representation of the Face object."""

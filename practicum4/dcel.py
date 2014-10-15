@@ -44,6 +44,7 @@ class DCEL(object):
                 triangle_edges.append(edge_1)
 
             triangle_face = Face(triangle_edges[0])
+            # Set previous and next of the edges
             for edge_idx, edge in enumerate(triangle_edges):
                 edge.nxt = triangle_edges[(edge_idx + 1) % 3]
                 edge.prev = triangle_edges[(edge_idx + 3 - 1) % 3]
@@ -51,7 +52,7 @@ class DCEL(object):
                 triangle_vertices[edge_idx].incident_edge = edge
             dcel.faces.append(triangle_face)
 
-            # TODO: containing face
+        containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]
         return dcel
 
     def add_edge(self, edge):

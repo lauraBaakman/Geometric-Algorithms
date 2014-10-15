@@ -35,18 +35,6 @@ class TestDCEL(unittest.TestCase):
             vertices.append(vertex)
             self.assertIn(vertex, dc.vertices)
 
-        # TODO: Check the incident edges of the vertices
-        # print "Vertices:"
-        # for vertex in dc.vertices:
-        #     print vertex
-        print len(dc.edges)
-        print "Edges:"
-        for edge in dc.edges:
-            print edge
-        # print "Faces:"
-        # for face in dc.faces:
-        #     print face
-
 
 class TestHalfEdge(unittest.TestCase):
 
@@ -76,6 +64,33 @@ class TestHalfEdge(unittest.TestCase):
         points_correct = [[1, 2], [3, 4]]
         self.assertEqual(points_returned, points_correct)
 
+
+class TestFace(unittest.TestCase):
+
+    """."""
+
+    def setUp(self):
+        """."""
+        xl = [150, 200, 250, 450, 600, 10]
+        yl = [550, 450, 500, 100, 550, 10]
+        xa = numpy.array(xl)
+        ya = numpy.array(yl)
+        centres, edges, triangles, neighs = triang.delaunay(xa, ya)
+        self.dcel = DCEL.from_delaunay_triangulation(
+            xl, yl, edges, triangles, neighs
+        )
+
+    def test_number_of_vertices_triangle(self):
+        """Test the method number_of_vertices on a triangle."""
+        pdb.set_trace()
+        face = self.dcel.faces[0]
+        result_returned = face.number_of_vertices()
+        result_correct = 3
+        self.assertEqual(result_returned, result_correct)
+
+    def test_number_of_vertices_polygon(self):
+        """Test the method number_of_vertices on a polygon that is not a triangle."""
+        pass
 
 if __name__ == '__main__':
     unittest.main()
