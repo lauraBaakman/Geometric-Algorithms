@@ -14,10 +14,11 @@ Global variables:
 """
 from random import *
 from math import *
+import sys
+import getopt
+
 import matplotlib.delaunay as triang
 import numpy
-
-
 try:
     from OpenGL.GLUT import *
     from OpenGL.GL import *
@@ -108,7 +109,7 @@ def reshape(wid, hgt):
     gluOrtho2D(0, width, height, 0)
 
 
-def main(argv=None):
+def main(displayFunction, argv=None, ):
     """."""
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts
     if argv is None:
@@ -117,16 +118,27 @@ def main(argv=None):
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
-    # glutInit(argv)
-    # glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
-    # glutInitWindowSize(width, height)
-    # glutInitWindowPosition(100, 100)
-    # glutCreateWindow("Delaunay triangulation")
-    # glutDisplayFunc(display)
-    # glutReshapeFunc(reshape)
-    # glutKeyboardFunc(keyboard)
-    # glutMainLoop()
+    glutInit(argv)
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+    glutInitWindowSize(width, height)
+    glutInitWindowPosition(100, 100)
+    glutCreateWindow("Delaunay triangulation")
+    glutDisplayFunc(displayFunction)
+    glutReshapeFunc(reshape)
+    glutKeyboardFunc(keyboard)
+    glutMainLoop()
     return
 
 if __name__ == '__main__':
-    sys.exit(main())
+    (_, opts) = getopt.getopt(sys.argv, "cd")
+    if opts[1] == '-ch':
+        print (
+            "Showing that the boundary of the Delaunay triangulation"
+            " is the convex hull of the triangulated points."
+        )
+        main(display)
+    elif opts[1] == '-dt':
+        print "Showing the Delauny triangulation and colouring its boundary."
+    else:
+        print "Showing the Delauny triangulation and colouring its boundary"
+
