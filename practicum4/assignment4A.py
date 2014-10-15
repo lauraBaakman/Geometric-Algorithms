@@ -202,16 +202,22 @@ def main(displayFunction, argv=None, ):
     return
 
 if __name__ == '__main__':
-    (_, opts) = getopt.getopt(sys.argv, "cd")
-    if opts[1] == '-ch':
+    (_, opts) = getopt.getopt(sys.argv[1:], "cd")
+    if opts and opts[0] == '-ch':
         print (
             "Showing that the boundary of the Delaunay triangulation"
             " is the convex hull of the triangulated points."
         )
         main(display_inspect_convex_hull)
-    elif opts[1] == '-dt':
+    elif opts and opts[0] == '-dt':
         print "Showing the Delauny triangulation and colouring its boundary."
         main(display_outer_boudary)
     else:
-        print "Showing the Delauny triangulation."
+        print (
+            "Showing the Delauny triangulation. To show other visualizations"
+            "use one of the following flags:\n"
+            "\t-dt: The Delauny Triangulation with the outer boundary highlighted (assignment A)\n"
+            "\t-ch: The outer boundary of the Delauny triangulation, its vertices and"
+            "all possible line segments between the vertices. (assignment A)\n"
+        )
         main(display)
