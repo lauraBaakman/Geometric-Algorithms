@@ -157,32 +157,35 @@ def display_inspect_convex_hull():
 def display_circumscribed_circles():
     """Display the circumscribed circle of three triangles."""
     glClear(GL_COLOR_BUFFER_BIT)
-    # Draw points
-    glLineWidth(1.0)
-    glColor3f(1.0, 1.0, 1.0)
-    glPointSize(3)
-    glBegin(GL_POINTS)
-    for i in range(len(xl)):
-        glVertex2f(xl[i], yl[i])
-    glColor3f(0.0, 0.0, 1.0)
-    glEnd()
     # Draw Delaunay Triangulation
+    glLineWidth(1.0)
     glColor3f(1.0, 0.0, 0.0)
     glBegin(GL_LINES)
     for i in range(len(edgs)):
         glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
         glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
     glEnd()
+    # Draw points
+    glColor3f(1.0, 1.0, 1.0)
+    glPointSize(5)
+    glBegin(GL_POINTS)
+    for i in range(len(xl)):
+        glVertex2f(xl[i], yl[i])
+    glColor3f(0.0, 0.0, 1.0)
+    glEnd()
     # Draw circles
-    global dcel
+    global dcel, cens
     triangle_idxs = sample(
         xrange(len([face for face in dcel.faces if face.outer_component])), 3)
     import pdb
     pdb.set_trace()
     for triangle_idx in triangle_idxs:
         triangle = dcel.faces[triangle_idx]
-        center, radius = triangle.get_circle_through_vertices()
-    #     # draw_circle(center, radius)
+        (_, vertices) = triangle.outer_component.get_incident_face()
+        vertex = vertices[0].as_points()
+        center = cens[triangle_idx]
+        radius = sqrt((vertex[0] - center[0]) ** 2 + (vertex[1] - center[1]) ** 2)
+        draw_circle(center, radius)
     glutSwapBuffers()
 
 
@@ -216,7 +219,7 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points(True)
+    generate_points(False)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
