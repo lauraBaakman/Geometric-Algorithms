@@ -21,16 +21,36 @@ class DCEL(object):
     @classmethod
     def from_delaunay_triangulation(cls, xl, yl, edges, triangles, neighs):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
-        dcel = cls()
-
-        for t in triangles:
-            # Add vertices of the triangle
-            triangle_vertices = [
-                dcel.add_vertex(Vertex(x))
-                for x in du.get_triangle_vertices(xl, yl, t)
+        def add_containing_face_to_dcel():
+            containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]
+            edge = containing_face_edges.pop()
+            face = Face(edge)
+            dcel.faces.append(face)
+            pdb.set_trace()
+            first_edge = edge
+            previous_edge = [
+                e for e in containing_face_edges if e.get_destination() == edge.origin
             ]
-            # Add edges of the triangle
-            triangle_edges = []
+            edge.prev = previous_edge[0]
+            while len(containing_face_edges) > 1:
+                edge.incident_face = face
+                next_edge = [
+                    e for e in containing_face_edges if e.origin == edge.get_destination()
+                ]
+                edge.nxt = next_edge[0]
+                next_edge[0].prev = edge
+                edge = next_edge[0]
+                containing_face_edges.remove(next_edge[0])
+            edge_2 = containing_face_edges.pop()
+            edge.incident_face = face
+            edge_2.incident_face = face
+            edge_2.prev = edge
+            edge_2.nxt = first_edge
+            edge.nxt = edge_2
+            pdb.set_trace()
+
+        def add_triangle_edges():
+            triangles_edges = []
             for vertex_idx, origin in enumerate(triangle_vertices):
                 # Destination of the edge in this triangle that has vertex as origin
                 destination = triangle_vertices[(vertex_idx + 1) % 3]
@@ -41,40 +61,25 @@ class DCEL(object):
                 edge_2.twin = edge_1
                 edge_2 = dcel.add_edge(edge_2)
                 edge_1.twin = edge_2
-                triangle_edges.append(edge_1)
+                triangles_edges.append(edge_1)
 
-            triangle_face = Face(triangle_edges[0])
+            triangle_face = Face(triangles_edges[0])
+            dcel.faces.append(triangle_face)
             # Set previous and next of the edges
-            for edge_idx, edge in enumerate(triangle_edges):
-                edge.nxt = triangle_edges[(edge_idx + 1) % 3]
-                edge.prev = triangle_edges[(edge_idx + 3 - 1) % 3]
+            for edge_idx, edge in enumerate(triangles_edges):
+                edge.nxt = triangles_edges[(edge_idx + 1) % 3]
+                edge.prev = triangles_edges[(edge_idx + 3 - 1) % 3]
                 edge.incident_face = triangle_face
                 triangle_vertices[edge_idx].incident_edge = edge
-            dcel.faces.append(triangle_face)
 
-        containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]
-        edge = containing_face_edges.pop()
-        first_edge = edge
-        previous_edge = [
-            e for e in containing_face_edges if e.get_destination() == edge.origin
-        ]
-        edge.prev = previous_edge[0]
-        face = Face(edge)
-        while len(containing_face_edges) > 1:
-            edge.incident_face = face
-            next_edge = [
-                e for e in containing_face_edges if e.origin == edge.get_destination()
+        dcel = cls()
+        for t in triangles:
+            triangle_vertices = [
+                dcel.add_vertex(Vertex(x))
+                for x in du.get_triangle_vertices(xl, yl, t)
             ]
-            edge.nxt = next_edge[0]
-            next_edge[0].prev = edge
-            edge = next_edge[0]
-            containing_face_edges.remove(next_edge[0])
-        edge_2 = containing_face_edges.pop()
-        edge.incident_face = face
-        edge_2.incident_face = face
-        edge_2.prev = edge
-        edge_2.nxt = first_edge
-        edge.nxt = edge_2
+            add_triangle_edges()
+        add_containing_face_to_dcel()
         return dcel
 
     def add_edge(self, edge):
@@ -106,7 +111,7 @@ class DCEL(object):
         """Print-friendly representation of the DCEL object."""
         return (
             '<DCEL ('
-            'vertices = {obj.vertices},\n'
-            'edges = {obj.edges},\n'
-            'faces = {obj.faces}>'.format(obj=self)
+            'vertices:\n {obj.vertices},\n'
+            'edges:\n {obj.edges},\n'
+            'faces:\n {obj.faces}>'.format(obj=self)
         )

@@ -60,7 +60,7 @@ class HalfEdge(object):
             'twin = {twin}, '
             'nxt = {next}, '
             'prev = {prev}, '
-            'incident_face = {face}>'
+            'incident_face = {face}>\n'
             .format(
                 obj=self,
                 twin=twin_origin,

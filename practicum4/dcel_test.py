@@ -34,6 +34,7 @@ class TestDCEL(unittest.TestCase):
             vertex = Vertex([x, y])
             vertices.append(vertex)
             self.assertIn(vertex, dc.vertices)
+        print dc
 
 
 class TestHalfEdge(unittest.TestCase):
@@ -65,37 +66,37 @@ class TestHalfEdge(unittest.TestCase):
         self.assertEqual(points_returned, points_correct)
 
 
-class TestFace(unittest.TestCase):
+# class TestFace(unittest.TestCase):
 
-    """."""
+#     """."""
 
-    def setUp(self):
-        """."""
-        xl = [150, 200, 250, 450, 600, 10]
-        yl = [550, 450, 500, 100, 550, 10]
-        xa = numpy.array(xl)
-        ya = numpy.array(yl)
-        centres, edges, triangles, neighs = triang.delaunay(xa, ya)
-        self.dcel = DCEL.from_delaunay_triangulation(
-            xl, yl, edges, triangles, neighs
-        )
+#     def setUp(self):
+#         """."""
+#         xl = [150, 200, 250, 450, 600, 10]
+#         yl = [550, 450, 500, 100, 550, 10]
+#         xa = numpy.array(xl)
+#         ya = numpy.array(yl)
+#         centres, edges, triangles, neighs = triang.delaunay(xa, ya)
+#         self.dcel = DCEL.from_delaunay_triangulation(
+#             xl, yl, edges, triangles, neighs
+#         )
 
-    def test_number_of_vertices_triangle(self):
-        """Test the method number_of_vertices on a triangle."""
-        face = self.dcel.faces[0]
-        result_returned = face.number_of_vertices()
-        result_correct = 3
-        self.assertEqual(result_returned, result_correct)
+#     def test_number_of_vertices_triangle(self):
+#         """Test the method number_of_vertices on a triangle."""
+#         face = self.dcel.faces[0]
+#         result_returned = face.number_of_vertices()
+#         result_correct = 3
+#         self.assertEqual(result_returned, result_correct)
 
-    def test_get_edges_triangle(self):
-        """Test the method get_edges on a triangle."""
-        face = self.dcel.faces[0]
-        edges_correct = []
-        edges_correct.append(self.dcel.edges[0])
-        edges_correct.append(self.dcel.edges[2])
-        edges_correct.append(self.dcel.edges[4])
-        edges_returned = face.get_edges()
-        self.assertItemsEqual(edges_returned, edges_correct)
+#     def test_get_edges_triangle(self):
+#         """Test the method get_edges on a triangle."""
+#         face = self.dcel.faces[0]
+#         edges_correct = []
+#         edges_correct.append(self.dcel.edges[0])
+#         edges_correct.append(self.dcel.edges[2])
+#         edges_correct.append(self.dcel.edges[4])
+#         edges_returned = face.get_edges()
+#         self.assertItemsEqual(edges_returned, edges_correct)
 
 if __name__ == '__main__':
     unittest.main()

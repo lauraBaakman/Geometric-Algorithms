@@ -44,10 +44,10 @@ class Face(object):
         """Print-friendly representation of the Face object."""
         return (
             '<Face ('
-            'outer_component = {obj.outer_component},\t '
-            'inner_components = {inners}>'
+            'outer_component = {outer},\t '
+            'inner_components = {inners}>\n'
             .format(
-                obj=self,
+                outer=self.outer_component.as_points(),
                 inners=[c.as_points() for c in self.inner_components]
             )
         )

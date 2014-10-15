@@ -30,7 +30,7 @@ class Vertex(object):
         return (
             '<Vertex ('
             'coordinates = {obj.coordinates},\t'
-            'incident_edge = {incident_edge_points}>'
+            'incident_edge = {incident_edge_points}>\n'
             .format(
                 obj=self,
                 incident_edge_points=incident_edge_points
