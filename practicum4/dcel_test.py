@@ -48,8 +48,8 @@ class TestDCEL(unittest.TestCase):
         dc = DCEL.from_delaunay_triangulation(
             self.xl, self.yl, self.triangles, self.centres
         )
-        print "Original DCEL"
-        print dc
+        # print "Original DCEL"
+        # print dc
 
         dc_dual = dc.dual()
         print "Original dual DCEL"
