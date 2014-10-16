@@ -68,8 +68,6 @@ def keyboard(key, x, y):
 def display():
     """Display the Delaunay triangulation."""
     glClear(GL_COLOR_BUFFER_BIT)
-    import pdb
-    pdb.set_trace()
     # Draw points
     glLineWidth(1.0)
     glColor3f(1.0, 1.0, 1.0)
@@ -224,7 +222,9 @@ def main(displayFunction, argv=None, ):
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
     # Generate the DCEL
-    dcel = DCEL.from_delaunay_triangulation(xl, yl, triPts)
+    dcel = DCEL.from_delaunay_triangulation(xl, yl, triPts, cens)
+    print cens
+    print dcel.faces
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)

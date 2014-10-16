@@ -19,7 +19,7 @@ class DCEL(object):
     """
 
     @classmethod
-    def from_delaunay_triangulation(cls, xl, yl, triangles):
+    def from_delaunay_triangulation(cls, xl, yl, triangles, circumcentres):
         """ Construct a DCEL from the output of matplotlib.delaunay.delaunay."""
         def add_containing_face_to_dcel():
             containing_face_edges = [edge for edge in dcel.edges if not edge.nxt]
@@ -47,7 +47,7 @@ class DCEL(object):
             edge_2.nxt = first_edge
             edge.nxt = edge_2
 
-        def add_triangle_edges():
+        def add_triangle_edges(circumcentre):
             triangles_edges = []
             for vertex_idx, origin in enumerate(triangle_vertices):
                 # Destination of the edge in this triangle that has vertex as origin
@@ -61,7 +61,7 @@ class DCEL(object):
                 edge_1.twin = edge_2
                 triangles_edges.append(edge_1)
 
-            triangle_face = Face(triangles_edges[0])
+            triangle_face = Face(triangles_edges[0], circumcentre=circumcentre)
             dcel.faces.append(triangle_face)
             # Set previous and next of the edges
             for edge_idx, edge in enumerate(triangles_edges):
@@ -71,12 +71,12 @@ class DCEL(object):
                 triangle_vertices[edge_idx].incident_edge = edge
 
         dcel = cls()
-        for t in triangles:
+        for t_idx, t in enumerate(triangles):
             triangle_vertices = [
                 dcel.add_vertex(Vertex(x))
                 for x in du.get_triangle_vertices(xl, yl, t)
             ]
-            add_triangle_edges()
+            add_triangle_edges(circumcentres[t_idx])
         add_containing_face_to_dcel()
         return dcel
 
