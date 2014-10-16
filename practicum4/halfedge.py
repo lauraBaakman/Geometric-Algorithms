@@ -54,6 +54,15 @@ class HalfEdge(object):
         """Return the edge as the coordinates of the origin and destination."""
         return [self.origin.coordinates, self.twin.origin.coordinates]
 
+    def is_finite(self):
+        """Return true if the edge has two defined vertices that are not inf."""
+        infinity = float('inf')
+        [[x1, y1], [x2, y2]] = self.as_points()
+        return (
+            x1 != infinity and y1 != infinity and
+            x2 != infinity and y2 != infinity
+        )
+
     def get_incident_face(self):
         """Return the edges and vertices of the incident face."""
         def get_incident_face_helper(current_edge, edges, vertices):
@@ -68,8 +77,10 @@ class HalfEdge(object):
     def __repr__(self):
         """Print-friendly representation of the HalfEdge object."""
         twin_origin = None
+        coordinates = self.origin
         if(self.twin):
             twin_origin = self.twin.as_points()
+            coordinates = self.as_points()
 
         incident_face_edge = None
         if(self.incident_face):
@@ -90,14 +101,14 @@ class HalfEdge(object):
 
         return (
             '<HalfEdge ('
-            'origin = {obj.origin.coordinates}, '
-            'twin = {twin}, '
-            'nxt = {next}, '
-            'prev = {prev}, '
-            'incident_face = {face}>\n'
+            'origin = {coordinates}, \n'
+            # 'twin = {twin}, '
+            'nxt = {next}, \n'
+            'prev = {prev}, \n\n'
+            # 'incident_face = {face}>\n'
             .format(
-                obj=self,
-                twin=twin_origin,
+                coordinates=coordinates,
+                # twin=twin_origin,
                 next=nxt_edge,
                 prev=prev_edge,
                 face=incident_face_edge

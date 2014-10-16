@@ -198,8 +198,15 @@ def display_delaunay_and_voronoi():
         glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
         glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
     glEnd()
+    voronoi = dcel.dual()
     # Draw Voronoi
-    #
+    glLineWidth(1.0)
+    glColor3f(0.0, 0.0, 1.0)
+    glBegin(GL_LINES)
+    for edge in [edge.as_points() for edge in voronoi.edges if edge.is_finite()]:
+        glVertex2f(edge[0][0], edge[0][1])
+        glVertex2f(edge[1][0], edge[1][1])
+    glEnd()
     # Draw Voronoi Vertices
     glColor3f(0.4, 0.4, 1.0)
     glPointSize(5)
@@ -249,7 +256,7 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points(True)
+    generate_points()
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)

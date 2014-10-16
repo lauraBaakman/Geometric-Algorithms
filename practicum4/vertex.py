@@ -34,6 +34,11 @@ class Vertex(object):
         """Return the vertex as a set of points."""
         return self.coordinates
 
+    def is_infinity(self):
+        """Return true if the coordinates of this point are infinity,infinity."""
+        infinity = float('inf')
+        return self.coordinates[0] == infinity and self.coordinates[1] == infinity
+
     def __repr__(self):
         """Print-friendly representation of the Vertex object."""
         incident_edge_points = None

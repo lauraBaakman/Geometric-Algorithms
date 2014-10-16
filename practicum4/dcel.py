@@ -91,7 +91,6 @@ class DCEL(object):
 
     def add_vertex(self, vertex):
         """Add vertex to DCEL if it doesn't already exists, otherwise return the existing vertex."""
-        # pdb.set_trace()
         try:
             vertex_idx = self.vertices.index(vertex)
             # print "{} already in {}".format(vertex, self.vertices)
@@ -123,6 +122,22 @@ class DCEL(object):
 
     def dual(self):
         """Return the dual of the current DCEL."""
+        def set_twins():
+            for edge_idx in range(0, len(dual_dcel.edges), 2):
+                dual_dcel.edges[edge_idx].twin = dual_dcel.edges[edge_idx + 1]
+                dual_dcel.edges[edge_idx + 1].twin = dual_dcel.edges[edge_idx]
+
+        def set_next_and_previous():
+            for face in dual_dcel.faces:
+                face_edges = [edge for edge in dual_dcel.edges if edge.incident_face == face]
+                for edge in face_edges:
+                    pdb.set_trace()
+                    if(not edge.get_destination().is_infinity()):
+                        edge.nxt = [e for e in face_edges if e.origin == edge.get_destination()][0]
+                    if(not edge.origin.is_infinity()):
+                        edge.prev = [e for e in face_edges if edge.origin == e.get_destination()][0]
+                    pdb.set_trace()
+
         dual_dcel = DCEL()
         for edge in self.edges:
             incident_face = dual_dcel.add_face(Face(circumcentre=edge.twin.origin.as_points()))
@@ -135,11 +150,8 @@ class DCEL(object):
             origin.incident_edge = dual_edge
             dual_dcel.edges.append(dual_edge)
 
-        for edge_idx in range(0, len(dual_dcel.edges), 2):
-            dual_dcel.edges[edge_idx].twin = dual_dcel.edges[edge_idx + 1]
-            dual_dcel.edges[edge_idx + 1].twin = dual_dcel.edges[edge_idx]
-
-        # set the nxt and prev of the dual edges
+        set_twins()
+        set_next_and_previous()
         return dual_dcel
 
     def __repr__(self):
