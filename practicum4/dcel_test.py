@@ -13,8 +13,13 @@ class TestDCEL(unittest.TestCase):
 
     def setUp(self):
         """."""
+        # Ruit met twee driehoeken
         self.xl = [000, 550, 250, 750]
         self.yl = [700, 500, 200, 000]
+
+        # Ruit met vier driehoeken
+        # self.xl = [350, 700, 350, 0, 350]
+        # self.yl = [0, 350, 700, 350, 350]
         xa = numpy.array(self.xl)
         ya = numpy.array(self.yl)
         self.centres, self.edges, self.triangles, self.neighs = triang.delaunay(xa, ya)
@@ -48,12 +53,8 @@ class TestDCEL(unittest.TestCase):
         dc = DCEL.from_delaunay_triangulation(
             self.xl, self.yl, self.triangles, self.centres
         )
-        # print "Original DCEL"
-        # print dc
-
-        dc_dual = dc.dual()
-        print "Dual DCEL"
-        print dc_dual
+        dc = dc.dual()
+        dc.get_outer_boundary_of_voronoi()
 
 # class TestHalfEdge(unittest.TestCase):
 

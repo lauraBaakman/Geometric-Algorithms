@@ -120,6 +120,21 @@ class DCEL(object):
             self.faces.append(face)
             return face
 
+    def get_outer_boundary_of_voronoi(self):
+        """Return a list of vertices that form the outer boundary of finite faces of the DCEL."""
+        edge = [edge for edge in self.edges if not edge.nxt][0]
+        # next(obj for obj in objs if obj.val==5)
+        first_vertex = edge.origin
+        outer_boundary = []
+        while (not edge.get_destination() == first_vertex):
+            if(edge.get_destination().is_infinity()):
+                edge = edge.twin.nxt
+            else:
+                outer_boundary.append(edge)
+                edge = edge.nxt
+        outer_boundary.append(edge)
+        return outer_boundary
+
     def dual(self):
         """Return the dual of the current DCEL."""
         def set_twins():
@@ -131,12 +146,10 @@ class DCEL(object):
             for face in dual_dcel.faces:
                 face_edges = [edge for edge in dual_dcel.edges if edge.incident_face == face]
                 for edge in face_edges:
-                    pdb.set_trace()
                     if(not edge.get_destination().is_infinity()):
                         edge.nxt = [e for e in face_edges if e.origin == edge.get_destination()][0]
                     if(not edge.origin.is_infinity()):
                         edge.prev = [e for e in face_edges if edge.origin == e.get_destination()][0]
-                    pdb.set_trace()
 
         dual_dcel = DCEL()
         for edge in self.edges:

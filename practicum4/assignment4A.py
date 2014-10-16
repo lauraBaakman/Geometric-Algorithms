@@ -46,8 +46,13 @@ def generate_points(debug=False):
     """."""
     global xl, yl
     if(debug):
-        xl = [000, 550, 250, 750]
-        yl = [700, 500, 200, 000]
+        # Ruit met twee driehoeken
+        # xl = [000, 550, 250, 750]
+        # yl = [700, 500, 200, 000]
+
+        # Ruit met vier driehoeken
+        xl = [350, 700, 350, 0, 350]
+        yl = [0, 350, 700, 350, 350]
         print "Points: {}".format([xy for xy in zip(xl, yl)])
     else:
         for i in range(100):
@@ -200,12 +205,21 @@ def display_delaunay_and_voronoi():
     glEnd()
     voronoi = dcel.dual()
     # Draw Voronoi
-    glLineWidth(1.0)
+    glLineWidth(2.0)
     glColor3f(0.0, 0.0, 1.0)
     glBegin(GL_LINES)
     for edge in [edge.as_points() for edge in voronoi.edges if edge.is_finite()]:
         glVertex2f(edge[0][0], edge[0][1])
         glVertex2f(edge[1][0], edge[1][1])
+    glEnd()
+    # Draw outer boundary of the voronoi diagram
+    glLineWidth(3.0)
+    glColor3f(0.0, 1.0, 0.0)
+    glBegin(GL_LINES)
+    for edge in voronoi.get_outer_boundary_of_voronoi():
+        edge_points = edge.as_points()
+        glVertex2f(edge_points[0][0], edge_points[0][1])
+        glVertex2f(edge_points[1][0], edge_points[1][1])
     glEnd()
     # Draw Voronoi Vertices
     glColor3f(0.4, 0.4, 1.0)
@@ -214,7 +228,6 @@ def display_delaunay_and_voronoi():
     for bounded_face in dcel.get_bounded_faces():
         circumcentre = bounded_face.circumcentre
         glVertex2f(circumcentre[0], circumcentre[1])
-    # glColor3f(0.0, 0.0, 1.0)
     glEnd()
     # Draw Deaunay Vertices
     glColor3f(1.0, 0.4, 0.4)
