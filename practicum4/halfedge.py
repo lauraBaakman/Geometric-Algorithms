@@ -61,11 +61,15 @@ class HalfEdge(object):
 
     def __repr__(self):
         """Print-friendly representation of the HalfEdge object."""
-        twin_origin = self.twin.as_points()
+        twin_origin = None
+        if(self.twin):
+            twin_origin = self.twin.as_points()
 
         incident_face_edge = None
         if(self.incident_face):
-            if(self.incident_face.outer_component):
+            if(self.incident_face.circumcentre):
+                incident_face_edge = self.incident_face.circumcentre
+            elif(self.incident_face.outer_component):
                 incident_face_edge = self.incident_face.outer_component.as_points()
             else:
                 incident_face_edge = [c.as_points() for c in self.incident_face.inner_components]
