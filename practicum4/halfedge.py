@@ -34,10 +34,16 @@ class HalfEdge(object):
     def __eq__(self, other):
         """Check if two half edges are equal."""
         if type(other) is type(self):
+            origin_destination_check = (
+                self.origin == other.origin and
+                self.twin.origin == other.twin.origin
+            )
+            if self.incident_face and other.incident_face:
                 return (
-                    self.origin == other.origin and
-                    self.twin.origin == other.twin.origin
+                    origin_destination_check and
+                    self.incident_face == other.incident_face
                 )
+            return origin_destination_check
         return False
 
     def __neq__(self, other):

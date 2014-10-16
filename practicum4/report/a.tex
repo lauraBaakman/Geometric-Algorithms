@@ -18,6 +18,8 @@ To create a DCEL one needs a couple of base classes, namely \t{Vertex}, \t{HalfE
 	The method \t{get_destination} returns the destination of the \t{HalfEdge} this is the same as the \t{origin} of its \t{twin}.
 
 	The \t{__eq__} method of \t{HalfEdge} has been overridden to avoid infinite recursion when comparing \t{HalfEdge}'s and to make it possible to compare an \t{HalfEdge} without the \t{nxt}, \t{incident_face} or \t{prev} property. This will not lead to any problems since an \t{HalfEdge} is uniquely defined by its origin and destination.
+
+	\todo[inline]{Edges zijn niet uniquely defined by hun origin en destination, i.e. de nerves van een voronoi diagram. __eq__ aanpassen óf hier uitleggen waarom het geen probleem is. Beter aanpassen!}
 	\lstinputlisting[firstline=21, lastline=45, label={lst:a:halfEdge}, caption={The definition of the class \t{HalfEdge}.}]{../halfedge.py}
 
 \subsubsection*{Face}

@@ -52,7 +52,7 @@ class TestDCEL(unittest.TestCase):
         # print dc
 
         dc_dual = dc.dual()
-        print "Original dual DCEL"
+        print "Dual DCEL"
         print dc_dual
 
 # class TestHalfEdge(unittest.TestCase):
