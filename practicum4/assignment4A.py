@@ -46,8 +46,8 @@ def generate_points(debug=False):
     """."""
     global xl, yl
     if(debug):
-        xl = [150, 200, 250, 450, 600, 10]
-        yl = [550, 450, 500, 100, 550, 10]
+        xl = [000, 550, 250, 750]
+        yl = [700, 500, 200, 000]
         print "Points: {}".format([xy for xy in zip(xl, yl)])
     else:
         for i in range(100):
@@ -68,6 +68,8 @@ def keyboard(key, x, y):
 def display():
     """Display the Delaunay triangulation."""
     glClear(GL_COLOR_BUFFER_BIT)
+    import pdb
+    pdb.set_trace()
     # Draw points
     glLineWidth(1.0)
     glColor3f(1.0, 1.0, 1.0)
@@ -217,7 +219,7 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points(False)
+    generate_points(True)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
