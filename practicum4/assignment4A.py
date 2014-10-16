@@ -174,14 +174,13 @@ def display_circumscribed_circles():
     glColor3f(0.0, 0.0, 1.0)
     glEnd()
     # Draw circles
-    global dcel, cens
+    global dcel
     triangle_idxs = sample(
         xrange(len([face for face in dcel.faces if face.outer_component])), 3)
     for triangle_idx in triangle_idxs:
         triangle = dcel.faces[triangle_idx]
-        (_, vertices) = triangle.outer_component.get_incident_face()
-        vertex = vertices[0].as_points()
-        center = cens[triangle_idx]
+        vertex = triangle.outer_component.origin.as_points()
+        center = triangle.circumcentre
         radius = sqrt((vertex[0] - center[0]) ** 2 + (vertex[1] - center[1]) ** 2)
         draw_circle(center, radius)
     glutSwapBuffers()
@@ -217,14 +216,12 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points(True)
+    generate_points(False)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
     # Generate the DCEL
     dcel = DCEL.from_delaunay_triangulation(xl, yl, triPts, cens)
-    print cens
-    print dcel.faces
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
