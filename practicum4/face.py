@@ -59,7 +59,7 @@ class Face(object):
 
     def is_bounded(self):
         """Return if the face is bounded, i.e. if its circumcentre == [inf, inf]."""
-        return not(self.circumcentre == [float('inf'), float('inf')])
+        return not(self.circumcentre[0] == float('inf') and self.circumcentre[1] == float('inf'))
 
     def __repr__(self):
         """Print-friendly representation of the Face object."""

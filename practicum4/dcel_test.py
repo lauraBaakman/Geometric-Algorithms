@@ -19,22 +19,29 @@ class TestDCEL(unittest.TestCase):
         ya = numpy.array(self.yl)
         self.centres, self.edges, self.triangles, self.neighs = triang.delaunay(xa, ya)
 
-    def test_from_delaunay_triangulation(self):
+    # def test_from_delaunay_triangulation(self):
+    #     """."""
+    #     dc = DCEL.from_delaunay_triangulation(
+    #         self.xl, self.yl, self.triangles, self.centres
+    #     )
+    #     # Check if the DCEL doesn't have more vertices than the triangulation
+    #     self.assertEqual(len(self.xl), len(dc.vertices))
+
+    #     # Check if the DCEL contains all the vertices of the triangulation
+    #     vertices = []
+    #     for (x, y) in zip(self.xl, self.yl):
+    #         vertex = Vertex([x, y])
+    #         vertices.append(vertex)
+    #         self.assertIn(vertex, dc.vertices)
+
+    def test_get_bounded_faces(self):
         """."""
         dc = DCEL.from_delaunay_triangulation(
-            self.xl, self.yl, self.edges, self.triangles, self.neighs
+            self.xl, self.yl, self.triangles, self.centres
         )
-        vertices = []
-
-        # Check if the DCEL doesn't have more vertices than the triangulation
-        self.assertEqual(len(self.xl), len(dc.vertices))
-
-        # Check if the DCEL contains all the vertices of the triangulation
-        for (x, y) in zip(self.xl, self.yl):
-            vertex = Vertex([x, y])
-            vertices.append(vertex)
-            self.assertIn(vertex, dc.vertices)
-        print dc
+        dc.get_bounded_faces()
+        print dc.faces
+        print dc.get_bounded_faces()
 
 
 # class TestHalfEdge(unittest.TestCase):

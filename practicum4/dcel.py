@@ -105,6 +105,10 @@ class DCEL(object):
         self.edges = edges
         self.faces = faces
 
+    def get_bounded_faces(self):
+        """Return all faces where the circumcentre is not infinity."""
+        return [face for face in self.faces if face.is_bounded()]
+
     def __repr__(self):
         """Print-friendly representation of the DCEL object."""
         return (
