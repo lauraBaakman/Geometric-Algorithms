@@ -81,7 +81,7 @@ class DCEL(object):
         return dcel
 
     def add_edge(self, edge):
-        """Add a edge to the DCEL if the edge doesn't already exists."""
+        """Add an edge to DCEL if it doesn't already exists, otherwise return the existing edge."""
         try:
             edge_idx = self.edges.index(edge)
             return self.edges[edge_idx]
@@ -90,7 +90,7 @@ class DCEL(object):
             return edge
 
     def add_vertex(self, vertex):
-        """Add a vertex to the DCEL if the vertex doesn't already exists."""
+        """Add vertex to DCEL if it doesn't already exists, otherwise return the existing vertex."""
         try:
             vertex_idx = self.vertices.index(vertex)
             return self.vertices[vertex_idx]
@@ -98,16 +98,47 @@ class DCEL(object):
             self.vertices.append(vertex)
             return vertex
 
-    def __init__(self, vertices=[], edges=[], faces=[]):
+    def __init__(self, vertices=None, edges=None, faces=None):
         """Construct a DCEL object."""
         super(DCEL, self).__init__()
-        self.vertices = vertices
-        self.edges = edges
-        self.faces = faces
+        self.vertices = vertices or []
+        self.edges = edges or []
+        self.faces = faces or []
 
     def get_bounded_faces(self):
         """Return all faces where the circumcentre is not infinity."""
         return [face for face in self.faces if face.is_bounded()]
+
+    def add_face(self, face):
+        """Add a face to DCEL if it doesn't already exists, otherwise return the existing face."""
+        try:
+            face_idx = self.faces.index(face)
+            return self.faces[face_idx]
+        except Exception:
+            self.faces.append(face)
+            return face
+
+    def dual(self):
+        """Return the dual of the current DCEL."""
+        pdb.set_trace()
+        dual_dcel = DCEL()
+        for edge in self.edges:
+            incident_face = dual_dcel.add_face(Face(circumcentre=edge.twin.origin.as_points()))
+            origin = dual_dcel.add_vertex(Vertex(edge.incident_face.circumcentre))
+            dual_edge = HalfEdge(
+                origin=origin,
+                incident_face=incident_face
+            )
+            incident_face.incident_edge = dual_edge
+            origin.incident_edge = dual_edge
+            dual_dcel.append(dual_edge)
+
+        for edge_idx in range(0, len(dual_dcel.edges), 2):
+            dual_dcel.edges[edge_idx].twin = dual_dcel.edges[edge_idx + 1]
+            dual_dcel.edges[edge_idx + 1].twin = dual_dcel.edges[edge_idx]
+
+        # set the nxt and prev of the dual edges
+        return dual_dcel
 
     def __repr__(self):
         """Print-friendly representation of the DCEL object."""
