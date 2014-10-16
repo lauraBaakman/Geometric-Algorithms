@@ -17,10 +17,9 @@ To create a DCEL one needs a couple of base classes, namely \t{Vertex}, \t{HalfE
 
 	The method \t{get_destination} returns the destination of the \t{HalfEdge} this is the same as the \t{origin} of its \t{twin}.
 
-	The \t{__eq__} method of \t{HalfEdge} has been overridden to avoid infinite recursion when comparing \t{HalfEdge}'s and to make it possible to compare an \t{HalfEdge} without the \t{nxt}, \t{incident_face} or \t{prev} property. This will not lead to any problems since an \t{HalfEdge} is uniquely defined by its origin and destination.
+	The \t{__eq__} method of \t{HalfEdge} has been overridden to avoid infinite recursion when comparing \t{HalfEdge}'s and to make it possible to compare an \t{HalfEdge} without the \t{nxt}, \t{incident_face} or \t{prev} property. This will not lead to any problems since an \t{HalfEdge} is uniquely defined by its origin and destination in a Delaunay triangulation. In a Vornoi diagram this is not necessarily the case, thus the comparison of the incident faces.
 
-	\todo[inline]{Edges zijn niet uniquely defined by hun origin en destination, i.e. de nerves van een voronoi diagram. eq aanpassen óf hier uitleggen waarom het geen probleem is. Beter aanpassen!}
-	\lstinputlisting[firstline=21, lastline=45, label={lst:a:halfEdge}, caption={The definition of the class \t{HalfEdge}.}]{../halfedge.py}
+	\lstinputlisting[firstline=21, lastline=47, label={lst:a:halfEdge}, caption={The definition of the class \t{HalfEdge}.}]{../halfedge.py}
 
 \subsubsection*{Face}
 	A \t{Face} is defined by an \t{outer_component}: a \t{HalfEdge} that when traversed keeps the face on the left and a list \t{inner_components}: which stores \t{HalfEdge}s of the outer boundaries of each hole in the \t{Face}. The definition of the class \t{Face} is provided in \autoref{lst:a:face}. 
@@ -32,7 +31,7 @@ To create a DCEL one needs a couple of base classes, namely \t{Vertex}, \t{HalfE
 \subsubsection*{From a Delauny Triangulation to a DCEL}
 	To represent a DCEL I have introduced the method \t{from_delauny_triangulation} that given the triangles and vertices of a Delauny Triangulation as provided by \t{matplotlib.delaunay.delaunay()} and returns a DCEl which is defined as in \autoref{lst:a:dcel:constructor}. 
 
-	\lstinputlisting[firstline=101, lastline=106, label={lst:a:dcel:constructor}, caption={The constructor the class \t{DCEL}.}]{../dcel.py}
+	\lstinputlisting[firstline=103, lastline=108, label={lst:a:dcel:constructor}, caption={The constructor the class \t{DCEL}.}]{../dcel.py}
 
 	To generate a DCEL from a Delauny Triangulation without geometric operations the following algorithm is used:
 		\begin{enumerate}
@@ -89,13 +88,13 @@ Running the script \t{assignment4A} with the flag \t{-dt} calls sets the method 
 
 \lstinputlisting[linerange={90-91, 110-120}, label={lst:a:display_outer_boudary}, caption={The part of the method \t{display_outer_boudary()} that draws the boundary.}]{../assignment4A.py}
 
-\lstinputlisting[linerange={30-32}, label={lst:a:vertex:as_points}, caption={The method \t{as_points()} in the class \t{Vertex}.}]{../vertex.py}
+\lstinputlisting[linerange={33-35}, label={lst:a:vertex:as_points}, caption={The method \t{as_points()} in the class \t{Vertex}.}]{../vertex.py}
 
-\lstinputlisting[linerange={47-49}, label={lst:a:halfedge:as_points}, caption={The method \t{as_points()} in the class \t{HalfEdge}.}]{../halfedge.py}
+\lstinputlisting[linerange={53-5}, label={lst:a:halfedge:as_points}, caption={The method \t{as_points()} in the class \t{HalfEdge}.}]{../halfedge.py}
 
 To see if the plotted boundary is the convex hull of the points we have generated \autoref{fig:a:convex_hull}, since all possible line segments between the vertices of the triangulation stay within the convex hull we can conclude that the outer boundary of the triangulation is indeed the convex hull. To generate this image on can run the script \t{assignment4A} with the flag \t{-ch}. The used display function is presented in \autoref{lst:a:display_inspect_convex_hull}.
 
-\lstinputlisting[linerange={123-154}, label={lst:a:display_inspect_convex_hull}, caption={The method \t{display_inspect_convex_hull()}.}]{../assignment4a.py}
+\lstinputlisting[linerange={128-159}, label={lst:a:display_inspect_convex_hull}, caption={The method \t{display_inspect_convex_hull()}.}]{../assignment4a.py}
 
 \begin{figure}
 	\begin{minipage}[t]{0.45\textwidth}

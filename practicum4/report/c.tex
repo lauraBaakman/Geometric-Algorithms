@@ -31,9 +31,13 @@ The code used to determine the duals of the elements of a DCEL is presented in \
 
 \lstinputlisting[firstline=138, lastline=168, label={lst:c:dual}, caption={The method \t{dual} in the class \t{DCEL}.}]{../dcel.py}
 
-Since I could not figure out what the dual of the next and previous edges where I have used written the method \t{set_next_and_previous()}. For each \t{Face} in the \t{DCEl} this method find the edges adjoining that face and sorts out the next and previous using the coordinates of their vertices. 
+Since I could not figure out what the dual of the next and previous edges where I have used written the method \t{set_next_and_previous()}. For each \t{Face} in the \t{DCEl} this method find the edges adjoining that face and sorts out the next and previous using the coordinates of their vertices. \t{Face}s are joined to the \t{DCEL} using the method \t{add_face()} which checks for duplicates before adding the \t{Face}, see \autoref{lst:c:add_face}.
 
-A Voronoi diagram created by taking the dual of the Delaunay Triangulation is presented in \autoref{fig:c:voronoi}. The Boundaries of a simpler Voronoi diagram are highlighted in \autoref{fig:c:voronoi_small} to show that every half-edge of an outer non-finite face is shown.
+\lstinputlisting[firstline=114, lastline=121, label={lst:c:add_face}, caption={The method \t{add_face} in the class \t{DCEL}.}]{../dcel.py}
+
+Thus by taking the dual, and some searching in lists in this case, on can generate a Voronoi diagram based on a Delaunay triangulation without geometric operations.\\
+
+A Voronoi diagram created by taking the dual of the Delaunay Triangulation is presented in \autoref{fig:c:voronoi}. The Boundaries of a simpler Voronoi diagram are highlighted in \autoref{fig:c:voronoi_small} to show that every half-edge of an outer non-finite face is shown. 
 
 \begin{figure}
 	\begin{minipage}[t]{0.45\textwidth}
