@@ -269,7 +269,7 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points()
+    generate_points(True)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
@@ -311,5 +311,6 @@ if __name__ == '__main__':
             "\t-ch: The outer boundary of the Delauny triangulation, its vertices and"
             "all possible line segments between the vertices. (assignment A)\n"
             "\t-circle: Draw circumscribed circles for three triangles."
+            "\t-voronoi: Show the Voronoi diagram of the Delaunay triangulation with the outer boundary highlighted."
         )
         main(display)
