@@ -20,7 +20,10 @@ class Vertex(object):
     def __eq__(self, other):
         """Chekc if two objects are equal by comparing only their coordinates."""
         if type(other) is type(self):
-            return self.coordinates == other.coordinates
+            return(
+                self.coordinates[0] == other.coordinates[0] and
+                self.coordinates[1] == other.coordinates[1]
+            )
         return False
 
     def __neq__(self, other):
