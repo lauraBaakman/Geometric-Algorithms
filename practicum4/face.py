@@ -25,6 +25,12 @@ class Face(object):
         self.inner_components = inner_components
         self.circumcentre = circumcentre
 
+    def __eq__(self, other):
+        """Check if two objects are equal."""
+        if type(other) is type(self):
+            return self.circumcentre == other.circumcentre
+        return False
+
     def number_of_vertices(self):
         """Return the number of vertices that define the face."""
         def number_of_vertices_helper(current_edge):
@@ -46,12 +52,6 @@ class Face(object):
             self.inner_components[inner_component_idx].nxt,
             [self.inner_components[inner_component_idx]]
         )
-
-    def __eq__(self, other):
-        """Check if two objects are equal."""
-        if type(other) is type(self):
-            return self.circumcentre == other.circumcentre
-        return False
 
     def __neq__(self, other):
         """Check if two objects are not equal."""
