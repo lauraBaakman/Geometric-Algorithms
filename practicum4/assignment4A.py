@@ -186,6 +186,39 @@ def display_circumscribed_circles():
     glutSwapBuffers()
 
 
+def display_delaunay_and_voronoi():
+    """Display the Delaunay triangulation and the Vornonoi diagram."""
+    global dcel
+    glClear(GL_COLOR_BUFFER_BIT)
+    # Draw Delaunay Triangulation
+    glLineWidth(1.0)
+    glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_LINES)
+    for i in range(len(edgs)):
+        glVertex2f(xl[edgs[i][0]],  yl[edgs[i][0]])
+        glVertex2f(xl[edgs[i][1]],  yl[edgs[i][1]])
+    glEnd()
+    # Draw Voronoi
+    #
+    # Draw Voronoi Vertices
+    glColor3f(0.4, 0.4, 1.0)
+    glPointSize(5)
+    glBegin(GL_POINTS)
+    for bounded_face in dcel.get_bounded_faces():
+        circumcentre = bounded_face.circumcentre
+        glVertex2f(circumcentre[0], circumcentre[1])
+    # glColor3f(0.0, 0.0, 1.0)
+    glEnd()
+    # Draw Deaunay Vertices
+    glColor3f(1.0, 0.4, 0.4)
+    glPointSize(5)
+    glBegin(GL_POINTS)
+    for i in range(len(xl)):
+        glVertex2f(xl[i], yl[i])
+    glEnd()
+    glutSwapBuffers()
+
+
 def draw_circle(c, r):
     """."""
     # draws a circle, center c, radius r
@@ -216,7 +249,7 @@ def main(displayFunction, argv=None, ):
     global xl, yl, xyl, xa, ya, cens, edgs, tris, neighs, triPts, dcel
     if argv is None:
         argv = sys.argv
-    generate_points(False)
+    generate_points(True)
     xa = numpy.array(xl)  # transform array data to list data (for delaunay())
     ya = numpy.array(yl)
     cens, edgs, triPts, neighs = triang.delaunay(xa, ya)
@@ -247,6 +280,9 @@ if __name__ == '__main__':
     elif opts and opts[0] == '-circle':
         print "Drawing the circumscribed circle for three random triangles."
         main(display_circumscribed_circles)
+    elif opts and opts[0] == '-voronoi':
+        print "Draw the Delauny triangulation and the Vornonoi diagram."
+        main(display_delaunay_and_voronoi)
     else:
         print (
             "Showing the Delauny triangulation. To show other visualizations"
