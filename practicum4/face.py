@@ -15,14 +15,14 @@ class Face(object):
     """
 
     def __init__(
-        self, outer_component,
-        inner_components=[],
+        self, outer_component=None,
+        inner_components=None,
         circumcentre=[float('inf'), float('inf')]
     ):
         """Construct a Face object."""
         super(Face, self).__init__()
         self.outer_component = outer_component
-        self.inner_components = inner_components
+        self.inner_components = inner_components or []
         self.circumcentre = circumcentre
 
     def __eq__(self, other):
