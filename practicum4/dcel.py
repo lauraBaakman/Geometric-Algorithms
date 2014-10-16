@@ -61,7 +61,7 @@ class DCEL(object):
                 edge_1.twin = edge_2
                 triangles_edges.append(edge_1)
 
-            triangle_face = Face(triangles_edges[0], circumcentre=circumcentre)
+            triangle_face = Face(triangles_edges[0], circumcentre=list(circumcentre))
             dcel.faces.append(triangle_face)
             # Set previous and next of the edges
             for edge_idx, edge in enumerate(triangles_edges):
@@ -91,11 +91,14 @@ class DCEL(object):
 
     def add_vertex(self, vertex):
         """Add vertex to DCEL if it doesn't already exists, otherwise return the existing vertex."""
+        # pdb.set_trace()
         try:
             vertex_idx = self.vertices.index(vertex)
+            # print "{} already in {}".format(vertex, self.vertices)
             return self.vertices[vertex_idx]
         except Exception:
             self.vertices.append(vertex)
+            # print "adding {} to {}".format(vertex, self.vertices)
             return vertex
 
     def __init__(self, vertices=None, edges=None, faces=None):
@@ -120,18 +123,17 @@ class DCEL(object):
 
     def dual(self):
         """Return the dual of the current DCEL."""
-        pdb.set_trace()
         dual_dcel = DCEL()
         for edge in self.edges:
             incident_face = dual_dcel.add_face(Face(circumcentre=edge.twin.origin.as_points()))
-            origin = dual_dcel.add_vertex(Vertex(edge.incident_face.circumcentre))
+            origin = dual_dcel.add_vertex(Vertex(coordinates=edge.incident_face.circumcentre))
             dual_edge = HalfEdge(
                 origin=origin,
                 incident_face=incident_face
             )
-            incident_face.incident_edge = dual_edge
+            incident_face.outer_component = dual_edge
             origin.incident_edge = dual_edge
-            dual_dcel.append(dual_edge)
+            dual_dcel.edges.append(dual_edge)
 
         for edge_idx in range(0, len(dual_dcel.edges), 2):
             dual_dcel.edges[edge_idx].twin = dual_dcel.edges[edge_idx + 1]

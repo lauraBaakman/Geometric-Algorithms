@@ -13,8 +13,8 @@ class TestDCEL(unittest.TestCase):
 
     def setUp(self):
         """."""
-        self.xl = [150, 200, 250, 450, 600, 10]
-        self.yl = [550, 450, 500, 100, 550, 10]
+        self.xl = [000, 550, 250, 750]
+        self.yl = [700, 500, 200, 000]
         xa = numpy.array(self.xl)
         ya = numpy.array(self.yl)
         self.centres, self.edges, self.triangles, self.neighs = triang.delaunay(xa, ya)
@@ -34,15 +34,26 @@ class TestDCEL(unittest.TestCase):
     #         vertices.append(vertex)
     #         self.assertIn(vertex, dc.vertices)
 
-    def test_get_bounded_faces(self):
+    # def test_get_bounded_faces(self):
+    #     """."""
+    #     dc = DCEL.from_delaunay_triangulation(
+    #         self.xl, self.yl, self.triangles, self.centres
+    #     )
+    #     dc.get_bounded_faces()
+    #     print dc.faces
+    #     print dc.get_bounded_faces()
+
+    def test_dual(self):
         """."""
         dc = DCEL.from_delaunay_triangulation(
             self.xl, self.yl, self.triangles, self.centres
         )
-        dc.get_bounded_faces()
-        print dc.faces
-        print dc.get_bounded_faces()
+        print "Original DCEL"
+        print dc
 
+        dc_dual = dc.dual()
+        print "Original dual DCEL"
+        print dc_dual
 
 # class TestHalfEdge(unittest.TestCase):
 
