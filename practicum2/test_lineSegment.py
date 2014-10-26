@@ -25,41 +25,41 @@ class TestLinesegmentIntersection(unittest.TestCase):
         """The line segments aren't parallel but do not intersect."""
         l1 = LineSegment([[0.0, 0.0], [0.0, 4.0]])
         l2 = LineSegment([[1.0, 1.0], [5.0, 5.0]])
-        self.assertFalse(l1.intersect(l2))
-        self.assertFalse(l2.intersect(l1))
+        self.assertIsNone(l1.intersect(l2))
+        self.assertIsNone(l2.intersect(l1))
 
     def test_parallel_non_colinear_line_segments(self):
         """The line segements are parallel, but not colinear."""
         l1 = LineSegment([[0.0, 0.0], [0.0, 5.0]])
         l2 = LineSegment([[3.0, 2.0], [3.0, 7.0]])
-        self.assertFalse(l1.intersect(l2))
-        self.assertFalse(l2.intersect(l1))
+        self.assertIsNone(l1.intersect(l2))
+        self.assertIsNone(l2.intersect(l1))
 
     def test_colinear_non_overlapping(self):
         """The line segements are colinear but do not overlap."""
         l1 = LineSegment([[1.0, 2.0], [1.0, 7.0]])
         l2 = LineSegment([[1.0, 9.0], [1.0, 10.0]])
-        self.assertFalse(l1.intersect(l2))
-        self.assertFalse(l2.intersect(l1))
+        self.assertIsNone(l1.intersect(l2))
+        self.assertIsNone(l2.intersect(l1))
 
     def test_colinear_contained(self):
         """One of the line segments is contained in the other."""
         l1 = LineSegment([[1.0, 1.0], [5.0, 1.0]])
         l2 = LineSegment([[2.0, 1.0], [4.0, 1.0]])
-        self.assertFalse(l1.intersect(l2))
-        self.assertFalse(l2.intersect(l1))
+        self.assertIsNone(l1.intersect(l2))
+        self.assertIsNone(l2.intersect(l1))
 
     def test_colinear_overlapping(self):
         """One of the line segments partially overlaps the other."""
         l1 = LineSegment([[1.0, 1.0], [5.0, 1.0]])
         l2 = LineSegment([[0.0, 1.0], [3.0, 1.0]])
-        self.assertFalse(l1.intersect(l2))
-        self.assertFalse(l2.intersect(l1))
+        self.assertIsNone(l1.intersect(l2))
+        self.assertIsNone(l2.intersect(l1))
 
     def test_colinear_equal(self):
         """A line segment does not intersect with itself."""
         l1 = LineSegment([[1.0, 1.0], [5.0, 1, 0]])
-        self.assertFalse(l1.intersect(l1))
+        self.assertIsNone(l1.intersect(l1))
 
 
 if __name__ == '__main__':
