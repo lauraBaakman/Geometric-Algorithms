@@ -29,7 +29,7 @@ class ConvexPolygonIntersection(object):
         self.algorithm_init()
 
     def __iter__(self):
-        """Make this class iterable."""
+        """Make this class itera_begin_point[l] e ."""
         return self
 
     def next(self):
@@ -45,8 +45,6 @@ class ConvexPolygonIntersection(object):
         """Initialization of the algorithm."""
         self.p = self.P[0]
         self.q = self.Q[0]
-        print("convexPolygonIntersection.py: self.p : {}".format(self.p))
-        print("convexPolygonIntersection.py: self.q : {}".format(self.q))
 
     def algorithm_step(self):
         """Step of the algorithm."""
@@ -62,7 +60,5 @@ if __name__ == '__main__':
     Q = [[500, 250], [300, 400], [700, 550]]
 
     pq_intersection_iterator = ConvexPolygonIntersection(P, Q)
-    print("convexPolygonIntersection.py: pq_intersection_iterator.p : {}".format(pq_intersection_iterator.p))
-    print("convexPolygonIntersection.py: pq_intersection_iterator.q : {}".format(pq_intersection_iterator.q))
     while(True):
         pq_intersection_iterator.next()
