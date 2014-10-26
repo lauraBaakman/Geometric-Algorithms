@@ -26,6 +26,7 @@ class ConvexPolygonIntersection(object):
         self.Q = set_Q
         self.max_steps = 2 * (len(self.P) + len(self.Q))
         self.current_step = 0
+        self.algorithm_init()
 
     def __iter__(self):
         """Make this class iterable."""
@@ -42,7 +43,10 @@ class ConvexPolygonIntersection(object):
 
     def algorithm_init(self):
         """Initialization of the algorithm."""
-        print "Algorithm init"
+        self.p = self.P[0]
+        self.q = self.Q[0]
+        print("convexPolygonIntersection.py: self.p : {}".format(self.p))
+        print("convexPolygonIntersection.py: self.q : {}".format(self.q))
 
     def algorithm_step(self):
         """Step of the algorithm."""
@@ -58,5 +62,7 @@ if __name__ == '__main__':
     Q = [[500, 250], [300, 400], [700, 550]]
 
     pq_intersection_iterator = ConvexPolygonIntersection(P, Q)
+    print("convexPolygonIntersection.py: pq_intersection_iterator.p : {}".format(pq_intersection_iterator.p))
+    print("convexPolygonIntersection.py: pq_intersection_iterator.q : {}".format(pq_intersection_iterator.q))
     while(True):
         pq_intersection_iterator.next()
