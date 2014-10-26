@@ -1,4 +1,5 @@
 """."""
+import pdb
 
 
 class ConvexPolygonIntersection(object):
@@ -43,8 +44,13 @@ class ConvexPolygonIntersection(object):
 
     def algorithm_init(self):
         """Initialization of the algorithm."""
+        pdb.set_trace()
+        self.p_min = self.P[len(self.P) - 1]
+        self.q_min = self.Q[len(self.Q) - 1]
         self.p = self.P[0]
         self.q = self.Q[0]
+        self.p_plus = self.P[1]
+        self.q_plus = self.Q[1]
 
     def algorithm_step(self):
         """Step of the algorithm."""
@@ -60,5 +66,6 @@ if __name__ == '__main__':
     Q = [[500, 250], [300, 400], [700, 550]]
 
     pq_intersection_iterator = ConvexPolygonIntersection(P, Q)
+    pdb.set_trace()
     while(True):
         pq_intersection_iterator.next()
