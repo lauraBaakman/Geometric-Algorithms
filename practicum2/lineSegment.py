@@ -19,7 +19,7 @@ class LineSegment(object):
         self.vector = [-p1[0] + p2[0], -p1[1] + p2[1]]
         self.point = p1
 
-    def intersect(self, other):
+    def intersect_line_segments(self, other):
         """Find the intersection of this LineSegment with other."""
         p = self.point
         r = self.vector
