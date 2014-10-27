@@ -1,6 +1,22 @@
-""" This class stores a line as a vector and a point on the line."""
+""" Some computations that are necessary for the polygon intersection algorithm."""
 from __future__ import division
 from fractions import *
+
+
+def vertex_in_half_plane(vertex, half_plane):
+    """
+    Return true if the vertex vertex lies in the half plane half_plane.
+
+    Input:
+        vertex: a 2D vertex as [x,y]
+        half-plane: a vector as its begin point (bx, by) and its endpoint
+            (ex, ey) in a list: [[bx, by], [ex, ey]].
+    """
+    [p_min, p] = half_plane
+    return (
+        (p[1] * p_min[0] - p[0] * p_min[1] - p[1] * vertex[0] +
+            p_min[1] * vertex[0] + p[0] * vertex[1] - p_min[0] * vertex[1]) >= 0
+    )
 
 
 class LineSegment(object):
@@ -19,7 +35,7 @@ class LineSegment(object):
         self.vector = [-p1[0] + p2[0], -p1[1] + p2[1]]
         self.point = p1
 
-    def intersect_line_segments(self, other):
+    def intersect_line_segment(self, other):
         """Find the intersection of this LineSegment with other."""
         p = self.point
         r = self.vector
