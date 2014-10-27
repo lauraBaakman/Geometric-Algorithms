@@ -44,13 +44,10 @@ class ConvexPolygonIntersection(object):
 
     def algorithm_init(self):
         """Initialization of the algorithm."""
-        pdb.set_trace()
-        self.p_min = self.P[len(self.P) - 1]
-        self.q_min = self.Q[len(self.Q) - 1]
-        self.p = self.P[0]
-        self.q = self.Q[0]
-        self.p_plus = self.P[1]
-        self.q_plus = self.Q[1]
+        self.p_min_idx = len(self.P) - 1
+        self.q_min_idx = len(self.Q) - 1
+        self.p_idx = 0
+        self.q_idx = 0
 
     def algorithm_step(self):
         """Step of the algorithm."""
