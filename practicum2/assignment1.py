@@ -7,8 +7,6 @@ A New Linear Algorithm for Intersecting Convex Polygons
 JOSEPH O ROURKE, CHI BIN CHIEN, THOMAS OLSON, AND DAVID NADDOR
 h.bekker@rug.nl
 """
-
-
 try:
     from OpenGL.GLUT import *
     from OpenGL.GL import *
@@ -17,6 +15,8 @@ except:
     print '''ERROR: PyOpenGL not installed properly.'''
     print '''Get it at: http://atrpms.net/'''
     exit(2)
+
+from convexPolygonIntersection import ConvexPolygonIntersection
 
 
 # P and Q are two convex polygons. Points are given in counter clockwise order
@@ -71,9 +71,10 @@ degP = [
     [75.542837591689178, 396.06840939472079]
 ]
 
+P = [[50, 200], [250, 200], [250, 500]]
+Q = [[150, 100], [500, 300], [150, 300]]
 
-# p and q are the active vertices of P and Q, p_minus, q_minus, pDot, qDot
-p, q, pm, qm, pd, qd = 0, 0, 0,  0, 0, 0
+intersection = None
 
 width = 700  # screen x_size
 height = 700  # screen y_size
@@ -81,66 +82,49 @@ height = 700  # screen y_size
 
 def display():
     """."""
+    def get_edges(vertices):
+        """Return a list of edges."""
+        shifted = vertices[1:]
+        shifted.append(vertices[0])
+        return zip(vertices, shifted)
+
     glClear(GL_COLOR_BUFFER_BIT)
     # draw convex hull P
     glColor3f(1.0, 0.0, 0.0)
     glLineWidth(1)
     glBegin(GL_LINES)
-    for i in range(len(P) - 1):
-        glVertex2f(P[i][0], P[i][1])
-        glVertex2f(P[i + 1][0], P[i + 1][1])
-    # draw edge from last to first entry in ch
-    glVertex2f(P[len(P) - 1][0], P[len(P) - 1][1])
-    glVertex2f(P[0][0], P[0][1])
+    for (a, b) in get_edges(intersection.P):
+        glVertex2f(a[0], a[1])
+        glVertex2f(b[0], b[1])
     glEnd()
     glLineWidth(4)  # draw active edge of P
-    glBegin(GL_LINES)
-    glVertex2f(pd[0][0], pd[0][1])
-    glVertex2f(pd[1][0], pd[1][1])
-    glEnd()
+    # glBegin(GL_LINES)
+    # glVertex2f(pd[0][0], pd[0][1])
+    # glVertex2f(pd[1][0], pd[1][1])
+    # glEnd()
     # draw convex hull Q
     glColor3f(0.0, 1.0, 0.0)
     glLineWidth(1)
     glBegin(GL_LINES)
-    for i in range(len(Q) - 1):
-        glVertex2f(Q[i][0], Q[i][1])
-        glVertex2f(Q[i + 1][0], Q[i + 1][1])
-    # draw edge from last to first entry in ch
-    glVertex2f(Q[len(Q) - 1][0], Q[len(Q) - 1][1])
-    glVertex2f(Q[0][0], Q[0][1])
+    for (a, b) in get_edges(intersection.Q):
+        glVertex2f(a[0], a[1])
+        glVertex2f(b[0], b[1])
     glEnd()
     glLineWidth(4)  # draw active edge of Q
-    glBegin(GL_LINES)
-    glVertex2f(qd[0][0], qd[0][1])
-    glVertex2f(qd[1][0], qd[1][1])
-    glEnd()
+    # glBegin(GL_LINES)
+    # glVertex2f(qd[0][0], qd[0][1])
+    # glVertex2f(qd[1][0], qd[1][1])
+    # glEnd()
     glutSwapBuffers()  # display
 
 
 def keyboard(key, x, y):
     """."""
-    # pm, qm means p_minus q_minus resp., see article
-    global p, q, pm, qm, pd, qd
-    if key == 'p':  # advance active edge of P (test purpose)
-        p += 1
-        pm = p - 1
-    if p == len(P):
-        p = 0
-    if pm < 0:
-        pm = len(P) - 1
-    if key == 'q':  # advance active edge of Q (test purpose)
-        q += 1
-        qm = q - 1
-    if q == len(Q):
-        q = 0
-    if qm < 0:
-        qm = len(Q) - 1
-    # pd means "p dot" see article
-    pd = [[P[pm][0], P[pm][1]], [P[p][0], P[p][1]]]
-    # qd means "q dot" see article
-    qd = [[Q[qm][0], Q[qm][1]], [Q[q][0], Q[q][1]]]
-    if key == 'n':  # do one step of the actual algorithm from the paper
-        print "one step"
+    if key == 'n':
+        print "next step"
+        intersection.next()
+    if key in ['q', 'Q']:
+        raise SystemExit
 
 
 def reshape(wid, hgt):
@@ -156,14 +140,10 @@ def reshape(wid, hgt):
 
 def main(argv=None):
     """."""
-    global P, Q, pm, qm, pd, qd
     if argv is None:
         argv = sys.argv
-    pm, qm = len(P) - 1, len(Q) - 1
-    # pd means "p dot" see article
-    pd = [[P[pm][0], P[pm][1]], [P[p][0], P[p][1]]]
-    # qd means "q dot" see article
-    qd = [[Q[qm][0], Q[qm][1]], [Q[q][0], Q[q][1]]]
+    global intersection
+    intersection = ConvexPolygonIntersection(P, Q)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
