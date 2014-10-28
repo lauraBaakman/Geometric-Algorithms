@@ -130,8 +130,15 @@ def display():
 def keyboard(key, x, y):
     """."""
     if key == 'n':
-        print "next step"
-        intersection.next()
+        try:
+            intersection.next()
+        except Exception:
+            if(intersection.intersections):
+                print("Intersections: {}.".format(intersection.intersections))
+            else:
+                print("No intersections found.")
+            print "Bye bye..."
+            raise SystemExit
     if key in ['q', 'Q']:
         raise SystemExit
 

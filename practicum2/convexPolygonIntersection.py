@@ -19,6 +19,7 @@ class ConvexPolygonIntersection(object):
         Public:
         - P: Set of points n in the form [[x1, y1], [x2, y2], ..., [xn, yn]]
         - Q: Set of points m in the form [[x1, y1], [x2, y2], ..., [xm, ym]]
+        - intersections: A list of the currently found intersections in the form [[x1, y1], ...]
 
         Private:
         - max_steps: maximum number of steps
@@ -26,7 +27,6 @@ class ConvexPolygonIntersection(object):
         - first_intersection: the first intersection the algorithm found
         - p_idx: current vertex in the polygon P as an index in P
         - q_idx: current vertex in the polygon Q as an index in Q
-
     """
 
     def __init__(self, set_P, set_Q):
@@ -42,6 +42,7 @@ class ConvexPolygonIntersection(object):
         self._max_steps = 2 * (len(self.P) + len(self.Q))
         self._current_step = 0
         self._first_intersection = None
+        self.intersections = []
         self.algorithm_init()
 
     def __iter__(self):
@@ -140,6 +141,7 @@ class ConvexPolygonIntersection(object):
                 inside = 'P'
             else:
                 inside = 'Q'
+            self.intersections.append(intersection)
         if(q_dot_cross_p_dot() >= 0):
             if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
                 intersection2 = self.advance_q(inside)
@@ -150,11 +152,11 @@ class ConvexPolygonIntersection(object):
                 intersection2 = self.advance_p(inside)
             else:
                 intersection2 = self.advance_q(inside)
+
+        # If there is an intersection2, there is also an intersection,
+        # otherwise inside would be none.
         if(intersection2):
-            # If there is an intersection2, there is also an intersection,
-            # otherwise inside would be none.
-            return [intersection, intersection2]
-        return [intersection]
+            self.intersections.append(intersection2)
 
     def algorithm_finalize(self):
         """
