@@ -76,11 +76,3 @@ class LineSegment(object):
                     y = p[1] + r[1] * t
                     return [x, y]
         return None
-
-    def __repr__(self):
-        """Print-friendly representation of the LineSegment object."""
-        return (
-            '<LineSegment ('
-            'vector = {obj.vector}, '
-            'point = {obj.point}>'.format(obj=self)
-        )
