@@ -83,8 +83,15 @@ class TestNextPrevious(unittest.TestCase):
 
     def test_get_dot(self):
         """."""
-        self.assertItemsEqual(self.cpi.get_p_dot(), [self.P[3], self.P[0]])
-        self.assertItemsEqual(self.cpi.get_q_dot(), [self.Q[3], self.Q[0]])
+        self.assertEqual(self.cpi.get_p_dot()[0][0], self.P[3][0])
+        self.assertEqual(self.cpi.get_p_dot()[0][1], self.P[3][1])
+        self.assertEqual(self.cpi.get_p_dot()[1][0], self.P[0][0])
+        self.assertEqual(self.cpi.get_p_dot()[1][1], self.P[0][1])
+
+        self.assertEqual(self.cpi.get_q_dot()[0][0], self.Q[3][0])
+        self.assertEqual(self.cpi.get_q_dot()[0][1], self.Q[3][1])
+        self.assertEqual(self.cpi.get_q_dot()[1][0], self.Q[0][0])
+        self.assertEqual(self.cpi.get_q_dot()[1][1], self.Q[0][1])
 
 if __name__ == '__main__':
     unittest.main()

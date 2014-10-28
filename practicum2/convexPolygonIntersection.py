@@ -50,7 +50,7 @@ class ConvexPolygonIntersection(object):
 
     def next(self):
         """Take the next step."""
-        if(self._current_step < self._max_steps):
+        if(self._current_step <= self._max_steps):
             self.algorithm_step()
         else:
             self.algorithm_finalize()
@@ -99,11 +99,11 @@ class ConvexPolygonIntersection(object):
 
     def get_p_dot(self):
         """Return the begin and endpoints of the vector pdot."""
-        return [self.P[self._p_idx], self.get_p_min()]
+        return [self.get_p_min(), self.P[self._p_idx]]
 
     def get_q_dot(self):
         """Return the begin and endpoints of the vector qdot."""
-        return [self.Q[self._q_idx], self.get_q_min()]
+        return [self.get_q_min(), self.Q[self._q_idx]]
 
     def algorithm_init(self):
         """Initialization of the algorithm."""
@@ -128,9 +128,11 @@ class ConvexPolygonIntersection(object):
             )
 
         print("algorithm step {}".format(self._current_step))
-        intersection = LineSegment(self.get_p_dot).intersect_line_segment(
-            LineSegment(self.get_q_dot))
+        pdb.set_trace()
+        intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
+            LineSegment(self.get_q_dot()))
         inside = None
+        pdb.set_trace()
         if(intersection):
             if(not self._first_intersection):
                 self._first_intersection = intersection
@@ -143,15 +145,22 @@ class ConvexPolygonIntersection(object):
                 inside = 'P'
             else:
                 inside = 'Q'
+        pdb.set_trace()
         if(q_dot_cross_p_dot() >= 0):
+            pdb.set_trace()
             if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
+                pdb.set_trace()
                 intersection2 = self.advance_q(inside)
             else:
+                pdb.set_trace()
                 intersection2 = self.advance_p(inside)
         else:
+            pdb.set_trace()
             if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
+                pdb.set_trace()
                 intersection2 = self.advance_p(inside)
             else:
+                pdb.set_trace()
                 intersection2 = self.advance_q(inside)
         if(intersection2):
             # If there is an intersection2, there is also an intersection,
@@ -165,8 +174,8 @@ class ConvexPolygonIntersection(object):
 
 
 if __name__ == '__main__':
-    P = [[100, 100], [100, 400], [500, 400], [500, 100]]
-    Q = [[500, 250], [300, 400], [700, 550]]
+    P = [[5, 20], [25, 20], [25, 50]]
+    Q = [[15, 10], [50, 30], [15, 30]]
 
     pq_intersection_iterator = ConvexPolygonIntersection(P, Q)
     pdb.set_trace()
