@@ -98,10 +98,11 @@ def display():
         glVertex2f(b[0], b[1])
     glEnd()
     glLineWidth(4)  # draw active edge of P
-    # glBegin(GL_LINES)
-    # glVertex2f(pd[0][0], pd[0][1])
-    # glVertex2f(pd[1][0], pd[1][1])
-    # glEnd()
+    glBegin(GL_LINES)
+    pdot = intersection.get_p_dot()
+    glVertex2f(pdot[0][0], pdot[0][1])
+    glVertex2f(pdot[1][0], pdot[1][1])
+    glEnd()
     # draw convex hull Q
     glColor3f(0.0, 1.0, 0.0)
     glLineWidth(1)
