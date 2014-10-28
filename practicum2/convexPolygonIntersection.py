@@ -132,7 +132,6 @@ class ConvexPolygonIntersection(object):
         intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
             LineSegment(self.get_q_dot()))
         inside = None
-        pdb.set_trace()
         if(intersection):
             if(not self._first_intersection):
                 self._first_intersection = intersection
@@ -147,7 +146,6 @@ class ConvexPolygonIntersection(object):
                 inside = 'Q'
         pdb.set_trace()
         if(q_dot_cross_p_dot() >= 0):
-            pdb.set_trace()
             if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
                 pdb.set_trace()
                 intersection2 = self.advance_q(inside)
@@ -155,7 +153,6 @@ class ConvexPolygonIntersection(object):
                 pdb.set_trace()
                 intersection2 = self.advance_p(inside)
         else:
-            pdb.set_trace()
             if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
                 pdb.set_trace()
                 intersection2 = self.advance_p(inside)
