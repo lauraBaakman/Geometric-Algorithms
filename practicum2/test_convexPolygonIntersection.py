@@ -16,6 +16,28 @@ class TestNextPrevious(unittest.TestCase):
         self.Q = self.P
         self.cpi = ConvexPolygonIntersection(self.P, self.Q)
 
+    def test_advance(self):
+        """."""
+        self.cpi.advance_p(None)
+        self.assertEqual(self.cpi._p_idx, 1)
+        self.cpi.advance_q(None)
+        self.assertEqual(self.cpi._q_idx, 1)
+
+        self.cpi.advance_p(None)
+        self.assertEqual(self.cpi._p_idx, 2)
+        self.cpi.advance_q(None)
+        self.assertEqual(self.cpi._q_idx, 2)
+
+        self.cpi.advance_p(None)
+        self.assertEqual(self.cpi._p_idx, 3)
+        self.cpi.advance_q(None)
+        self.assertEqual(self.cpi._q_idx, 3)
+
+        self.cpi.advance_p(None)
+        self.assertEqual(self.cpi._p_idx, 0)
+        self.cpi.advance_q(None)
+        self.assertEqual(self.cpi._q_idx, 0)
+
     def test_get(self):
         """."""
         self.assertItemsEqual(self.cpi.get_p(), self.P[0])
@@ -25,24 +47,44 @@ class TestNextPrevious(unittest.TestCase):
         """."""
         self.assertItemsEqual(self.cpi.get_p_min(), self.P[3])
         self.assertItemsEqual(self.cpi.get_q_min(), self.Q[3])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_min(), self.P[0])
+        self.assertItemsEqual(self.cpi.get_q_min(), self.Q[0])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_min(), self.P[1])
+        self.assertItemsEqual(self.cpi.get_q_min(), self.Q[1])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_min(), self.P[2])
+        self.assertItemsEqual(self.cpi.get_q_min(), self.Q[2])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_min(), self.P[3])
+        self.assertItemsEqual(self.cpi.get_q_min(), self.Q[3])
 
     def test_get_plus(self):
         """."""
         self.assertItemsEqual(self.cpi.get_p_plus(), self.P[1])
         self.assertItemsEqual(self.cpi.get_q_plus(), self.Q[1])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_plus(), self.P[2])
+        self.assertItemsEqual(self.cpi.get_q_plus(), self.Q[2])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_plus(), self.P[3])
+        self.assertItemsEqual(self.cpi.get_q_plus(), self.Q[3])
+        self.cpi.advance_p(None)
+        self.cpi.advance_q(None)
+        self.assertItemsEqual(self.cpi.get_p_plus(), self.P[0])
+        self.assertItemsEqual(self.cpi.get_q_plus(), self.Q[0])
 
     def test_get_dot(self):
         """."""
         self.assertItemsEqual(self.cpi.get_p_dot(), [self.P[3], self.P[0]])
         self.assertItemsEqual(self.cpi.get_q_dot(), [self.Q[3], self.Q[0]])
-
-    def test_advance(self):
-        """."""
-        pdb.set_trace()
-        self.cpi.advance_p(None)
-        self.assertEqual(self.cpi._p_idx, 1)
-        self.cpi.advance_q(None)
-        self.assertEqual(self.cpi._q_idx, 1)
 
 if __name__ == '__main__':
     unittest.main()
