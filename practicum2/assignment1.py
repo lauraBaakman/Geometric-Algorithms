@@ -89,6 +89,7 @@ def display():
         return zip(vertices, shifted)
 
     glClear(GL_COLOR_BUFFER_BIT)
+
     # draw convex hull P
     glColor3f(1.0, 0.0, 0.0)
     glLineWidth(1)
@@ -97,12 +98,15 @@ def display():
         glVertex2f(a[0], a[1])
         glVertex2f(b[0], b[1])
     glEnd()
-    glLineWidth(4)  # draw active edge of P
+
+    # draw active edge of P
+    glLineWidth(4)
     glBegin(GL_LINES)
     pdot = intersection.get_p_dot()
     glVertex2f(pdot[0][0], pdot[0][1])
     glVertex2f(pdot[1][0], pdot[1][1])
     glEnd()
+
     # draw convex hull Q
     glColor3f(0.0, 1.0, 0.0)
     glLineWidth(1)
@@ -111,11 +115,15 @@ def display():
         glVertex2f(a[0], a[1])
         glVertex2f(b[0], b[1])
     glEnd()
-    glLineWidth(4)  # draw active edge of Q
-    # glBegin(GL_LINES)
-    # glVertex2f(qd[0][0], qd[0][1])
-    # glVertex2f(qd[1][0], qd[1][1])
-    # glEnd()
+
+    # draw active edge of Q
+    glLineWidth(4)
+    glBegin(GL_LINES)
+    qdot = intersection.get_q_dot()
+    glVertex2f(qdot[0][0], qdot[0][1])
+    glVertex2f(qdot[1][0], qdot[1][1])
+    glEnd()
+
     glutSwapBuffers()  # display
 
 
