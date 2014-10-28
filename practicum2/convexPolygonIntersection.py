@@ -1,7 +1,5 @@
 """."""
-import pdb
-
-from lineSegment import *
+from utilities import *
 
 
 class ConvexPolygonIntersection(object):
@@ -164,18 +162,20 @@ class ConvexPolygonIntersection(object):
 
         Test if one polygon is contained in the other.
         """
+        import pdb
+        pdb.set_trace()
         if(point_in_polygon(self.get_p(), self.Q)):
-            return self.P
+            self.intersections = self.P
         elif(point_in_polygon(self.get_q(), self.P)):
-            return self.Q
-        else:
-            return None
+            self.intersections = self.Q
 
 
 if __name__ == '__main__':
     P = [[5, 20], [25, 20], [25, 50]]
     Q = [[15, 10], [50, 30], [15, 30]]
+    A = [[50, 200], [250, 200], [250, 500]]
+    D = [[300, 100], [500, 200], [350, 400]]
 
-    pq_intersection_iterator = ConvexPolygonIntersection(P, Q)
+    pq_intersection_iterator = ConvexPolygonIntersection(A, D)
     while(True):
         pq_intersection_iterator.next()

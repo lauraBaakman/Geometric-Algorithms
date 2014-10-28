@@ -71,8 +71,12 @@ degP = [
     [75.542837591689178, 396.06840939472079]
 ]
 
-P = [[50, 200], [250, 200], [250, 500]]
-Q = [[150, 100], [500, 300], [150, 300]]
+#  C lies in A
+#  A and D are disjoint
+A = [[50, 200], [250, 200], [250, 500]]
+B = [[150, 100], [500, 300], [150, 300]]
+C = [[100, 250], [200, 250], [150, 300]]
+D = [[300, 100], [500, 200], [350, 400]]
 
 intersection = None
 
@@ -159,7 +163,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     global intersection
-    intersection = ConvexPolygonIntersection(P, Q)
+    intersection = ConvexPolygonIntersection(A, C)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)

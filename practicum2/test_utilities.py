@@ -2,7 +2,7 @@
 
 import unittest
 
-from lineSegment import *
+from utilities import *
 
 
 class TestVertexInHalfPlane(unittest.TestCase):
