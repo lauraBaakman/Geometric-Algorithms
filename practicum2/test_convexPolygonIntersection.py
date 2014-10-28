@@ -1,7 +1,6 @@
 """Test methods and classes in the file convexPolygonIntersection."""
 
 import unittest
-import pdb
 
 from convexPolygonIntersection import *
 

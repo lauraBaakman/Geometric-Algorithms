@@ -1,7 +1,7 @@
 """."""
 import pdb
 
-from lineSegment import LineSegment, vertex_in_half_plane
+from lineSegment import *
 
 
 class ConvexPolygonIntersection(object):
@@ -59,14 +59,12 @@ class ConvexPolygonIntersection(object):
 
     def advance_q(self, inside):
         """Advance q."""
-        print "Advance q"
         self._q_idx = (self._q_idx + 1) % len(self.Q)
         if inside == 'Q':
             return self.get_q_min()
 
     def advance_p(self, inside):
         """Advance p."""
-        print "Advance p"
         self._p_idx = (self._p_idx + 1) % len(self.P)
         if inside == 'P':
             return self.get_p_min()
@@ -127,8 +125,6 @@ class ConvexPolygonIntersection(object):
                 p[1] * q_min[0] + p_min[1] * q_min[0] + p[0] * q_min[1] - p_min[0] * q_min[1]
             )
 
-        print("algorithm step {}".format(self._current_step))
-        pdb.set_trace()
         intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
             LineSegment(self.get_q_dot()))
         inside = None
@@ -144,20 +140,15 @@ class ConvexPolygonIntersection(object):
                 inside = 'P'
             else:
                 inside = 'Q'
-        pdb.set_trace()
         if(q_dot_cross_p_dot() >= 0):
             if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
-                pdb.set_trace()
                 intersection2 = self.advance_q(inside)
             else:
-                pdb.set_trace()
                 intersection2 = self.advance_p(inside)
         else:
             if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
-                pdb.set_trace()
                 intersection2 = self.advance_p(inside)
             else:
-                pdb.set_trace()
                 intersection2 = self.advance_q(inside)
         if(intersection2):
             # If there is an intersection2, there is also an intersection,
@@ -166,8 +157,17 @@ class ConvexPolygonIntersection(object):
         return [intersection]
 
     def algorithm_finalize(self):
-        """Finalization of the algorithm."""
-        print "Algorithm finalize"
+        """
+        Finalization of the algorithm.
+
+        Test if one polygon is contained in the other.
+        """
+        if(point_in_polygon(self.get_p(), self.Q)):
+            return self.P
+        elif(point_in_polygon(self.get_q(), self.P)):
+            return self.Q
+        else:
+            return None
 
 
 if __name__ == '__main__':
@@ -175,6 +175,5 @@ if __name__ == '__main__':
     Q = [[15, 10], [50, 30], [15, 30]]
 
     pq_intersection_iterator = ConvexPolygonIntersection(P, Q)
-    pdb.set_trace()
     while(True):
         pq_intersection_iterator.next()

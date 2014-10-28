@@ -1,7 +1,6 @@
 """ Some computations that are necessary for the polygon intersection algorithm."""
 from __future__ import division
 from fractions import *
-import pdb
 
 
 def point_in_polygon(point, polygon):
