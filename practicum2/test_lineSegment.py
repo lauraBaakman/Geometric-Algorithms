@@ -28,6 +28,27 @@ class TestVertexInHalfPlane(unittest.TestCase):
         self.assertFalse(result)
 
 
+class TestPointInPolygon(unittest.TestCase):
+
+    """Unit test to thest the method pointInPolygon."""
+
+    def setUp(self):
+        """."""
+        pass
+
+    def test_point_in_polygon(self):
+        """."""
+        point = [200, 200]
+        polygon = [[100, 100], [100, 400], [500, 400], [500, 100]]
+        self.assertTrue(point_in_polygon(point, polygon))
+
+    def test_point_not_in_polygon(self):
+        """."""
+        point = [600, 400]
+        polygon = [[100, 100], [100, 400], [500, 400], [500, 100]]
+        self.assertFalse(point_in_polygon(point, polygon))
+
+
 class TestLinesegmentIntersection(unittest.TestCase):
 
     """Unit test for the method intersection of the class line segment."""

@@ -1,6 +1,27 @@
 """ Some computations that are necessary for the polygon intersection algorithm."""
 from __future__ import division
 from fractions import *
+import pdb
+
+
+def point_in_polygon(point, polygon):
+    """
+    Return true if the point point is contained in the polygon polygon.
+
+    Input:
+        point: a 2D point as [x,y]
+        polygon: a list of n points in CCW order: [[x1, y1], ..., [xn, yn]]
+    """
+    polygon_translated = [[vertex[0] - point[0], vertex[1] - point[1]] for vertex in polygon]
+    polygon_shift = polygon_translated[1:]
+    polygon_shift.append(polygon_translated[0])
+    area = [
+        1
+        for (a, b)
+        in zip(polygon_translated, polygon_shift)
+        if (b[0] * a[1] - a[0] * b[1]) < 0
+    ]
+    return sum(area) in [0, len(polygon)]
 
 
 def vertex_in_half_plane(vertex, half_plane):
