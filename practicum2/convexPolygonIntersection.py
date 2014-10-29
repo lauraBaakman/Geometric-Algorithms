@@ -188,7 +188,7 @@ class ConvexPolygonIntersection(object):
         # print "outer_product_q_dot_p_dot: {}".format(outer_product_q_dot_p_dot)
         inside = None
         import pdb
-        # pdb.set_trace()
+        pdb.set_trace()
         if(outer_product_q_dot_p_dot):
             intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
                 LineSegment(self.get_q_dot()))
@@ -208,26 +208,26 @@ class ConvexPolygonIntersection(object):
                         raise StopIteration(
                             'The current intersection is equal to the first intersection.'
                         )
-                if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
+                if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
                     inside = 'P'
                 else:
                     inside = 'Q'
                 self.intersections.append(intersection)
-        # pdb.set_trace()
+        pdb.set_trace()
 
         if(outer_product_q_dot_p_dot >= 0):
-            if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
-                # pdb.set_trace()
+            if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
+                pdb.set_trace()
                 intersection2 = self.advance_q(inside)
             else:
-                # pdb.set_trace()
+                pdb.set_trace()
                 intersection2 = self.advance_p(inside)
         else:
-            if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
-                # pdb.set_trace()
+            if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
+                pdb.set_trace()
                 intersection2 = self.advance_p(inside)
             else:
-                # pdb.set_trace()
+                pdb.set_trace()
                 intersection2 = self.advance_q(inside)
 
         if(intersection2):
