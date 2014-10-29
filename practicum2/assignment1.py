@@ -96,7 +96,7 @@ def display():
 
     # draw convex hull P
     glColor3f(1.0, 0.0, 0.0)
-    glLineWidth(1)
+    glLineWidth(4)
     glBegin(GL_LINES)
     for (a, b) in get_edges(intersection.P):
         glVertex2f(a[0], a[1])
@@ -104,7 +104,7 @@ def display():
     glEnd()
 
     # draw active edge of P
-    glLineWidth(4)
+    glLineWidth(8)
     glBegin(GL_LINES)
     pdot = intersection.get_p_dot()
     glVertex2f(pdot[0][0], pdot[0][1])
@@ -113,7 +113,7 @@ def display():
 
     # draw convex hull Q
     glColor3f(0.0, 1.0, 0.0)
-    glLineWidth(1)
+    glLineWidth(4)
     glBegin(GL_LINES)
     for (a, b) in get_edges(intersection.Q):
         glVertex2f(a[0], a[1])
@@ -121,13 +121,21 @@ def display():
     glEnd()
 
     # draw active edge of Q
-    glLineWidth(4)
+    glLineWidth(8)
     glBegin(GL_LINES)
     qdot = intersection.get_q_dot()
     glVertex2f(qdot[0][0], qdot[0][1])
     glVertex2f(qdot[1][0], qdot[1][1])
     glEnd()
 
+    # draw intersections
+    glColor3f(0.4, 1.0, 1.0)
+    glPointSize(20)
+    glBegin(GL_POINTS)
+    if(intersection.intersections):
+        for intersection_point in intersection.intersections:
+            glVertex2f(intersection_point[0], intersection_point[1])
+    glEnd()
     glutSwapBuffers()  # display
 
 
@@ -138,11 +146,9 @@ def keyboard(key, x, y):
             intersection.next()
         except Exception:
             if(intersection.intersections):
-                print("Intersections: {}.".format(intersection.intersections))
+                print("Finished: intersections: {}.".format(intersection.intersections))
             else:
-                print("No intersections found.")
-            print "Bye bye..."
-            raise SystemExit
+                print("Finished: no intersections found.")
     if key in ['q', 'Q']:
         raise SystemExit
 
@@ -163,7 +169,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     global intersection
-    intersection = ConvexPolygonIntersection(A, C)
+    intersection = ConvexPolygonIntersection(P, Q)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)

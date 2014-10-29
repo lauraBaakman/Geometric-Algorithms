@@ -151,8 +151,6 @@ class ConvexPolygonIntersection(object):
             else:
                 intersection2 = self.advance_q(inside)
 
-        # If there is an intersection2, there is also an intersection,
-        # otherwise inside would be none.
         if(intersection2):
             self.intersections.append(intersection2)
 
@@ -162,8 +160,6 @@ class ConvexPolygonIntersection(object):
 
         Test if one polygon is contained in the other.
         """
-        import pdb
-        pdb.set_trace()
         if(point_in_polygon(self.get_p(), self.Q)):
             self.intersections = self.P
         elif(point_in_polygon(self.get_q(), self.P)):
