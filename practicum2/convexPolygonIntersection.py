@@ -61,13 +61,17 @@ class ConvexPolygonIntersection(object):
         """Advance q."""
         self._q_idx = (self._q_idx + 1) % len(self.Q)
         if inside == 'Q':
-            return self.get_q_min()
+            # pdb.set_trace()
+            self.intersections.append(self.get_q_min())
+            print "Adding intersection in advance_q: {}".format(self.get_q_min())
 
     def advance_p(self, inside):
         """Advance p."""
         self._p_idx = (self._p_idx + 1) % len(self.P)
         if inside == 'P':
-            return self.get_p_min()
+            # pdb.set_trace()
+            self.intersections.append(self.get_p_min())
+            print "Adding intersection in advance_p: {}".format(self.get_p_min())
 
     def get_p_min(self):
         """Return p min."""
@@ -188,7 +192,7 @@ class ConvexPolygonIntersection(object):
         # print "outer_product_q_dot_p_dot: {}".format(outer_product_q_dot_p_dot)
         inside = None
         import pdb
-        pdb.set_trace()
+        print "Step {}\t q = {}, p = {}".format(self._current_step, self._q_idx, self._p_idx)
         if(outer_product_q_dot_p_dot):
             intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
                 LineSegment(self.get_q_dot()))
@@ -212,26 +216,20 @@ class ConvexPolygonIntersection(object):
                     inside = 'P'
                 else:
                     inside = 'Q'
+                # pdb.set_trace()
+                print "Adding intersection in step {}: {} (pdot: {}, qdot: {})".format(self._current_step, intersection, self.get_p_dot(), self.get_q_dot())
                 self.intersections.append(intersection)
-        pdb.set_trace()
 
         if(outer_product_q_dot_p_dot >= 0):
             if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
-                pdb.set_trace()
-                intersection2 = self.advance_q(inside)
+                self.advance_q(inside)
             else:
-                pdb.set_trace()
-                intersection2 = self.advance_p(inside)
+                self.advance_p(inside)
         else:
             if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
-                pdb.set_trace()
-                intersection2 = self.advance_p(inside)
+                self.advance_p(inside)
             else:
-                pdb.set_trace()
-                intersection2 = self.advance_q(inside)
-
-        if(intersection2):
-            self.intersections.append(intersection2)
+                self.advance_q(inside)
 
 if __name__ == '__main__':
     P = [[5, 20], [25, 20], [25, 50]]
