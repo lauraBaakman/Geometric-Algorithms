@@ -74,12 +74,14 @@ degP = [
 #  C lies in A
 #  A and D are disjoint
 #  E and F are degenerate case one: vertex on edge
+#  E and G are degenerate two: vertex on vertex
 A = [[50, 200], [250, 200], [250, 500]]
 B = [[150, 100], [500, 300], [150, 300]]
 C = [[100, 250], [200, 250], [150, 300]]
 D = [[300, 100], [500, 200], [350, 400]]
 E = [[50, 200], [50, 450], [450, 450], [450, 200]]
 F = [[50, 400], [550, 400], [250, 300]]
+G = [[50, 200], [100, 300], [100, 100]]
 
 intersection = None
 
@@ -107,7 +109,7 @@ def display():
     glEnd()
 
     # draw active edge of P
-    glLineWidth(8)
+    glLineWidth(15)
     glBegin(GL_LINES)
     pdot = intersection.get_p_dot()
     glVertex2f(pdot[0][0], pdot[0][1])
@@ -124,7 +126,7 @@ def display():
     glEnd()
 
     # draw active edge of Q
-    glLineWidth(8)
+    glLineWidth(15)
     glBegin(GL_LINES)
     qdot = intersection.get_q_dot()
     glVertex2f(qdot[0][0], qdot[0][1])
@@ -172,7 +174,7 @@ def main(argv=None):
     if argv is None:
         argv = sys.argv
     global intersection
-    intersection = ConvexPolygonIntersection(E, F)
+    intersection = ConvexPolygonIntersection(E, G)
     glutInit(argv)
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
     glutInitWindowSize(width, height)
