@@ -161,10 +161,11 @@ class ConvexPolygonIntersection(object):
 
         Test if one polygon is contained in the other.
         """
-        if(point_in_polygon(self.get_p(), self.Q)):
-            self.intersections = self.P
-        elif(point_in_polygon(self.get_q(), self.P)):
-            self.intersections = self.Q
+        if(not self.intersections):
+            if(point_in_polygon(self.get_p(), self.Q)):
+                self.intersections = self.P
+            elif(point_in_polygon(self.get_q(), self.P)):
+                self.intersections = self.Q
 
     def algorithm_step_2(self):
         """
