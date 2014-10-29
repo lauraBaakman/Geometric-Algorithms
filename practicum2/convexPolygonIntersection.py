@@ -51,7 +51,8 @@ class ConvexPolygonIntersection(object):
     def next(self):
         """Take the next step."""
         if(self._current_step <= self._max_steps):
-            self.algorithm_step_2()
+            # self.algorithm_step_2()
+            self.algorithm_step()
         else:
             self.algorithm_finalize()
             raise StopIteration('Executed the maximum number of steps.')
@@ -61,17 +62,13 @@ class ConvexPolygonIntersection(object):
         """Advance q."""
         self._q_idx = (self._q_idx + 1) % len(self.Q)
         if inside == 'Q':
-            # pdb.set_trace()
             self.intersections.append(self.get_q_min())
-            print "Adding intersection in advance_q: {}".format(self.get_q_min())
 
     def advance_p(self, inside):
         """Advance p."""
         self._p_idx = (self._p_idx + 1) % len(self.P)
         if inside == 'P':
-            # pdb.set_trace()
             self.intersections.append(self.get_p_min())
-            print "Adding intersection in advance_p: {}".format(self.get_p_min())
 
     def get_p_min(self):
         """Return p min."""
@@ -147,17 +144,14 @@ class ConvexPolygonIntersection(object):
             self.intersections.append(intersection)
         if(q_dot_cross_p_dot() >= 0):
             if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
-                intersection2 = self.advance_q(inside)
+                self.advance_q(inside)
             else:
-                intersection2 = self.advance_p(inside)
+                self.advance_p(inside)
         else:
             if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
-                intersection2 = self.advance_p(inside)
+                self.advance_p(inside)
             else:
-                intersection2 = self.advance_q(inside)
-
-        if(intersection2):
-            self.intersections.append(intersection2)
+                self.advance_q(inside)
 
     def algorithm_finalize(self):
         """
@@ -189,10 +183,7 @@ class ConvexPolygonIntersection(object):
             )
 
         outer_product_q_dot_p_dot = q_dot_cross_p_dot()
-        # print "outer_product_q_dot_p_dot: {}".format(outer_product_q_dot_p_dot)
         inside = None
-        import pdb
-        print "Step {}\t q = {}, p = {}".format(self._current_step, self._q_idx, self._p_idx)
         if(outer_product_q_dot_p_dot):
             intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
                 LineSegment(self.get_q_dot()))
@@ -200,11 +191,7 @@ class ConvexPolygonIntersection(object):
                 if(not self._first_intersection):
                     self._first_intersection = intersection
                     self._first_intersection_step = self._current_step
-                    print "First intersection found, step: {}".format(
-                        self._first_intersection_step)
                 else:
-                    print "Intersection found, step: {}, first intersection step: {}".format(
-                        self._current_step, self._first_intersection_step)
                     if(
                         self._current_step != (self._first_intersection_step + 1) and
                         self._first_intersection == intersection
@@ -216,8 +203,6 @@ class ConvexPolygonIntersection(object):
                     inside = 'P'
                 else:
                     inside = 'Q'
-                # pdb.set_trace()
-                print "Adding intersection in step {}: {} (pdot: {}, qdot: {})".format(self._current_step, intersection, self.get_p_dot(), self.get_q_dot())
                 self.intersections.append(intersection)
 
         if(outer_product_q_dot_p_dot >= 0):

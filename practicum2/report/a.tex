@@ -34,8 +34,7 @@
 
 	rCrossS = Part[Cross[rExtended, sExtended], 3];
 	tNumerator = Part[Cross[(qExtended - pExtended), sExtended], 3];
-	uNumerator = Part[Cross[(qExtended - pExtended), rExtended], 3];
-	\end{lstlisting}
+	uNumerator = Part[Cross[(qExtended - pExtended), rExtended], 3];\end{lstlisting}
 
 	\lstinputlisting[float, firstline=42, lastline=78, label={lst:a:linesegment}, caption={The class \t{LineSegment}. It should be noted that \t{division} has been imported from \t{\_\_future\_\_}.}]{../utilities.py}
 
@@ -55,15 +54,17 @@
 	\subsubsection*{Implementation}
 	The implementation of the algorithm presented by \textcite{o1982new} is implemented in the class \t{ConvexPolygonIntersection}. \t{_algorithm_init} executes all the code before the start of the loop in the algorithm. Each call of \t{_algorithm_step} executes one step of the algorithm. \t{_algorithm_finalize} handles the case where more than $2 \cdot (|P| + |Q|)$ steps have been taken. The code closesly follows the pseudo code presented by \citeauthor{o1982new}.
 
-	\lstinputlisting[float, firstline=105, lastline=108, label={lst:a:polygonIntersectionAlgorithmInit}, caption={The method \t{_algorithm_init} in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
+	\lstinputlisting[float, firstline=106, lastline=109, label={lst:a:polygonIntersectionAlgorithmInit}, caption={The method \t{_algorithm_init} in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
 
-	\lstinputlisting[float, firstline=110, lastline=155, label={lst:a:polygonIntersectionAlgorithmStep}, caption={The method \t{_algorithm_step} in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
+	\lstinputlisting[float, firstline=111, lastline=153, label={lst:a:polygonIntersectionAlgorithmStep}, caption={The method \t{_algorithm_step} in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
 
-	\lstinputlisting[float, firstline=157, lastline=166, label={lst:a:polygonIntersectionAlgorithmFinalize}, caption={The method \t{_algorithm_finalize} in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
+	\lstinputlisting[float, firstline=155, lastline=165x, label={lst:a:polygonIntersectionAlgorithmFinalize}, caption={The method \t{_algorithm_finalize} in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
 
-	Since $p_+$, $p_-$, $\dot{p}$, $q_+$, $q_-$, $\dot{q}$ are all derived from $p$ and $q$ I have only stored the index of the current $p$ and $q$ in the variables \t{_p_idx} and \t{_q_idx}. To easily gain access to the derived variables getters and setters have been defined, see \autoref{lst:a:getters}.
+	Since $p_+$, $p_-$, $\dot{p}$, $q_+$, $q_-$, $\dot{q}$ are all derived from $p$ and $q$ I have only stored the index of the current $p$ and $q$ in the variables \t{_p_idx} and \t{_q_idx}. To easily gain access to the derived variables getters and setters have been defined, see \autoref{lst:a:getters}. To increase readability the advancement of the edges has also been implemented as separate methods, see \autoref{lst:a:advance}.
 
-	\lstinputlisting[float, firstline=71, lastline=103, label={lst:a:getters}, caption={The getters in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
+	\lstinputlisting[float, firstline=72, lastline=104, label={lst:a:getters}, caption={The getters in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}
+
+	\lstinputlisting[float, firstline=60, lastline=70, label={lst:a:advance}, caption={The advancement methods in the class \t{ConvexPolygonIntersection}.}]{../convexPolygonIntersection.py}	
 
 \subsection*{General Implementation}
 	To be able to give a step by step visualization of the algorithm \t{ConvexPolygonIntersection} is implemented as an iterator. This allows the user to simply call the method \t{next} on the \t{PolygonIntersection} object. 
