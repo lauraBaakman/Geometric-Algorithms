@@ -35,7 +35,7 @@ def vertex_in_half_plane(vertex, half_plane):
     [p_min, p] = half_plane
     return (
         (p[1] * p_min[0] - p[0] * p_min[1] - p[1] * vertex[0] +
-            p_min[1] * vertex[0] + p[0] * vertex[1] - p_min[0] * vertex[1]) <= 0
+            p_min[1] * vertex[0] + p[0] * vertex[1] - p_min[0] * vertex[1]) >= 0
     )
 
 
