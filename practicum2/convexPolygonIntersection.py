@@ -25,6 +25,7 @@ class ConvexPolygonIntersection(object):
         - first_intersection: the first intersection the algorithm found
         - p_idx: current vertex in the polygon P as an index in P
         - q_idx: current vertex in the polygon Q as an index in Q
+        - first_intersection_step: step where the first intersection was found.
     """
 
     def __init__(self, set_P, set_Q):
@@ -50,7 +51,7 @@ class ConvexPolygonIntersection(object):
     def next(self):
         """Take the next step."""
         if(self._current_step <= self._max_steps):
-            self.algorithm_step()
+            self.algorithm_step_2()
         else:
             self.algorithm_finalize()
             raise StopIteration('Executed the maximum number of steps.')
@@ -111,7 +112,7 @@ class ConvexPolygonIntersection(object):
         """
         Step of the algorithm.
 
-        Returns the intersection(s) or none is no intersection was found.
+        Adds found intersections to self.intersections.
         """
         def q_dot_cross_p_dot():
             """Compute the dot product of q_dot and p_dot."""
@@ -165,6 +166,71 @@ class ConvexPolygonIntersection(object):
         elif(point_in_polygon(self.get_q(), self.P)):
             self.intersections = self.Q
 
+    def algorithm_step_2(self):
+        """
+        Step of the algorithm, that can handle degenerate cases.
+
+        Adds found intersections to self.intersections.
+        """
+        def q_dot_cross_p_dot():
+            """Compute the dot product of q_dot and p_dot."""
+            p = self.get_p()
+            q = self.get_q()
+            p_min = self.get_p_min()
+            q_min = self.get_q_min()
+            return (
+                p[1] * q[0] - p_min[1] * q[0] - p[0] * q[1] + p_min[0] * q[1] -
+                p[1] * q_min[0] + p_min[1] * q_min[0] + p[0] * q_min[1] - p_min[0] * q_min[1]
+            )
+
+        outer_product_q_dot_p_dot = q_dot_cross_p_dot()
+        # print "outer_product_q_dot_p_dot: {}".format(outer_product_q_dot_p_dot)
+        inside = None
+        import pdb
+        # pdb.set_trace()
+        if(outer_product_q_dot_p_dot):
+            intersection = LineSegment(self.get_p_dot()).intersect_line_segment(
+                LineSegment(self.get_q_dot()))
+            if(intersection):
+                if(not self._first_intersection):
+                    self._first_intersection = intersection
+                    self._first_intersection_step = self._current_step
+                    print "First intersection found, step: {}".format(
+                        self._first_intersection_step)
+                else:
+                    print "Intersection found, step: {}, first intersection step: {}".format(
+                        self._current_step, self._first_intersection_step)
+                    if(
+                        self._current_step != (self._first_intersection_step + 1) and
+                        self._first_intersection == intersection
+                    ):
+                        raise StopIteration(
+                            'The current intersection is equal to the first intersection.'
+                        )
+                if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
+                    inside = 'P'
+                else:
+                    inside = 'Q'
+                self.intersections.append(intersection)
+        # pdb.set_trace()
+
+        if(outer_product_q_dot_p_dot >= 0):
+            if(vertex_in_half_plane(self.get_p(), self.get_q_dot())):
+                # pdb.set_trace()
+                intersection2 = self.advance_q(inside)
+            else:
+                # pdb.set_trace()
+                intersection2 = self.advance_p(inside)
+        else:
+            if(vertex_in_half_plane(self.get_q(), self.get_p_dot())):
+                # pdb.set_trace()
+                intersection2 = self.advance_p(inside)
+            else:
+                # pdb.set_trace()
+                intersection2 = self.advance_q(inside)
+
+        if(intersection2):
+            self.intersections.append(intersection2)
 
 if __name__ == '__main__':
     P = [[5, 20], [25, 20], [25, 50]]
